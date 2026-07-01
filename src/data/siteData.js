@@ -22,7 +22,12 @@ export const navItems = [
   { label: 'Harga', href: '#pricing-section', icon: 'fa-solid fa-tags' },
   { label: 'Portofolio', href: '#portfolio', icon: 'fa-solid fa-laptop-code' },
   { label: 'Blog', href: '#blog', icon: 'fa-solid fa-newspaper' },
-  { label: 'Testimoni', href: '#testimoni', icon: 'fa-solid fa-comments' },
+  {
+    label: 'Testimoni',
+    href: '#testimoni',
+    icon: 'fa-solid fa-comments',
+    children: [{ label: 'FAQ', href: '#faq' }],
+  },
   { label: 'Kontak', href: '#kontak', icon: 'fa-solid fa-phone' },
 ]
 
@@ -137,18 +142,22 @@ export const pricingPlans = [
     tag: 'Starter',
     name: 'Paket Basic',
     copy: 'Cocok untuk usaha kecil yang ingin punya landing page profesional dan cepat tayang.',
-    price: 'Mulai dari paket Basic',
+    price: 'Rp 800.000 - Rp 1.500.000',
     download: '/downloads/paket-basic.pdf',
     orderLink: whatsappLinks.primary,
+    whatsappMessage:
+      'Halo Koteka Digital, saya tertarik dengan Paket Basic Rp 800.000 - Rp 1.500.000. Mohon konsultasinya.',
     features: ['Landing page bisnis', 'Desain responsive', 'CTA WhatsApp', 'Optimasi dasar'],
   },
   {
     tag: 'Paling Dipilih',
     name: 'Paket Standard',
     copy: 'Pilihan seimbang untuk bisnis yang butuh profil usaha yang lebih lengkap dan meyakinkan.',
-    price: 'Mulai dari paket Standard',
+    price: 'Rp 2.500.000 - Rp 5.000.000',
     download: '/downloads/paket-standard.pdf',
     orderLink: whatsappLinks.primary,
+    whatsappMessage:
+      'Halo Koteka Digital, saya tertarik dengan Paket Standar Rp 2.500.000 - Rp 5.000.000. Mohon konsultasinya.',
     featured: true,
     features: ['Multi section lengkap', 'Portofolio dan blog', 'SEO dasar', 'Support revisi terarah'],
   },
@@ -156,9 +165,11 @@ export const pricingPlans = [
     tag: 'Growth',
     name: 'Paket Premium',
     copy: 'Untuk bisnis yang ingin presentasi brand lebih kuat, struktur lebih lengkap, dan impact lebih serius.',
-    price: 'Mulai dari paket Premium',
+    price: 'Rp 7.000.000 - Rp 15.000.000+',
     download: '/downloads/paket-premium.pdf',
     orderLink: whatsappLinks.primary,
+    whatsappMessage:
+      'Halo Koteka Digital, saya tertarik dengan Paket Premium Rp 7.000.000 - Rp 15.000.000+. Mohon konsultasinya.',
     features: ['Presentasi brand premium', 'Section lebih kompleks', 'Strategi CTA lebih kuat', 'Prioritas pengalaman mobile'],
   },
 ]
@@ -279,19 +290,69 @@ export const testimonials = [
 
 export const faqs = [
   {
-    icon: 'fa-solid fa-circle-question',
-    question: 'Apa itu Koteka Digital?',
-    answer: 'Koteka Digital adalah layanan pembuatan website profesional di Jayapura, Papua untuk UMKM, bisnis lokal, personal brand, dan instansi.',
+    question: 'Berapa lama pengerjaan website?',
+    answer:
+      'Durasi pengerjaan menyesuaikan kebutuhan project, namun rata-rata website company profile atau landing page dapat selesai dalam beberapa hari hingga beberapa minggu setelah materi lengkap diterima.',
   },
   {
-    icon: 'fa-solid fa-map-location-dot',
-    question: 'Area layanan di mana saja?',
-    answer: 'Fokus layanan mencakup Jayapura, Papua, Tanah Papua, dan kebutuhan bisnis Indonesia yang membutuhkan website profesional.',
+    question: 'Apakah bisa cicilan?',
+    answer:
+      'Bisa dibicarakan untuk project tertentu. Skema pembayaran biasanya dibuat bertahap agar lebih ringan dan tetap nyaman untuk kedua belah pihak.',
   },
   {
-    icon: 'fa-solid fa-laptop-code',
-    question: 'Layanan website apa saja?',
-    answer: 'Layanan mencakup website bisnis, landing page, company profile, portofolio, toko online sederhana, integrasi WhatsApp, dan optimasi SEO lokal.',
+    question: 'Apakah domain gratis?',
+    answer:
+      'Domain bisa disertakan sesuai paket atau kebutuhan project. Detail domain akan dijelaskan di awal agar biaya dan masa aktifnya jelas sejak awal.',
+  },
+  {
+    question: 'Apakah hosting gratis?',
+    answer:
+      'Hosting dapat disiapkan sesuai paket yang dipilih atau mengikuti kebutuhan performa website. Jika ada biaya hosting, semuanya diinformasikan secara terbuka sebelum project berjalan.',
+  },
+  {
+    question: 'Apakah bisa revisi?',
+    answer:
+      'Bisa. Revisi tetap tersedia sesuai ruang lingkup yang disepakati agar hasil akhir website tetap sesuai kebutuhan bisnis dan ekspektasi klien.',
+  },
+  {
+    question: 'Apakah website SEO Friendly?',
+    answer:
+      'Ya, website dibuat dengan struktur yang rapi, responsive, cepat diakses, dan siap mendukung optimasi SEO dasar agar lebih mudah ditemukan di Google.',
+  },
+  {
+    question: 'Apakah website bisa dibuka di HP?',
+    answer:
+      'Bisa. Semua website dirancang responsive sehingga tetap nyaman dibuka di HP, tablet, maupun desktop tanpa merusak tampilan utama.',
+  },
+  {
+    question: 'Apakah bisa request desain custom?',
+    answer:
+      'Bisa. Desain dapat disesuaikan dengan karakter brand, gaya visual, dan target audiens agar website terasa lebih personal dan profesional.',
+  },
+  {
+    question: 'Apakah website bisa terhubung ke WhatsApp?',
+    answer:
+      'Bisa. Tombol atau alur chat WhatsApp dapat dipasang agar pengunjung lebih mudah langsung konsultasi atau menghubungi bisnis Anda.',
+  },
+  {
+    question: 'Apakah tersedia maintenance?',
+    answer:
+      'Tersedia. Maintenance bisa mencakup update ringan, perbaikan konten, pengecekan teknis, dan bantuan lanjutan sesuai kebutuhan website Anda.',
+  },
+  {
+    question: 'Apakah bisa dibuatkan email bisnis?',
+    answer:
+      'Bisa. Email bisnis dengan nama domain sendiri dapat disiapkan agar bisnis terlihat lebih kredibel dan profesional saat berkomunikasi.',
+  },
+  {
+    question: 'Apakah setelah selesai website menjadi milik client?',
+    answer:
+      'Ya, setelah project selesai sesuai kesepakatan, website menjadi milik klien beserta akses yang relevan agar dapat dikelola dengan nyaman ke depannya.',
+  },
+  {
+    question: 'Apakah website bisa terhubung dan terintegrasi ke semua media sosial?',
+    answer:
+      'Ya, website dapat dihubungkan dan diintegrasikan dengan berbagai media sosial seperti WhatsApp, Instagram, Facebook, TikTok, YouTube, dan platform lainnya sesuai kebutuhan bisnis.',
   },
 ]
 

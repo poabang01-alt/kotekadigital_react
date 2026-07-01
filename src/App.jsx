@@ -16,6 +16,14 @@ import {
 import './index.css'
 
 function App() {
+  const techIcons = {
+    HTML: 'fa-brands fa-html5',
+    CSS: 'fa-brands fa-css3-alt',
+    JavaScript: 'fa-brands fa-js',
+    PHP: 'fa-brands fa-php',
+    Laravel: 'fa-brands fa-laravel',
+  }
+
   const heroSocialLinks = [
     {
       label: 'Website Koteka Digital',
@@ -48,12 +56,38 @@ function App() {
   ]
 
   const [menuOpen, setMenuOpen] = useState(false)
-  const [servicesOpen, setServicesOpen] = useState(false)
+  const [openDropdown, setOpenDropdown] = useState(null)
   const [activeSection, setActiveSection] = useState('home')
   const [portfolioIndex, setPortfolioIndex] = useState(0)
   const [testimonialIndex, setTestimonialIndex] = useState(0)
+  const [testimonialDragOffset, setTestimonialDragOffset] = useState(0)
+  const [openFaqIndex, setOpenFaqIndex] = useState(0)
   const sectionRatiosRef = useRef(new Map())
   const mobileNavRef = useRef(null)
+  const testimonialInteractingRef = useRef(false)
+  const testimonialGestureRef = useRef({
+    pointerId: null,
+    startX: 0,
+    startY: 0,
+    lockedAxis: null,
+    dragging: false,
+  })
+
+  const handlePricingAction = (plan) => {
+    const downloadLink = document.createElement('a')
+    downloadLink.href = plan.download
+    downloadLink.setAttribute('download', '')
+    downloadLink.style.display = 'none'
+    document.body.appendChild(downloadLink)
+    downloadLink.click()
+    document.body.removeChild(downloadLink)
+
+    const whatsappBaseUrl =
+      plan.orderLink?.split('?')[0] || `https://wa.me/${contactInfo.whatsappNumber}`
+    const whatsappUrl = `${whatsappBaseUrl}?text=${encodeURIComponent(plan.whatsappMessage)}`
+
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
+  }
 
   useEffect(() => {
     const body = document.body
@@ -89,7 +123,7 @@ function App() {
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
         setMenuOpen(false)
-        setServicesOpen(false)
+        setOpenDropdown(null)
       }
     }
 
@@ -167,6 +201,7 @@ function App() {
 
   useEffect(() => {
     const timer = window.setInterval(() => {
+      if (testimonialInteractingRef.current) return
       setTestimonialIndex((current) => (current + 1) % testimonials.length)
     }, 6500)
 
@@ -176,18 +211,13 @@ function App() {
   const activePortfolio = portfolioItems[portfolioIndex]
   const activeTestimonial = testimonials[testimonialIndex]
 
-  const serviceNavIsActive = useMemo(
-    () => ['layanan', 'portfolio'].includes(activeSection),
-    [activeSection]
-  )
-
   const closeNavigation = useCallback(() => {
     setMenuOpen(false)
-    setServicesOpen(false)
+    setOpenDropdown(null)
   }, [])
 
-  const toggleServicesMenu = useCallback(() => {
-    setServicesOpen((open) => !open)
+  const toggleDropdownMenu = useCallback((label) => {
+    setOpenDropdown((current) => (current === label ? null : label))
   }, [])
 
   const activateAndScroll = useCallback((sectionId) => {
@@ -216,25 +246,30 @@ function App() {
 
   const handleHamburgerClick = useCallback(() => {
     setMenuOpen((open) => !open)
-    setServicesOpen(false)
+    setOpenDropdown(null)
   }, [])
 
-  const renderNavItems = (submenuId) =>
+  const renderNavItems = (submenuIdPrefix) =>
     navItems.map((item) =>
       item.children ? (
-        <div className={`nav-dropdown ${servicesOpen ? 'open' : ''}`} key={item.label}>
+        <div className={`nav-dropdown ${openDropdown === item.label ? 'open' : ''}`} key={item.label}>
           <button
             type="button"
-            className={`nav-link nav-button ${serviceNavIsActive ? 'active' : ''}`}
-            onClick={toggleServicesMenu}
-            aria-expanded={servicesOpen}
-            aria-controls={submenuId}
-            aria-label="Toggle submenu layanan"
+            className={`nav-link nav-button ${
+              activeSection === item.href.slice(1) ||
+              item.children.some((child) => activeSection === child.href.slice(1))
+                ? 'active'
+                : ''
+            }`}
+            onClick={() => toggleDropdownMenu(item.label)}
+            aria-expanded={openDropdown === item.label}
+            aria-controls={`${submenuIdPrefix}-${item.label.toLowerCase()}`}
+            aria-label={`Toggle submenu ${item.label}`}
           >
             {item.label}
             <i className="fa-solid fa-chevron-down caret" aria-hidden="true" />
           </button>
-          <div className="dropdown-panel" id={submenuId}>
+          <div className="dropdown-panel" id={`${submenuIdPrefix}-${item.label.toLowerCase()}`}>
             {item.children.map((child) => (
               <a
                 key={child.label}
@@ -271,6 +306,92 @@ function App() {
       (current) => (current - 1 + portfolioItems.length) % portfolioItems.length
     )
   }
+
+  const nextTestimonial = useCallback(() => {
+    setTestimonialIndex((current) => (current + 1) % testimonials.length)
+  }, [])
+
+  const prevTestimonial = useCallback(() => {
+    setTestimonialIndex((current) => (current - 1 + testimonials.length) % testimonials.length)
+  }, [])
+
+  const resetTestimonialGesture = useCallback(() => {
+    testimonialInteractingRef.current = false
+    testimonialGestureRef.current = {
+      pointerId: null,
+      startX: 0,
+      startY: 0,
+      lockedAxis: null,
+      dragging: false,
+    }
+    setTestimonialDragOffset(0)
+  }, [])
+
+  const handleTestimonialPointerDown = useCallback((event) => {
+    if (event.pointerType === 'mouse' && event.button !== 0) return
+
+    testimonialInteractingRef.current = true
+    testimonialGestureRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      lockedAxis: null,
+      dragging: false,
+    }
+
+    event.currentTarget.setPointerCapture?.(event.pointerId)
+  }, [])
+
+  const handleTestimonialPointerMove = useCallback((event) => {
+    const gesture = testimonialGestureRef.current
+    if (gesture.pointerId !== event.pointerId) return
+
+    const deltaX = event.clientX - gesture.startX
+    const deltaY = event.clientY - gesture.startY
+
+    if (!gesture.lockedAxis) {
+      if (Math.abs(deltaX) < 8 && Math.abs(deltaY) < 8) return
+      gesture.lockedAxis = Math.abs(deltaX) > Math.abs(deltaY) ? 'x' : 'y'
+    }
+
+    if (gesture.lockedAxis !== 'x') return
+
+    gesture.dragging = true
+    if (event.cancelable) {
+      event.preventDefault()
+    }
+
+    const limitedOffset = Math.max(Math.min(deltaX, 90), -90)
+    setTestimonialDragOffset(limitedOffset)
+  }, [])
+
+  const handleTestimonialPointerUp = useCallback((event) => {
+    const gesture = testimonialGestureRef.current
+    if (gesture.pointerId !== event.pointerId) return
+
+    const deltaX = event.clientX - gesture.startX
+    const threshold = 56
+
+    event.currentTarget.releasePointerCapture?.(event.pointerId)
+
+    if (gesture.lockedAxis === 'x' && Math.abs(deltaX) >= threshold) {
+      if (deltaX < 0) {
+        nextTestimonial()
+      } else {
+        prevTestimonial()
+      }
+    }
+
+    resetTestimonialGesture()
+  }, [nextTestimonial, prevTestimonial, resetTestimonialGesture])
+
+  const handleTestimonialPointerCancel = useCallback((event) => {
+    const gesture = testimonialGestureRef.current
+    if (gesture.pointerId !== event.pointerId) return
+
+    event.currentTarget.releasePointerCapture?.(event.pointerId)
+    resetTestimonialGesture()
+  }, [resetTestimonialGesture])
 
   return (
     <>
@@ -558,12 +679,13 @@ function App() {
                     ))}
                   </ul>
                   <div className="pricing-actions">
-                    <a className="button button-primary" href={plan.download} download>
-                      Download PDF
-                    </a>
-                    <a className="button button-secondary" href={plan.orderLink} target="_blank" rel="noreferrer">
-                      Pesan Paket
-                    </a>
+                    <button
+                      type="button"
+                      className="button button-primary pricing-cta"
+                      onClick={() => handlePricingAction(plan)}
+                    >
+                      Chat WA & Download PDF
+                    </button>
                   </div>
                 </article>
               ))}
@@ -587,7 +709,7 @@ function App() {
                 <i className="fa-solid fa-arrow-left" aria-hidden="true" />
               </button>
 
-              <article className="portfolio-card featured">
+              <article className="portfolio-card featured portfolio-card-animated" key={activePortfolio.title}>
                 <div className="portfolio-image">
                   <img src={activePortfolio.image} alt={activePortfolio.title} />
                 </div>
@@ -598,10 +720,14 @@ function App() {
                   <p className="portfolio-impact">{activePortfolio.impact}</p>
                   <div className="tech-list">
                     {activePortfolio.tech.map((tech) => (
-                      <span key={tech}>{tech}</span>
+                      <span key={tech}>
+                        <i className={techIcons[tech] || 'fa-solid fa-code'} aria-hidden="true" />
+                        {tech}
+                      </span>
                     ))}
                   </div>
-                  <a className="button button-primary" href={activePortfolio.link} target="_blank" rel="noreferrer">
+                  <a className="button button-primary portfolio-cta" href={activePortfolio.link} target="_blank" rel="noreferrer">
+                    <i className="fa-solid fa-up-right-from-square" aria-hidden="true" />
                     Live Demo
                   </a>
                 </div>
@@ -646,7 +772,8 @@ function App() {
                     <span className="blog-meta">{post.category}</span>
                     <h3>{post.title}</h3>
                     <p>{post.excerpt}</p>
-                    <a className="button button-tertiary" href={post.link}>
+                    <a className="button button-tertiary blog-cta" href={post.link}>
+                      <i className="fa-solid fa-arrow-right" aria-hidden="true" />
                       Baca Selengkapnya
                     </a>
                   </div>
@@ -663,21 +790,29 @@ function App() {
               <h2>Testimoni Klien</h2>
               <p>Cerita nyata dari klien yang telah merasakan dampak layanan kami.</p>
             </div>
-            <div className="testimonial-stage" data-reveal>
+            <div
+              className="testimonial-stage"
+              data-reveal
+              onPointerDown={handleTestimonialPointerDown}
+              onPointerMove={handleTestimonialPointerMove}
+              onPointerUp={handleTestimonialPointerUp}
+              onPointerCancel={handleTestimonialPointerCancel}
+              onLostPointerCapture={handleTestimonialPointerCancel}
+            >
               <button
                 type="button"
                 className="slider-control"
-                onClick={() =>
-                  setTestimonialIndex(
-                    (current) => (current - 1 + testimonials.length) % testimonials.length
-                  )
-                }
+                onClick={prevTestimonial}
                 aria-label="Testimoni sebelumnya"
               >
                 <i className="fa-solid fa-arrow-left" aria-hidden="true" />
               </button>
 
-              <article className="testimonial-card featured">
+              <article
+                className="testimonial-card featured testimonial-card-animated"
+                key={activeTestimonial.name}
+                style={{ '--testimonial-drag-offset': `${testimonialDragOffset}px` }}
+              >
                 <div className="testimonial-head">
                   <img src={activeTestimonial.image} alt={activeTestimonial.name} />
                   <div>
@@ -691,7 +826,7 @@ function App() {
               <button
                 type="button"
                 className="slider-control"
-                onClick={() => setTestimonialIndex((current) => (current + 1) % testimonials.length)}
+                onClick={nextTestimonial}
                 aria-label="Testimoni berikutnya"
               >
                 <i className="fa-solid fa-arrow-right" aria-hidden="true" />
@@ -713,52 +848,91 @@ function App() {
 
         <section className="faq-section" id="faq">
           <div className="container">
-            <div className="section-heading" data-reveal>
+            <div className="section-heading faq-heading" data-reveal>
               <span className="eyebrow">FAQ</span>
-              <h2>FAQ Jasa Website Jayapura Papua</h2>
-              <p>Pertanyaan penting lama kami pertahankan agar calon klien tetap cepat paham.</p>
+              <h2>Pertanyaan yang paling sering ditanyakan calon klien</h2>
+              <p>Pertanyaan penting kami susun lebih rapi agar calon klien cepat paham sebelum konsultasi.</p>
             </div>
-            <div className="card-grid card-grid-three">
-              {faqs.map((faq) => (
-                <article className="info-card faq-card" key={faq.question} data-reveal>
-                  <div className="card-icon">
-                    <i className={faq.icon} aria-hidden="true" />
-                  </div>
-                  <h3>{faq.question}</h3>
-                  <p>{faq.answer}</p>
-                </article>
-              ))}
+            <div className="faq-list" data-reveal>
+              {faqs.map((faq, index) => {
+                const isOpen = index === openFaqIndex
+                const answerId = `faq-answer-${index}`
+                const buttonId = `faq-button-${index}`
+
+                return (
+                  <article className={`faq-item ${isOpen ? 'open' : ''}`} key={faq.question}>
+                    <button
+                      type="button"
+                      id={buttonId}
+                      className="faq-trigger"
+                      aria-expanded={isOpen}
+                      aria-controls={answerId}
+                      onClick={() => setOpenFaqIndex((current) => (current === index ? -1 : index))}
+                    >
+                      <span className="faq-question">{faq.question}</span>
+                      <span className="faq-icon" aria-hidden="true">
+                        <i className={`fa-solid ${isOpen ? 'fa-minus' : 'fa-plus'}`} />
+                      </span>
+                    </button>
+                    <div
+                      id={answerId}
+                      className="faq-answer-wrap"
+                      role="region"
+                      aria-labelledby={buttonId}
+                    >
+                      <div className="faq-answer">
+                        <p>{faq.answer}</p>
+                      </div>
+                    </div>
+                  </article>
+                )
+              })}
             </div>
           </div>
         </section>
 
         <section className="contact-section" id="kontak">
           <div className="container">
-            <div className="section-heading" data-reveal>
+            <div className="section-heading contact-heading" data-reveal>
               <span className="eyebrow">Kontak</span>
               <h2>Kontak Kami</h2>
               <p>Hubungi kami untuk konsultasi website, SEO, dan strategi digital yang sesuai kebutuhan bisnis Anda.</p>
             </div>
 
-            <div className="contact-grid">
-              <article className="contact-card" data-reveal>
+            <div className="contact-stack">
+              <ContactForm />
+
+              <article className="contact-card contact-info-card" data-reveal>
                 <h3>Informasi Kontak</h3>
                 <ul className="contact-list">
                   <li>
                     <i className="fa-brands fa-whatsapp" aria-hidden="true" />
-                    <a href={contactInfo.whatsappLink} target="_blank" rel="noreferrer">
-                      {contactInfo.whatsappLabel}
-                    </a>
+                    <div>
+                      <strong>WhatsApp</strong>
+                      <a href={contactInfo.whatsappLink} target="_blank" rel="noreferrer">
+                        {contactInfo.whatsappLabel}
+                      </a>
+                    </div>
                   </li>
                   <li>
                     <i className="fa-solid fa-envelope" aria-hidden="true" />
-                    <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
+                    <div>
+                      <strong>Email</strong>
+                      <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
+                    </div>
                   </li>
                   <li>
                     <i className="fa-solid fa-location-dot" aria-hidden="true" />
-                    <span>{contactInfo.location}</span>
+                    <div>
+                      <strong>Lokasi</strong>
+                      <span>{contactInfo.location}</span>
+                    </div>
                   </li>
                 </ul>
+              </article>
+
+              <article className="contact-card map-card" data-reveal>
+                <h3>Lokasi Kami</h3>
                 <div className="map-wrap">
                   <iframe
                     title="Lokasi Koteka Digital"
@@ -768,8 +942,6 @@ function App() {
                   />
                 </div>
               </article>
-
-              <ContactForm />
             </div>
           </div>
         </section>
@@ -777,33 +949,82 @@ function App() {
 
       <footer className="site-footer">
         <div className="container footer-grid">
-          <div>
+          <div className="footer-column footer-brand">
             <h3>Koteka Digital</h3>
             <p>
-              Spesialis jasa pembuatan website profesional di Jayapura, Papua untuk UMKM, bisnis
-              lokal, personal brand, dan instansi.
+              Koteka Digital adalah spesialis jasa pembuatan website profesional di Jayapura, Papua.
+              Kami hadir sebagai mitra digital strategis bagi UMKM, bisnis lokal, personal brand,
+              dan instansi untuk meningkatkan kredibilitas serta visibilitas melalui SEO lokal dan
+              desain website yang berorientasi konversi.
             </p>
           </div>
-          <div>
+          <div className="footer-column">
             <h4>Navigasi</h4>
-            <div className="footer-links">
-              {navItems.filter((item) => !item.children).map((item) => (
-                <a key={item.label} href={item.href}>
-                  {item.label}
-                </a>
-              ))}
-              <a href="#faq">FAQ</a>
+            <span className="footer-accent" aria-hidden="true" />
+            <div className="footer-links footer-links-nav">
+              <a href="#home">
+                <i className="fa-solid fa-house" aria-hidden="true" />
+                <span>Home</span>
+              </a>
+              <a href="#layanan">
+                <i className="fa-solid fa-briefcase" aria-hidden="true" />
+                <span>Layanan</span>
+              </a>
+              <a href="#portfolio">
+                <i className="fa-solid fa-image" aria-hidden="true" />
+                <span>Portofolio</span>
+              </a>
+              <a href="#pricing-section">
+                <i className="fa-solid fa-tags" aria-hidden="true" />
+                <span>Harga</span>
+              </a>
+              <a href="#faq">
+                <i className="fa-solid fa-circle-question" aria-hidden="true" />
+                <span>FAQ</span>
+              </a>
+              <a href="#kontak">
+                <i className="fa-solid fa-envelope" aria-hidden="true" />
+                <span>Kontak</span>
+              </a>
             </div>
           </div>
-          <div>
+          <div className="footer-column">
             <h4>Hubungi Kami</h4>
-            <div className="footer-links">
+            <span className="footer-accent" aria-hidden="true" />
+            <div className="footer-links footer-links-contact">
               <a href={contactInfo.whatsappLink} target="_blank" rel="noreferrer">
-                {contactInfo.whatsappLabel}
+                <i className="fa-brands fa-whatsapp" aria-hidden="true" />
+                <span>085210559404</span>
               </a>
-              <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
+              <a href={`mailto:${contactInfo.email}`}>
+                <i className="fa-solid fa-envelope" aria-hidden="true" />
+                <span>{contactInfo.email}</span>
+              </a>
               <a href="https://kotekadigital.com/" target="_blank" rel="noreferrer">
-                kotekadigital.com
+                <i className="fa-solid fa-globe" aria-hidden="true" />
+                <span>kotekadigital.com</span>
+              </a>
+              <div className="footer-contact-item">
+                <i className="fa-solid fa-location-dot" aria-hidden="true" />
+                <span>Jayapura, Papua, Indonesia</span>
+              </div>
+            </div>
+          </div>
+          <div className="footer-column">
+            <h4>Media Sosial</h4>
+            <span className="footer-accent" aria-hidden="true" />
+            <div className="footer-socials">
+              <a href="https://www.instagram.com/kotekadigital/" target="_blank" rel="noreferrer" aria-label="Instagram Koteka Digital">
+                <i className="fa-brands fa-instagram" aria-hidden="true" />
+              </a>
+              <a href="https://web.facebook.com/profile.php?id=61573476356920" target="_blank" rel="noreferrer" aria-label="Facebook Koteka Digital">
+                <i className="fa-brands fa-facebook-f" aria-hidden="true" />
+              </a>
+              <a href="https://www.tiktok.com/@kotekadigitalstudio?_r=1&_t=ZS-97V638s9hhd" target="_blank" rel="noreferrer" aria-label="TikTok Koteka Digital">
+                <i className="fa-brands fa-tiktok" aria-hidden="true" />
+              </a>
+              <a href="https://kotekadigital.com/" target="_blank" rel="noreferrer" aria-label="Website Koteka Digital">
+                <i className="fa-solid fa-globe" aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -870,7 +1091,7 @@ function ContactForm() {
   }
 
   return (
-    <article className="contact-card" data-reveal>
+    <article className="contact-card contact-form-card" data-reveal>
       <h3>Form Konsultasi</h3>
       <form className="contact-form" onSubmit={handleSubmit}>
         <label htmlFor="nama">Nama Lengkap</label>
