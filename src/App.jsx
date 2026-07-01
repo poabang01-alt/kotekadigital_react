@@ -1,0 +1,902 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  aboutCards,
+  blogPosts,
+  companyStats,
+  contactInfo,
+  faqs,
+  navItems,
+  portfolioItems,
+  pricingPlans,
+  serviceGroups,
+  teamMembers,
+  testimonials,
+  whatsappLinks,
+} from './data/siteData'
+import './index.css'
+
+function App() {
+  const heroSocialLinks = [
+    {
+      label: 'Website Koteka Digital',
+      href: 'https://kotekadigital.com/',
+      icon: 'fa-solid fa-globe',
+    },
+    {
+      label: 'Instagram Koteka Digital',
+      href: 'https://www.instagram.com/kotekadigital/',
+      icon: 'fa-brands fa-instagram',
+    },
+    {
+      label: 'Facebook Koteka Digital',
+      href: 'https://web.facebook.com/profile.php?id=61573476356920',
+      icon: 'fa-brands fa-facebook-f',
+    },
+    {
+      label: 'TikTok Koteka Digital',
+      href: 'https://www.tiktok.com/@kotekadigitalstudio?_r=1&_t=ZS-97V638s9hhd',
+      icon: 'fa-brands fa-tiktok',
+    },
+  ]
+  const partnerCards = [
+    { label: 'UMKM Jayapura', icon: 'fa-solid fa-store' },
+    { label: 'Bisnis Lokal Papua', icon: 'fa-solid fa-briefcase' },
+    { label: 'Personal Brand', icon: 'fa-solid fa-user-tie' },
+    { label: 'Instansi', icon: 'fa-solid fa-building-columns' },
+    { label: 'Coffee Shop', icon: 'fa-solid fa-mug-hot' },
+    { label: 'Sekolah', icon: 'fa-solid fa-school' },
+  ]
+
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [servicesOpen, setServicesOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState('home')
+  const [portfolioIndex, setPortfolioIndex] = useState(0)
+  const [testimonialIndex, setTestimonialIndex] = useState(0)
+  const sectionRatiosRef = useRef(new Map())
+  const mobileNavRef = useRef(null)
+
+  useEffect(() => {
+    const body = document.body
+    const html = document.documentElement
+
+    if (!menuOpen) {
+      body.classList.remove('menu-open')
+      html.classList.remove('menu-open')
+      body.style.removeProperty('overflow')
+      html.style.removeProperty('overflow')
+      body.style.removeProperty('touch-action')
+      return
+    }
+
+    body.classList.add('menu-open')
+    html.classList.add('menu-open')
+    body.style.overflow = 'hidden'
+    html.style.overflow = 'hidden'
+    body.style.touchAction = 'none'
+
+    return () => {
+      body.classList.remove('menu-open')
+      html.classList.remove('menu-open')
+      body.style.removeProperty('overflow')
+      html.style.removeProperty('overflow')
+      body.style.removeProperty('touch-action')
+    }
+  }, [menuOpen])
+
+  useEffect(() => {
+    if (!menuOpen) return undefined
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false)
+        setServicesOpen(false)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    mobileNavRef.current?.focus()
+
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [menuOpen])
+
+  useEffect(() => {
+    const trackedSectionIds = [
+      'home',
+      'about',
+      'layanan',
+      'pricing-section',
+      'portfolio',
+      'blog',
+      'testimoni',
+      'kontak',
+    ]
+    const sectionRatios = sectionRatiosRef.current
+    const sections = trackedSectionIds
+      .map((sectionId) => document.getElementById(sectionId))
+      .filter(Boolean)
+
+    sectionRatios.clear()
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          sectionRatios.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0)
+        })
+
+        const dominantSection = [...sectionRatios.entries()].sort((a, b) => {
+          if (b[1] !== a[1]) return b[1] - a[1]
+          return trackedSectionIds.indexOf(a[0]) - trackedSectionIds.indexOf(b[0])
+        })[0]
+
+        if (dominantSection && dominantSection[1] > 0.15) {
+          setActiveSection((current) =>
+            current === dominantSection[0] ? current : dominantSection[0]
+          )
+        }
+      },
+      {
+        threshold: [0.15, 0.3, 0.45, 0.6, 0.75],
+        rootMargin: '-96px 0px -40% 0px',
+      }
+    )
+
+    sections.forEach((section) => observer.observe(section))
+    return () => {
+      observer.disconnect()
+      sectionRatios.clear()
+    }
+  }, [])
+
+  useEffect(() => {
+    const revealItems = document.querySelectorAll('[data-reveal]')
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible')
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -10% 0px' }
+    )
+
+    revealItems.forEach((item) => observer.observe(item))
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setTestimonialIndex((current) => (current + 1) % testimonials.length)
+    }, 6500)
+
+    return () => window.clearInterval(timer)
+  }, [])
+
+  const activePortfolio = portfolioItems[portfolioIndex]
+  const activeTestimonial = testimonials[testimonialIndex]
+
+  const serviceNavIsActive = useMemo(
+    () => ['layanan', 'portfolio'].includes(activeSection),
+    [activeSection]
+  )
+
+  const closeNavigation = useCallback(() => {
+    setMenuOpen(false)
+    setServicesOpen(false)
+  }, [])
+
+  const toggleServicesMenu = useCallback(() => {
+    setServicesOpen((open) => !open)
+  }, [])
+
+  const activateAndScroll = useCallback((sectionId) => {
+    const target = document.getElementById(sectionId)
+    setActiveSection(sectionId)
+
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }
+
+    closeNavigation()
+  }, [closeNavigation])
+
+  const handleNavClick = useCallback((event, href) => {
+    if (!href?.startsWith('#')) {
+      closeNavigation()
+      return
+    }
+
+    event.preventDefault()
+    activateAndScroll(href.slice(1))
+  }, [activateAndScroll, closeNavigation])
+
+  const handleHamburgerClick = useCallback(() => {
+    setMenuOpen((open) => !open)
+    setServicesOpen(false)
+  }, [])
+
+  const renderNavItems = (submenuId) =>
+    navItems.map((item) =>
+      item.children ? (
+        <div className={`nav-dropdown ${servicesOpen ? 'open' : ''}`} key={item.label}>
+          <button
+            type="button"
+            className={`nav-link nav-button ${serviceNavIsActive ? 'active' : ''}`}
+            onClick={toggleServicesMenu}
+            aria-expanded={servicesOpen}
+            aria-controls={submenuId}
+            aria-label="Toggle submenu layanan"
+          >
+            {item.label}
+            <i className="fa-solid fa-chevron-down caret" aria-hidden="true" />
+          </button>
+          <div className="dropdown-panel" id={submenuId}>
+            {item.children.map((child) => (
+              <a
+                key={child.label}
+                className={`dropdown-link ${
+                  activeSection === child.href.slice(1) ? 'active' : ''
+                }`}
+                href={child.href}
+                onClick={(event) => handleNavClick(event, child.href)}
+              >
+                {child.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <a
+          key={item.label}
+          className={`nav-link ${activeSection === item.href.slice(1) ? 'active' : ''}`}
+          href={item.href}
+          onClick={(event) => handleNavClick(event, item.href)}
+          aria-current={activeSection === item.href.slice(1) ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      )
+    )
+
+  const nextPortfolio = () => {
+    setPortfolioIndex((current) => (current + 1) % portfolioItems.length)
+  }
+
+  const prevPortfolio = () => {
+    setPortfolioIndex(
+      (current) => (current - 1 + portfolioItems.length) % portfolioItems.length
+    )
+  }
+
+  return (
+    <>
+      <header className="site-header">
+        <div className="container nav-shell">
+          <a className="brand" href="#home" onClick={(event) => handleNavClick(event, '#home')}>
+            <img
+              src="/img/koteka-digital-logo-jayapura-papua.png"
+              alt="Logo Koteka Digital"
+            />
+            <span className="brand-text">Koteka Digital</span>
+          </a>
+
+          <nav className="nav-menu nav-menu-desktop" aria-label="Navigasi utama desktop">
+            {renderNavItems('desktop-services-submenu')}
+          </nav>
+
+          <a className="cta-pill" href={whatsappLinks.primary} target="_blank" rel="noreferrer">
+            <img src="/img/optimized/wa-64.png" alt="" aria-hidden="true" />
+            Konsultasi Gratis
+          </a>
+
+          <button
+            type="button"
+            className={`hamburger ${menuOpen ? 'active' : ''}`}
+            onClick={handleHamburgerClick}
+            aria-label={menuOpen ? 'Tutup menu' : 'Buka menu'}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+        </div>
+      </header>
+
+      <div
+        className={`nav-overlay nav-overlay-mobile ${menuOpen ? 'active' : ''}`}
+        onClick={closeNavigation}
+        aria-hidden={!menuOpen}
+      />
+
+      <nav
+        className={`nav-menu nav-menu-mobile ${menuOpen ? 'active' : ''}`}
+        id="mobile-navigation"
+        aria-label="Navigasi utama"
+        aria-hidden={!menuOpen}
+        role="dialog"
+        aria-modal="true"
+        tabIndex={menuOpen ? -1 : undefined}
+        ref={mobileNavRef}
+      >
+        <div className="mobile-menu-header">
+          <div className="mobile-menu-brand">
+            <img
+              src="/img/koteka-digital-logo-jayapura-papua.png"
+              alt="Logo Koteka Digital"
+            />
+            <div className="mobile-menu-brand-copy">
+              <span className="mobile-menu-brand-title">Koteka Digital</span>
+              <span className="mobile-menu-brand-subtitle">Navigasi utama</span>
+            </div>
+          </div>
+          <button
+            type="button"
+            className="mobile-close"
+            onClick={closeNavigation}
+            aria-label="Tutup menu"
+          >
+            <i className="fa-solid fa-xmark" aria-hidden="true" />
+          </button>
+        </div>
+
+        <div className="mobile-menu-list">{renderNavItems('mobile-services-submenu')}</div>
+      </nav>
+
+      <main>
+        <section className="hero-section" id="home">
+          <div className="container hero-grid">
+            <div className="hero-copy" data-reveal>
+              <span className="eyebrow">Website Profesional untuk Jayapura dan Papua</span>
+              <h1>Jasa Pembuatan Website Profesional di Jayapura Papua</h1>
+              <p>
+                Kami membantu UMKM, bisnis lokal, personal brand, dan instansi tampil lebih
+                dipercaya lewat website modern, cepat, responsif, dan SEO-ready.
+              </p>
+              <p className="hero-note">
+                Fokus kami tetap sama seperti website lama: kredibilitas brand, visibilitas di
+                Google, dan pengalaman pengguna yang nyaman di desktop maupun mobile.
+              </p>
+              <div className="hero-actions">
+                <a
+                  className="button button-primary"
+                  href={whatsappLinks.primary}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Konsultasi WhatsApp
+                </a>
+                <a
+                  className="button button-secondary"
+                  href="#portfolio"
+                  onClick={(event) => handleNavClick(event, '#portfolio')}
+                >
+                  Lihat Portofolio
+                </a>
+              </div>
+              <div className="hero-social" aria-label="Media sosial Koteka Digital">
+                {heroSocialLinks.map((item) => (
+                  <a
+                    key={item.label}
+                    className="hero-social-link"
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={item.label}
+                  >
+                    <i className={item.icon} aria-hidden="true" />
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <div className="hero-visual" data-reveal>
+              <div className="hero-card hero-card-main">
+                <img src="/img/homeimg.png" alt="Preview hero Koteka Digital" />
+              </div>
+              <div className="hero-stat-grid">
+                {companyStats.map((stat) => (
+                  <article className="hero-stat" key={stat.label}>
+                    <strong>{stat.value}</strong>
+                    <span>{stat.label}</span>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="partner-section" aria-label="Klien dan partner">
+          <div className="container" data-reveal>
+            <p className="section-kicker">Dipercaya bisnis lokal dan institusi</p>
+            <div className="partner-grid">
+              {partnerCards.map((partner) => (
+                <article className="partner-card" key={partner.label}>
+                  <span className="partner-icon" aria-hidden="true">
+                    <i className={partner.icon} />
+                  </span>
+                  <span className="partner-label">{partner.label}</span>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="about-section" id="about">
+          <div className="container">
+            <div className="section-heading about-heading" data-reveal>
+              <h2>Tentang Kami</h2>
+              <p className="about-lead">
+                Membangun website yang profesional, cepat, dan siap mendukung bisnis bertumbuh
+              </p>
+              <p className="about-copy">
+                Koteka Digital tetap hadir dengan identitas lama: spesialis website untuk bisnis
+                Jayapura dan Papua yang butuh tampilan kuat, struktur rapi, dan hasil yang mudah
+                dipercaya pelanggan.
+              </p>
+            </div>
+
+            <div className="card-grid card-grid-three about-card-grid">
+              {aboutCards.map((card) => (
+                <article className="info-card about-info-card" key={card.title} data-reveal>
+                  <div className="about-card-head">
+                    <div className="card-icon about-card-icon">
+                      <i className={card.icon} aria-hidden="true" />
+                    </div>
+                    <h3>{card.title}</h3>
+                  </div>
+                  <p>{card.text}</p>
+                </article>
+              ))}
+            </div>
+
+            <div className="about-team" data-reveal>
+              <div className="section-heading about-team-heading">
+                <span className="eyebrow about-eyebrow">Tim Kami</span>
+                <h3>Orang-orang di balik pengalaman website yang rapi dan profesional</h3>
+              </div>
+
+              <div className="card-grid card-grid-three about-team-grid">
+                {teamMembers.map((member) => (
+                  <article className="team-card" key={member.name}>
+                    <div className="team-avatar-wrap">
+                      <span className="team-avatar-ring team-avatar-ring-one" aria-hidden="true" />
+                      <span className="team-avatar-ring team-avatar-ring-two" aria-hidden="true" />
+                      <img className="team-avatar" src={member.image} alt={member.name} loading="lazy" />
+                    </div>
+
+                    <div className="team-card-copy">
+                      <h4>{member.name}</h4>
+                      <p className="team-role">{member.role}</p>
+                      <p className="team-description">{member.description}</p>
+                    </div>
+
+                    <div className="team-socials" aria-label={`Sosial media ${member.name}`}>
+                      {member.socials.map((social) => (
+                        <a
+                          key={social.label}
+                          className="team-social-link"
+                          href={social.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={social.label}
+                        >
+                          <i className={social.icon} aria-hidden="true" />
+                        </a>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="services-section" id="layanan">
+          <div className="container">
+            <div className="section-heading services-heading" data-reveal>
+              <span className="eyebrow">Layanan</span>
+              <h2>Jasa Pembuatan Website Jayapura Profesional untuk UMKM</h2>
+              <p>
+                Seluruh kelompok layanan lama tetap dipertahankan: fondasi website bisnis,
+                performa dan keamanan, sampai strategi lanjutan untuk scale-up.
+              </p>
+            </div>
+
+            <div className="service-group-list">
+              {serviceGroups.map((group) => (
+                <section className="service-group service-group-premium" key={group.title} data-reveal>
+                  <div className="service-group-head">
+                    <h3 className="service-group-title">{group.title}</h3>
+                    <p>{group.description}</p>
+                  </div>
+                  <div className="card-grid card-grid-five">
+                    {group.items.map((item) => (
+                      <article className="service-card" key={item.title}>
+                        <i className={item.icon} aria-hidden="true" />
+                        <h4>{item.title}</h4>
+                        <p>{item.text}</p>
+                      </article>
+                    ))}
+                  </div>
+                  <a className="button button-tertiary service-cta" href={group.link} target="_blank" rel="noreferrer">
+                    Diskusi Layanan Ini
+                  </a>
+                </section>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="pricing-section" id="pricing-section">
+          <div className="container">
+            <div className="section-heading" data-reveal>
+              <span className="eyebrow">Harga</span>
+              <h2>Pilih Paket Website</h2>
+              <p>Paket PDF lama tetap tersedia untuk download agar alur konsultasi Anda tidak berubah.</p>
+            </div>
+
+            <div className="card-grid card-grid-three">
+              {pricingPlans.map((plan) => (
+                <article
+                  className={`pricing-card ${plan.featured ? 'featured' : ''}`}
+                  key={plan.name}
+                  data-reveal
+                >
+                  <span className="plan-tag">{plan.tag}</span>
+                  <h3>{plan.name}</h3>
+                  <p className="pricing-copy">{plan.copy}</p>
+                  <strong className="price">{plan.price}</strong>
+                  <ul className="feature-list">
+                    {plan.features.map((feature) => (
+                      <li key={feature}>{feature}</li>
+                    ))}
+                  </ul>
+                  <div className="pricing-actions">
+                    <a className="button button-primary" href={plan.download} download>
+                      Download PDF
+                    </a>
+                    <a className="button button-secondary" href={plan.orderLink} target="_blank" rel="noreferrer">
+                      Pesan Paket
+                    </a>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="portfolio-section" id="portfolio">
+          <div className="container">
+            <div className="section-heading" data-reveal>
+              <span className="eyebrow">Portofolio</span>
+              <h2>Proyek yang sudah tayang dan bisa langsung dilihat</h2>
+              <p>
+                Live preview lama kami pertahankan agar calon klien tetap bisa melihat hasil kerja
+                secara langsung.
+              </p>
+            </div>
+
+            <div className="portfolio-showcase" data-reveal>
+              <button type="button" className="slider-control" onClick={prevPortfolio} aria-label="Portofolio sebelumnya">
+                <i className="fa-solid fa-arrow-left" aria-hidden="true" />
+              </button>
+
+              <article className="portfolio-card featured">
+                <div className="portfolio-image">
+                  <img src={activePortfolio.image} alt={activePortfolio.title} />
+                </div>
+                <div className="portfolio-content">
+                  <span className="portfolio-label">{activePortfolio.label}</span>
+                  <h3>{activePortfolio.title}</h3>
+                  <p>{activePortfolio.description}</p>
+                  <p className="portfolio-impact">{activePortfolio.impact}</p>
+                  <div className="tech-list">
+                    {activePortfolio.tech.map((tech) => (
+                      <span key={tech}>{tech}</span>
+                    ))}
+                  </div>
+                  <a className="button button-primary" href={activePortfolio.link} target="_blank" rel="noreferrer">
+                    Live Demo
+                  </a>
+                </div>
+              </article>
+
+              <button type="button" className="slider-control" onClick={nextPortfolio} aria-label="Portofolio berikutnya">
+                <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+              </button>
+            </div>
+
+            <div className="portfolio-thumbs">
+              {portfolioItems.map((item, index) => (
+                <button
+                  type="button"
+                  key={item.title}
+                  className={`thumb-card ${index === portfolioIndex ? 'active' : ''}`}
+                  onClick={() => setPortfolioIndex(index)}
+                >
+                  <img src={item.image} alt="" aria-hidden="true" />
+                  <span>{item.title}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="blog-section" id="blog">
+          <div className="container">
+            <div className="section-heading" data-reveal>
+              <span className="eyebrow">Blog</span>
+              <h2>Artikel lama tetap aman dan sekarang tetap mudah diakses</h2>
+              <p>
+                Semua artikel penting dari website sebelumnya tetap disediakan di folder publik
+                agar SEO dan link baca selengkapnya tidak hilang.
+              </p>
+            </div>
+            <div className="card-grid card-grid-three">
+              {blogPosts.map((post) => (
+                <article className="blog-card" key={post.title} data-reveal>
+                  <img src={post.image} alt={post.title} />
+                  <div className="blog-card-body">
+                    <span className="blog-meta">{post.category}</span>
+                    <h3>{post.title}</h3>
+                    <p>{post.excerpt}</p>
+                    <a className="button button-tertiary" href={post.link}>
+                      Baca Selengkapnya
+                    </a>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="testimonial-section" id="testimoni">
+          <div className="container">
+            <div className="section-heading" data-reveal>
+              <span className="eyebrow">Testimoni</span>
+              <h2>Testimoni Klien</h2>
+              <p>Cerita nyata dari klien yang telah merasakan dampak layanan kami.</p>
+            </div>
+            <div className="testimonial-stage" data-reveal>
+              <button
+                type="button"
+                className="slider-control"
+                onClick={() =>
+                  setTestimonialIndex(
+                    (current) => (current - 1 + testimonials.length) % testimonials.length
+                  )
+                }
+                aria-label="Testimoni sebelumnya"
+              >
+                <i className="fa-solid fa-arrow-left" aria-hidden="true" />
+              </button>
+
+              <article className="testimonial-card featured">
+                <div className="testimonial-head">
+                  <img src={activeTestimonial.image} alt={activeTestimonial.name} />
+                  <div>
+                    <h3>{activeTestimonial.name}</h3>
+                    <span>{activeTestimonial.role}</span>
+                  </div>
+                </div>
+                <p>{activeTestimonial.quote}</p>
+              </article>
+
+              <button
+                type="button"
+                className="slider-control"
+                onClick={() => setTestimonialIndex((current) => (current + 1) % testimonials.length)}
+                aria-label="Testimoni berikutnya"
+              >
+                <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+              </button>
+            </div>
+            <div className="dot-list">
+              {testimonials.map((item, index) => (
+                <button
+                  type="button"
+                  key={item.name}
+                  className={`dot ${index === testimonialIndex ? 'active' : ''}`}
+                  onClick={() => setTestimonialIndex(index)}
+                  aria-label={`Tampilkan testimoni ${item.name}`}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="faq-section" id="faq">
+          <div className="container">
+            <div className="section-heading" data-reveal>
+              <span className="eyebrow">FAQ</span>
+              <h2>FAQ Jasa Website Jayapura Papua</h2>
+              <p>Pertanyaan penting lama kami pertahankan agar calon klien tetap cepat paham.</p>
+            </div>
+            <div className="card-grid card-grid-three">
+              {faqs.map((faq) => (
+                <article className="info-card faq-card" key={faq.question} data-reveal>
+                  <div className="card-icon">
+                    <i className={faq.icon} aria-hidden="true" />
+                  </div>
+                  <h3>{faq.question}</h3>
+                  <p>{faq.answer}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="contact-section" id="kontak">
+          <div className="container">
+            <div className="section-heading" data-reveal>
+              <span className="eyebrow">Kontak</span>
+              <h2>Kontak Kami</h2>
+              <p>Hubungi kami untuk konsultasi website, SEO, dan strategi digital yang sesuai kebutuhan bisnis Anda.</p>
+            </div>
+
+            <div className="contact-grid">
+              <article className="contact-card" data-reveal>
+                <h3>Informasi Kontak</h3>
+                <ul className="contact-list">
+                  <li>
+                    <i className="fa-brands fa-whatsapp" aria-hidden="true" />
+                    <a href={contactInfo.whatsappLink} target="_blank" rel="noreferrer">
+                      {contactInfo.whatsappLabel}
+                    </a>
+                  </li>
+                  <li>
+                    <i className="fa-solid fa-envelope" aria-hidden="true" />
+                    <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
+                  </li>
+                  <li>
+                    <i className="fa-solid fa-location-dot" aria-hidden="true" />
+                    <span>{contactInfo.location}</span>
+                  </li>
+                </ul>
+                <div className="map-wrap">
+                  <iframe
+                    title="Lokasi Koteka Digital"
+                    src="https://www.google.com/maps?q=Jayapura%2C%20Papua&output=embed"
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </div>
+              </article>
+
+              <ContactForm />
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="site-footer">
+        <div className="container footer-grid">
+          <div>
+            <h3>Koteka Digital</h3>
+            <p>
+              Spesialis jasa pembuatan website profesional di Jayapura, Papua untuk UMKM, bisnis
+              lokal, personal brand, dan instansi.
+            </p>
+          </div>
+          <div>
+            <h4>Navigasi</h4>
+            <div className="footer-links">
+              {navItems.filter((item) => !item.children).map((item) => (
+                <a key={item.label} href={item.href}>
+                  {item.label}
+                </a>
+              ))}
+              <a href="#faq">FAQ</a>
+            </div>
+          </div>
+          <div>
+            <h4>Hubungi Kami</h4>
+            <div className="footer-links">
+              <a href={contactInfo.whatsappLink} target="_blank" rel="noreferrer">
+                {contactInfo.whatsappLabel}
+              </a>
+              <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
+              <a href="https://kotekadigital.com/" target="_blank" rel="noreferrer">
+                kotekadigital.com
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <p>&copy; 2026 Koteka Digital. Seluruh hak cipta dilindungi.</p>
+        </div>
+      </footer>
+
+      <a className="floating-wa" href={whatsappLinks.floating} target="_blank" rel="noreferrer">
+        <i className="fa-brands fa-whatsapp" aria-hidden="true" />
+        <span>Konsultasi Gratis</span>
+      </a>
+    </>
+  )
+}
+
+function ContactForm() {
+  const [form, setForm] = useState({
+    nama: '',
+    wa: '',
+    email: '',
+    pesan: '',
+    kirimVia: 'whatsapp',
+  })
+
+  const submitLabel = form.kirimVia === 'email' ? 'Kirim via Email' : 'Kirim via WhatsApp'
+
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    setForm((current) => ({ ...current, [name]: value }))
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+
+    const message = [
+      'Halo Koteka Digital, saya tertarik konsultasi layanan website.',
+      '',
+      `Nama: ${form.nama}`,
+      `WhatsApp: ${form.wa}`,
+      `Email: ${form.email}`,
+      `Pesan: ${form.pesan}`,
+    ].join('\n')
+
+    if (form.kirimVia === 'email') {
+      const subject = encodeURIComponent(`Permintaan Konsultasi Website - ${form.nama || 'Tanpa Nama'}`)
+      window.location.href = `mailto:${contactInfo.email}?subject=${subject}&body=${encodeURIComponent(message)}`
+    } else {
+      window.open(
+        `https://wa.me/${contactInfo.whatsappNumber}?text=${encodeURIComponent(message)}`,
+        '_blank',
+        'noopener,noreferrer'
+      )
+    }
+
+    setForm({
+      nama: '',
+      wa: '',
+      email: '',
+      pesan: '',
+      kirimVia: form.kirimVia,
+    })
+  }
+
+  return (
+    <article className="contact-card" data-reveal>
+      <h3>Form Konsultasi</h3>
+      <form className="contact-form" onSubmit={handleSubmit}>
+        <label htmlFor="nama">Nama Lengkap</label>
+        <input id="nama" name="nama" value={form.nama} onChange={handleChange} required />
+
+        <label htmlFor="wa">Nomor WhatsApp Aktif</label>
+        <input id="wa" name="wa" value={form.wa} onChange={handleChange} required />
+
+        <label htmlFor="email">Email Aktif</label>
+        <input id="email" type="email" name="email" value={form.email} onChange={handleChange} required />
+
+        <label htmlFor="pesan">Kebutuhan Anda</label>
+        <textarea id="pesan" name="pesan" rows="5" value={form.pesan} onChange={handleChange} required />
+
+        <label htmlFor="kirimVia">Pilih Channel Pengiriman</label>
+        <select id="kirimVia" name="kirimVia" value={form.kirimVia} onChange={handleChange}>
+          <option value="whatsapp">WhatsApp (Respon Lebih Cepat)</option>
+          <option value="email">Email (Format Lebih Formal)</option>
+        </select>
+
+        <button type="submit" className="button button-primary form-submit">
+          {submitLabel}
+        </button>
+      </form>
+    </article>
+  )
+}
+
+export default App
