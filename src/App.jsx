@@ -402,7 +402,10 @@ function App() {
               src="/img/koteka-digital-logo-jayapura-papua.png"
               alt="Logo Koteka Digital"
             />
-            <span className="brand-text">Koteka Digital</span>
+            <span className="brand-text">
+              <span>KOTEKA</span>
+              <span className="brand-accent">DIGITAL</span>
+            </span>
           </a>
 
           <nav className="nav-menu nav-menu-desktop" aria-label="Navigasi utama desktop">
@@ -490,7 +493,7 @@ function App() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Konsultasi WhatsApp
+                  Pesan Paket Website
                 </a>
                 <a
                   className="button button-secondary"
@@ -518,7 +521,12 @@ function App() {
 
             <div className="hero-visual" data-reveal>
               <div className="hero-card hero-card-main">
-                <img src="/img/homeimg.png" alt="Preview hero Koteka Digital" />
+                <img
+                  src="/img/optimized/developer-720.jpg"
+                  srcSet="/img/optimized/developer-480.jpg 480w, /img/optimized/developer-720.jpg 720w"
+                  sizes="(max-width: 900px) 100vw, 42vw"
+                  alt="Preview hero Koteka Digital"
+                />
               </div>
               <div className="hero-stat-grid">
                 {companyStats.map((stat) => (
@@ -551,9 +559,11 @@ function App() {
         <section className="about-section" id="about">
           <div className="container">
             <div className="section-heading about-heading" data-reveal>
+              <span className="eyebrow">About</span>
               <h2>Tentang Kami</h2>
               <p className="about-lead">
-                Membangun website yang profesional, cepat, dan siap mendukung bisnis bertumbuh
+                Membangun website profesional yang cepat, SEO-friendly, dan siap mendukung
+                pertumbuhan bisnis.
               </p>
               <p className="about-copy">
                 Koteka Digital tetap hadir dengan identitas lama: spesialis website untuk bisnis
@@ -562,18 +572,31 @@ function App() {
               </p>
             </div>
 
-            <div className="card-grid card-grid-three about-card-grid">
-              {aboutCards.map((card) => (
-                <article className="info-card about-info-card" key={card.title} data-reveal>
-                  <div className="about-card-head">
-                    <div className="card-icon about-card-icon">
-                      <i className={card.icon} aria-hidden="true" />
+            <div className="about-layout" data-reveal>
+              <div className="about-logo-panel">
+                <div className="about-logo-frame">
+                  <img
+                    className="about-logo"
+                    src="/img/koteka-digital-jasa-website-jayapura-papua.jpg"
+                    alt="Logo baru Koteka Digital"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+
+              <div className="card-grid card-grid-three about-card-grid">
+                {aboutCards.map((card) => (
+                  <article className="info-card about-info-card" key={card.title}>
+                    <div className="about-card-head">
+                      <div className="card-icon about-card-icon">
+                        <i className={card.icon} aria-hidden="true" />
+                      </div>
+                      <h3>{card.title}</h3>
                     </div>
-                    <h3>{card.title}</h3>
-                  </div>
-                  <p>{card.text}</p>
-                </article>
-              ))}
+                    <p>{card.text}</p>
+                  </article>
+                ))}
+              </div>
             </div>
 
             <div className="about-team" data-reveal>
@@ -630,16 +653,19 @@ function App() {
             </div>
 
             <div className="service-group-list">
-              {serviceGroups.map((group) => (
+              {serviceGroups.map((group, index) => (
                 <section className="service-group service-group-premium" key={group.title} data-reveal>
                   <div className="service-group-head">
+                    <span className="service-group-kicker">{`Kategori 0${index + 1}`}</span>
                     <h3 className="service-group-title">{group.title}</h3>
                     <p>{group.description}</p>
                   </div>
                   <div className="card-grid card-grid-five">
                     {group.items.map((item) => (
                       <article className="service-card" key={item.title}>
-                        <i className={item.icon} aria-hidden="true" />
+                        <span className="service-card-icon" aria-hidden="true">
+                          <i className={item.icon} />
+                        </span>
                         <h4>{item.title}</h4>
                         <p>{item.text}</p>
                       </article>
@@ -893,17 +919,53 @@ function App() {
 
         <section className="contact-section" id="kontak">
           <div className="container">
-            <div className="section-heading contact-heading" data-reveal>
-              <span className="eyebrow">Kontak</span>
-              <h2>Kontak Kami</h2>
-              <p>Hubungi kami untuk konsultasi website, SEO, dan strategi digital yang sesuai kebutuhan bisnis Anda.</p>
+            <div className="contact-hero" data-reveal>
+              <div className="contact-intro">
+                <div className="section-heading contact-heading">
+                  <span className="eyebrow">Kontak</span>
+                  <h2>Kontak Kami</h2>
+                  <p>Hubungi kami untuk konsultasi website, SEO, dan strategi digital yang sesuai kebutuhan bisnis Anda.</p>
+                </div>
+
+                <div className="contact-benefits">
+                  <div className="contact-benefit">
+                    <i className="fa-solid fa-bolt" aria-hidden="true" />
+                    <span>Respon cepat untuk kebutuhan konsultasi awal</span>
+                  </div>
+                  <div className="contact-benefit">
+                    <i className="fa-solid fa-shield-heart" aria-hidden="true" />
+                    <span>Diskusi lebih terarah sesuai target bisnis Anda</span>
+                  </div>
+                  <div className="contact-benefit">
+                    <i className="fa-solid fa-laptop-code" aria-hidden="true" />
+                    <span>Solusi website, sistem digital, dan optimasi yang relevan</span>
+                  </div>
+                </div>
+
+                <div className="contact-social-grid">
+                  <a className="contact-social-card" href={contactInfo.whatsappLink} target="_blank" rel="noreferrer">
+                    <i className="fa-brands fa-whatsapp" aria-hidden="true" />
+                    <div>
+                      <strong>WhatsApp</strong>
+                      <span>{contactInfo.whatsappLabel}</span>
+                    </div>
+                  </a>
+                  <a className="contact-social-card" href={`mailto:${contactInfo.email}`}>
+                    <i className="fa-solid fa-envelope" aria-hidden="true" />
+                    <div>
+                      <strong>Email</strong>
+                      <span>{contactInfo.email}</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+
+              <ContactForm />
             </div>
 
-            <div className="contact-stack">
-              <ContactForm />
-
-              <article className="contact-card contact-info-card" data-reveal>
-                <h3>Informasi Kontak</h3>
+            <article className="contact-card contact-combined-card" data-reveal>
+              <div className="contact-combined-copy">
+                <h3>Informasi Kontak & Lokasi Kami</h3>
                 <ul className="contact-list">
                   <li>
                     <i className="fa-brands fa-whatsapp" aria-hidden="true" />
@@ -922,16 +984,25 @@ function App() {
                     </div>
                   </li>
                   <li>
+                    <i className="fa-solid fa-globe" aria-hidden="true" />
+                    <div>
+                      <strong>Website</strong>
+                      <a href="https://kotekadigital.com/" target="_blank" rel="noreferrer">
+                        kotekadigital.com
+                      </a>
+                    </div>
+                  </li>
+                  <li>
                     <i className="fa-solid fa-location-dot" aria-hidden="true" />
                     <div>
-                      <strong>Lokasi</strong>
+                      <strong>Alamat / Lokasi</strong>
                       <span>{contactInfo.location}</span>
                     </div>
                   </li>
                 </ul>
-              </article>
+              </div>
 
-              <article className="contact-card map-card" data-reveal>
+              <div className="map-card">
                 <h3>Lokasi Kami</h3>
                 <div className="map-wrap">
                   <iframe
@@ -941,8 +1012,8 @@ function App() {
                     referrerPolicy="no-referrer-when-downgrade"
                   />
                 </div>
-              </article>
-            </div>
+              </div>
+            </article>
           </div>
         </section>
       </main>
@@ -1094,23 +1165,50 @@ function ContactForm() {
     <article className="contact-card contact-form-card" data-reveal>
       <h3>Form Konsultasi</h3>
       <form className="contact-form" onSubmit={handleSubmit}>
-        <label htmlFor="nama">Nama Lengkap</label>
-        <input id="nama" name="nama" value={form.nama} onChange={handleChange} required />
+        <div className="contact-form-grid">
+          <div className="contact-field">
+            <label htmlFor="nama">Nama Lengkap</label>
+            <input id="nama" name="nama" placeholder="Masukkan nama lengkap" value={form.nama} onChange={handleChange} required />
+          </div>
+          <div className="contact-field">
+            <label htmlFor="email">Email Aktif</label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              placeholder="Masukkan email aktif"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </div>
 
-        <label htmlFor="wa">Nomor WhatsApp Aktif</label>
-        <input id="wa" name="wa" value={form.wa} onChange={handleChange} required />
+        <div className="contact-field">
+          <label htmlFor="wa">Nomor WhatsApp Aktif</label>
+          <input id="wa" name="wa" placeholder="Masukkan nomor WhatsApp" value={form.wa} onChange={handleChange} required />
+        </div>
 
-        <label htmlFor="email">Email Aktif</label>
-        <input id="email" type="email" name="email" value={form.email} onChange={handleChange} required />
+        <div className="contact-field">
+          <label htmlFor="pesan">Kebutuhan Anda</label>
+          <textarea
+            id="pesan"
+            name="pesan"
+            rows="5"
+            placeholder="Ceritakan kebutuhan website atau sistem digital Anda"
+            value={form.pesan}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-        <label htmlFor="pesan">Kebutuhan Anda</label>
-        <textarea id="pesan" name="pesan" rows="5" value={form.pesan} onChange={handleChange} required />
-
-        <label htmlFor="kirimVia">Pilih Channel Pengiriman</label>
-        <select id="kirimVia" name="kirimVia" value={form.kirimVia} onChange={handleChange}>
-          <option value="whatsapp">WhatsApp (Respon Lebih Cepat)</option>
-          <option value="email">Email (Format Lebih Formal)</option>
-        </select>
+        <div className="contact-field">
+          <label htmlFor="kirimVia">Pilih Channel Pengiriman</label>
+          <select id="kirimVia" name="kirimVia" value={form.kirimVia} onChange={handleChange}>
+            <option value="whatsapp">WhatsApp (Respon Lebih Cepat)</option>
+            <option value="email">Email (Format Lebih Formal)</option>
+          </select>
+        </div>
 
         <button type="submit" className="button button-primary form-submit">
           {submitLabel}
