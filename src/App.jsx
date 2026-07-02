@@ -582,6 +582,30 @@ function App() {
                     loading="lazy"
                   />
                 </div>
+
+                <div className="about-logo-contact" aria-label="Media sosial dan info Koteka Digital">
+                  <span className="about-logo-socials-label">Terhubung dengan Koteka Digital</span>
+                  <div className="about-logo-social-links">
+                    <a href={contactInfo.whatsappLink} target="_blank" rel="noreferrer" aria-label={`WhatsApp ${contactInfo.whatsappLabel}`}>
+                      <i className="fa-brands fa-whatsapp" aria-hidden="true" />
+                    </a>
+                    <span className="about-logo-social-link-static" aria-label={`Lokasi ${contactInfo.location}`} title={contactInfo.location}>
+                      <i className="fa-solid fa-location-dot" aria-hidden="true" />
+                    </span>
+                    <a href="https://www.instagram.com/kotekadigital/" target="_blank" rel="noreferrer" aria-label="Instagram Koteka Digital">
+                      <i className="fa-brands fa-instagram" aria-hidden="true" />
+                    </a>
+                    <a href="https://web.facebook.com/profile.php?id=61573476356920" target="_blank" rel="noreferrer" aria-label="Facebook Koteka Digital">
+                      <i className="fa-brands fa-facebook-f" aria-hidden="true" />
+                    </a>
+                    <a href="https://www.tiktok.com/@kotekadigitalstudio?_r=1&_t=ZS-97V638s9hhd" target="_blank" rel="noreferrer" aria-label="TikTok Koteka Digital">
+                      <i className="fa-brands fa-tiktok" aria-hidden="true" />
+                    </a>
+                    <a href="https://kotekadigital.com/" target="_blank" rel="noreferrer" aria-label="Website Koteka Digital">
+                      <i className="fa-solid fa-globe" aria-hidden="true" />
+                    </a>
+                  </div>
+                </div>
               </div>
 
               <div className="card-grid card-grid-three about-card-grid">
