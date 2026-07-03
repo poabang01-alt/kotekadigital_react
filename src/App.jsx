@@ -54,14 +54,98 @@ function App() {
     { label: 'Coffee Shop', icon: 'fa-solid fa-mug-hot' },
     { label: 'Sekolah', icon: 'fa-solid fa-school' },
   ]
+  const pricingFeatureMap = {
+    'Paket Basic': [
+      '1-4 halaman (Home, About, Contact)',
+      'Desain template (bisa custom, bisa template)',
+      'Mobile responsive di berbagai device (HP, tablet, laptop)',
+      'Form kontak',
+      'Tombol WhatsApp',
+      'SEO dasar (judul & meta)',
+      'Footer gratis terintegrasi',
+      'Domain & hosting (opsional)',
+      'Revisi 1-2x',
+    ],
+    'Paket Standar': [
+      '4-8 halaman (Home, Tentang, Layanan, Kontak, dll)',
+      'Desain semi custom',
+      'Desain (bisa custom, bisa template)',
+      'SEO basic + struktur website',
+      'Integrasi WhatsApp dan Email',
+      'Integrasi ke semua sosial media',
+      'Form kontak',
+      'Google Maps',
+      'Revisi 2-3x',
+      'Training penggunaan website',
+    ],
+    'Paket Premium': [
+      'Halaman bebas (custom sesuai kebutuhan)',
+      'Desain full custom (UI/UX profesional)',
+      'Animasi & interaktif',
+      'SEO lanjutan',
+      'Blog / artikel',
+      'Integrasi WhatsApp dan Email',
+      'Integrasi ke semua sosial media',
+      'Optimasi kecepatan (speed optimization)',
+      'Security website',
+      'Backup otomatis',
+      'Revisi lebih fleksibel',
+    ],
+  }
+  const comparisonRows = [
+    { feature: 'Jumlah Halaman', basic: '1 - 4 Halaman', standard: '4 - 8 Halaman', premium: 'Custom (Bebas)' },
+    { feature: 'Desain UI', basic: 'Template / Custom Ringan', standard: 'Semi Custom', premium: 'Full Custom (UI/UX Profesional)' },
+    { feature: 'SEO', basic: 'Dasar', standard: 'Dasar + Struktur', premium: 'Lanjutan' },
+    { feature: 'Integrasi', basic: 'WhatsApp', standard: 'WhatsApp + Email + Sosial Media', premium: 'Lengkap + Optimasi Kecepatan' },
+    { feature: 'Revisi', basic: '1 - 2x', standard: '2 - 3x', premium: 'Lebih Fleksibel' },
+    { feature: 'Keamanan', basic: 'Dasar', standard: 'Standar', premium: 'Tinggi' },
+    { feature: 'Backup', basic: '-', standard: '-', premium: 'Otomatis' },
+    { feature: 'Training', basic: '-', standard: 'Ya', premium: 'Ya + Panduan Lengkap' },
+  ]
+  const calculatorBasePrices = {
+    company: 1500000,
+    business: 2500000,
+    institution: 3500000,
+    webapp: 7000000,
+  }
+  const calculatorPagePrices = {
+    1: 0,
+    5: 450000,
+    8: 900000,
+    12: 1500000,
+  }
+  const calculatorDesignPrices = {
+    template: 0,
+    semi: 1000000,
+    full: 2500000,
+  }
+  const calculatorFeaturePrices = {
+    blog: 450000,
+    whatsapp: 300000,
+    email: 300000,
+    maps: 250000,
+    animation: 600000,
+    seo: 800000,
+  }
 
   const [menuOpen, setMenuOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState(null)
+  const [isDesktopNav, setIsDesktopNav] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia('(min-width: 901px)').matches : true
+  )
   const [activeSection, setActiveSection] = useState('home')
   const [portfolioIndex, setPortfolioIndex] = useState(0)
   const [testimonialIndex, setTestimonialIndex] = useState(0)
   const [testimonialDragOffset, setTestimonialDragOffset] = useState(0)
   const [openFaqIndex, setOpenFaqIndex] = useState(0)
+  const [calculatorForm, setCalculatorForm] = useState({
+    websiteType: 'company',
+    pageCount: '5',
+    design: 'semi',
+    extras: ['blog', 'whatsapp', 'email', 'maps'],
+  })
+  const headerRef = useRef(null)
+  const headerOffsetRef = useRef(0)
   const sectionRatiosRef = useRef(new Map())
   const mobileNavRef = useRef(null)
   const testimonialInteractingRef = useRef(false)
@@ -134,14 +218,56 @@ function App() {
   }, [menuOpen])
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 901px)')
+    const handleMediaChange = (event) => {
+      setIsDesktopNav(event.matches)
+      setOpenDropdown(null)
+    }
+
+    setIsDesktopNav(mediaQuery.matches)
+    mediaQuery.addEventListener('change', handleMediaChange)
+
+    return () => mediaQuery.removeEventListener('change', handleMediaChange)
+  }, [])
+
+  useEffect(() => {
+    const syncHeaderOffset = () => {
+      const headerHeight = headerRef.current?.offsetHeight ?? 0
+      headerOffsetRef.current = headerHeight
+      document.documentElement.style.setProperty('--nav-offset', `${headerHeight}px`)
+    }
+
+    syncHeaderOffset()
+
+    const headerNode = headerRef.current
+    if (!headerNode || typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', syncHeaderOffset)
+      return () => window.removeEventListener('resize', syncHeaderOffset)
+    }
+
+    const resizeObserver = new ResizeObserver(() => syncHeaderOffset())
+    resizeObserver.observe(headerNode)
+    window.addEventListener('resize', syncHeaderOffset)
+
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener('resize', syncHeaderOffset)
+    }
+  }, [])
+
+  useEffect(() => {
     const trackedSectionIds = [
       'home',
       'about',
       'layanan',
+      'layanan-kategori-01',
+      'layanan-kategori-02',
+      'layanan-kategori-03',
       'pricing-section',
       'portfolio',
       'blog',
       'testimoni',
+      'faq',
       'kontak',
     ]
     const sectionRatios = sectionRatiosRef.current
@@ -210,6 +336,22 @@ function App() {
 
   const activePortfolio = portfolioItems[portfolioIndex]
   const activeTestimonial = testimonials[testimonialIndex]
+  const estimatedPrice = useMemo(() => {
+    const basePrice = calculatorBasePrices[calculatorForm.websiteType] ?? 0
+    const pagePrice = calculatorPagePrices[Number(calculatorForm.pageCount)] ?? 0
+    const designPrice = calculatorDesignPrices[calculatorForm.design] ?? 0
+    const extrasPrice = calculatorForm.extras.reduce(
+      (total, extra) => total + (calculatorFeaturePrices[extra] ?? 0),
+      0
+    )
+
+    return basePrice + pagePrice + designPrice + extrasPrice
+  }, [calculatorForm])
+  const estimatedTimeline = useMemo(() => {
+    if (estimatedPrice >= 9000000) return '14 - 30 hari kerja'
+    if (estimatedPrice >= 5000000) return '7 - 14 hari kerja'
+    return '3 - 7 hari kerja'
+  }, [estimatedPrice])
 
   const closeNavigation = useCallback(() => {
     setMenuOpen(false)
@@ -225,9 +367,12 @@ function App() {
     setActiveSection(sectionId)
 
     if (target) {
-      target.scrollIntoView({
+      const headerOffset = headerOffsetRef.current
+      const targetTop = target.getBoundingClientRect().top + window.scrollY - headerOffset
+
+      window.scrollTo({
+        top: Math.max(targetTop, 0),
         behavior: 'smooth',
-        block: 'start',
       })
     }
 
@@ -244,15 +389,108 @@ function App() {
     activateAndScroll(href.slice(1))
   }, [activateAndScroll, closeNavigation])
 
+  const handleDropdownButtonClick = useCallback((event, item) => {
+    if (isDesktopNav) {
+      handleNavClick(event, item.href)
+      return
+    }
+
+    event.preventDefault()
+    toggleDropdownMenu(item.label)
+  }, [handleNavClick, isDesktopNav, toggleDropdownMenu])
+
+  const handleDropdownPointerEnter = useCallback((label) => {
+    if (!isDesktopNav) return
+    setOpenDropdown(label)
+  }, [isDesktopNav])
+
+  const handleDropdownPointerLeave = useCallback((label) => {
+    if (!isDesktopNav) return
+    setOpenDropdown((current) => (current === label ? null : current))
+  }, [isDesktopNav])
+
   const handleHamburgerClick = useCallback(() => {
     setMenuOpen((open) => !open)
     setOpenDropdown(null)
   }, [])
 
+  const handleCalculatorChange = useCallback((field, value) => {
+    setCalculatorForm((current) => ({
+      ...current,
+      [field]: value,
+    }))
+  }, [])
+
+  const handleCalculatorExtraToggle = useCallback((extra) => {
+    setCalculatorForm((current) => {
+      const hasExtra = current.extras.includes(extra)
+      return {
+        ...current,
+        extras: hasExtra
+          ? current.extras.filter((item) => item !== extra)
+          : [...current.extras, extra],
+      }
+    })
+  }, [])
+
+  const handleCalculatorReset = useCallback(() => {
+    setCalculatorForm({
+      websiteType: 'company',
+      pageCount: '5',
+      design: 'semi',
+      extras: ['blog', 'whatsapp', 'email', 'maps'],
+    })
+  }, [])
+
+  const handleCalculatorWhatsapp = useCallback(() => {
+    const websiteTypeLabels = {
+      company: 'Company Profile',
+      business: 'Website Bisnis / UMKM',
+      institution: 'Website Lembaga / Institusi',
+      webapp: 'Web App Sistem Digital',
+    }
+    const designLabels = {
+      template: 'Template / Custom Ringan',
+      semi: 'Semi Custom',
+      full: 'Full Custom (UI/UX Profesional)',
+    }
+    const featureLabels = {
+      blog: 'Blog / Artikel',
+      whatsapp: 'Integrasi WhatsApp',
+      email: 'Integrasi Email',
+      maps: 'Google Maps',
+      animation: 'Animasi & Interaktif',
+      seo: 'SEO Lanjutan',
+    }
+    const message = [
+      'Halo Koteka Digital, saya ingin konsultasi estimasi harga website.',
+      `Jenis Website: ${websiteTypeLabels[calculatorForm.websiteType]}`,
+      `Jumlah Halaman: ${calculatorForm.pageCount} halaman`,
+      `Desain: ${designLabels[calculatorForm.design]}`,
+      `Fitur Tambahan: ${
+        calculatorForm.extras.length
+          ? calculatorForm.extras.map((extra) => featureLabels[extra]).join(', ')
+          : 'Tidak ada'
+      }`,
+      `Estimasi Harga: Rp ${estimatedPrice.toLocaleString('id-ID')}`,
+    ].join('\n')
+
+    window.open(
+      `https://wa.me/${contactInfo.whatsappNumber}?text=${encodeURIComponent(message)}`,
+      '_blank',
+      'noopener,noreferrer'
+    )
+  }, [calculatorForm, estimatedPrice])
+
   const renderNavItems = (submenuIdPrefix) =>
     navItems.map((item) =>
       item.children ? (
-        <div className={`nav-dropdown ${openDropdown === item.label ? 'open' : ''}`} key={item.label}>
+        <div
+          className={`nav-dropdown ${openDropdown === item.label ? 'open' : ''}`}
+          key={item.label}
+          onPointerEnter={() => handleDropdownPointerEnter(item.label)}
+          onPointerLeave={() => handleDropdownPointerLeave(item.label)}
+        >
           <button
             type="button"
             className={`nav-link nav-button ${
@@ -261,7 +499,7 @@ function App() {
                 ? 'active'
                 : ''
             }`}
-            onClick={() => toggleDropdownMenu(item.label)}
+            onClick={(event) => handleDropdownButtonClick(event, item)}
             aria-expanded={openDropdown === item.label}
             aria-controls={`${submenuIdPrefix}-${item.label.toLowerCase()}`}
             aria-label={`Toggle submenu ${item.label}`}
@@ -395,7 +633,7 @@ function App() {
 
   return (
     <>
-      <header className="site-header">
+      <header className="site-header" ref={headerRef}>
         <div className="container nav-shell">
           <a className="brand" href="#home" onClick={(event) => handleNavClick(event, '#home')}>
             <img
@@ -489,18 +727,17 @@ function App() {
               <div className="hero-actions">
                 <a
                   className="button button-primary"
-                  href={whatsappLinks.primary}
-                  target="_blank"
-                  rel="noreferrer"
+                  href="#pricing-section"
+                  onClick={(event) => handleNavClick(event, '#pricing-section')}
                 >
                   Pesan Paket Website
                 </a>
                 <a
                   className="button button-secondary"
-                  href="#portfolio"
-                  onClick={(event) => handleNavClick(event, '#portfolio')}
+                  href="#layanan"
+                  onClick={(event) => handleNavClick(event, '#layanan')}
                 >
-                  Lihat Portofolio
+                  Lihat Layanan
                 </a>
               </div>
               <div className="hero-social" aria-label="Media sosial Koteka Digital">
@@ -678,7 +915,12 @@ function App() {
 
             <div className="service-group-list">
               {serviceGroups.map((group, index) => (
-                <section className="service-group service-group-premium" key={group.title} data-reveal>
+                <section
+                  className="service-group service-group-premium"
+                  id={`layanan-kategori-0${index + 1}`}
+                  key={group.title}
+                  data-reveal
+                >
                   <div className="service-group-head">
                     <span className="service-group-kicker">{`Kategori 0${index + 1}`}</span>
                     <h3 className="service-group-title">{group.title}</h3>
@@ -706,25 +948,46 @@ function App() {
 
         <section className="pricing-section" id="pricing-section">
           <div className="container">
-            <div className="section-heading" data-reveal>
-              <span className="eyebrow">Harga</span>
-              <h2>Pilih Paket Website</h2>
-              <p>Paket PDF lama tetap tersedia untuk download agar alur konsultasi Anda tidak berubah.</p>
+            <div className="pricing-header" data-reveal>
+              <span className="pricing-badge">Paket Layanan Website</span>
+              <h2>
+                Pilih Paket Terbaik Untuk <span>Bisnis Anda</span>
+              </h2>
+              <p>
+                Kami menyediakan berbagai paket pembuatan website profesional yang dapat
+                disesuaikan dengan kebutuhan dan budget Anda.
+              </p>
             </div>
 
-            <div className="card-grid card-grid-three">
+            <div className="pricing-package-grid">
               {pricingPlans.map((plan) => (
                 <article
-                  className={`pricing-card ${plan.featured ? 'featured' : ''}`}
+                  className={`pricing-card pricing-card-reference ${
+                    plan.featured ? 'featured' : ''
+                  }`}
                   key={plan.name}
                   data-reveal
                 >
-                  <span className="plan-tag">{plan.tag}</span>
+                  <div className="pricing-card-shell">
+                    {plan.featured ? <span className="pricing-popular-badge">Paling Populer</span> : null}
+                    <div className="pricing-card-icon" aria-hidden="true">
+                      <i
+                        className={
+                          plan.name === 'Paket Basic'
+                            ? 'fa-solid fa-rocket'
+                            : plan.name === 'Paket Standar'
+                              ? 'fa-solid fa-chart-column'
+                              : 'fa-regular fa-crown'
+                        }
+                      />
+                    </div>
+                  </div>
                   <h3>{plan.name}</h3>
                   <p className="pricing-copy">{plan.copy}</p>
+                  <div className="pricing-investment-label">Investasi Paket</div>
                   <strong className="price">{plan.price}</strong>
-                  <ul className="feature-list">
-                    {plan.features.map((feature) => (
+                  <ul className="feature-list pricing-feature-list">
+                    {(pricingFeatureMap[plan.name] || plan.features).map((feature) => (
                       <li key={feature}>{feature}</li>
                     ))}
                   </ul>
@@ -739,6 +1002,180 @@ function App() {
                   </div>
                 </article>
               ))}
+            </div>
+
+            <div className="pricing-lower-grid">
+              <article className="pricing-comparison-card" data-reveal>
+                <div className="pricing-subsection-title">
+                  <i className="fa-solid fa-scale-balanced" aria-hidden="true" />
+                  <div>
+                    <h3>Tabel Perbandingan Paket</h3>
+                  </div>
+                </div>
+
+                <div className="pricing-table-wrap">
+                  <table className="pricing-table">
+                    <thead>
+                      <tr>
+                        <th>Fitur</th>
+                        <th>Basic</th>
+                        <th className="is-highlighted">
+                          <span className="pricing-table-badge">Paling Populer</span>
+                          Standard
+                        </th>
+                        <th>Premium</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {comparisonRows.map((row) => (
+                        <tr key={row.feature}>
+                          <th scope="row">{row.feature}</th>
+                          <td>{row.basic}</td>
+                          <td className="is-highlighted">{row.standard}</td>
+                          <td>{row.premium}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </article>
+
+              <article className="pricing-calculator-card" data-reveal>
+                <div className="pricing-subsection-title">
+                  <i className="fa-solid fa-calculator" aria-hidden="true" />
+                  <div>
+                    <h3>Kalkulator Harga Website</h3>
+                    <p>Hitung estimasi harga website sesuai kebutuhan Anda</p>
+                  </div>
+                </div>
+
+                <div className="pricing-calculator-grid">
+                  <div className="calculator-form">
+                    <label className="calculator-field">
+                      <span>1. Jenis Website</span>
+                      <select
+                        value={calculatorForm.websiteType}
+                        onChange={(event) =>
+                          handleCalculatorChange('websiteType', event.target.value)
+                        }
+                      >
+                        <option value="company">Company Profile</option>
+                        <option value="business">Website Bisnis / UMKM</option>
+                        <option value="institution">Website Lembaga / Institusi</option>
+                        <option value="webapp">Web App Sistem Digital</option>
+                      </select>
+                    </label>
+
+                    <label className="calculator-field">
+                      <span>2. Jumlah Halaman</span>
+                      <select
+                        value={calculatorForm.pageCount}
+                        onChange={(event) =>
+                          handleCalculatorChange('pageCount', event.target.value)
+                        }
+                      >
+                        <option value="1">1 Halaman</option>
+                        <option value="5">5 Halaman</option>
+                        <option value="8">8 Halaman</option>
+                        <option value="12">12+ Halaman</option>
+                      </select>
+                    </label>
+
+                    <fieldset className="calculator-fieldset">
+                      <legend>3. Desain</legend>
+                      <label className="calculator-radio">
+                        <input
+                          type="radio"
+                          name="design"
+                          value="template"
+                          checked={calculatorForm.design === 'template'}
+                          onChange={(event) =>
+                            handleCalculatorChange('design', event.target.value)
+                          }
+                        />
+                        <span>Template / Custom Ringan</span>
+                      </label>
+                      <label className="calculator-radio">
+                        <input
+                          type="radio"
+                          name="design"
+                          value="semi"
+                          checked={calculatorForm.design === 'semi'}
+                          onChange={(event) =>
+                            handleCalculatorChange('design', event.target.value)
+                          }
+                        />
+                        <span>Semi Custom</span>
+                      </label>
+                      <label className="calculator-radio">
+                        <input
+                          type="radio"
+                          name="design"
+                          value="full"
+                          checked={calculatorForm.design === 'full'}
+                          onChange={(event) =>
+                            handleCalculatorChange('design', event.target.value)
+                          }
+                        />
+                        <span>Full Custom (UI/UX Profesional)</span>
+                      </label>
+                    </fieldset>
+
+                    <fieldset className="calculator-fieldset">
+                      <legend>4. Fitur Tambahan</legend>
+                      {[
+                        ['blog', 'Blog / Artikel'],
+                        ['whatsapp', 'Integrasi WhatsApp'],
+                        ['email', 'Integrasi Email'],
+                        ['maps', 'Google Maps'],
+                        ['animation', 'Animasi & Interaktif'],
+                        ['seo', 'SEO Lanjutan'],
+                      ].map(([value, label]) => (
+                        <label className="calculator-checkbox" key={value}>
+                          <input
+                            type="checkbox"
+                            checked={calculatorForm.extras.includes(value)}
+                            onChange={() => handleCalculatorExtraToggle(value)}
+                          />
+                          <span>{label}</span>
+                        </label>
+                      ))}
+                    </fieldset>
+                  </div>
+
+                  <div className="calculator-summary">
+                    <div className="calculator-summary-card">
+                      <p className="calculator-summary-label">Estimasi Harga</p>
+                      <span className="calculator-summary-title">Total Estimasi</span>
+                      <strong>Rp {estimatedPrice.toLocaleString('id-ID')}</strong>
+                      <div className="calculator-summary-meta">
+                        <span>Estimasi waktu pengerjaan</span>
+                        <b>{estimatedTimeline}</b>
+                      </div>
+                      <button
+                        type="button"
+                        className="button button-primary calculator-wa-button"
+                        onClick={handleCalculatorWhatsapp}
+                      >
+                        <i className="fa-brands fa-whatsapp" aria-hidden="true" />
+                        Kirim ke WhatsApp
+                      </button>
+                      <button
+                        type="button"
+                        className="calculator-reset-button"
+                        onClick={handleCalculatorReset}
+                      >
+                        <i className="fa-solid fa-rotate-left" aria-hidden="true" />
+                        Reset Kalkulator
+                      </button>
+                      <small>
+                        * Harga bersifat estimasi dan dapat berubah sesuai kebutuhan spesifik
+                        proyek Anda.
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </article>
             </div>
           </div>
         </section>

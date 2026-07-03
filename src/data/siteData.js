@@ -13,10 +13,12 @@ export const navItems = [
     href: '#layanan',
     icon: 'fa-solid fa-briefcase',
     children: [
-      { label: 'Website UMKM', href: '#layanan' },
-      { label: 'Portofolio', href: '#portfolio' },
-      { label: 'Company Profile', href: '#layanan' },
-      { label: 'SEO', href: '#blog' },
+      { label: 'Website Bisnis', href: '#layanan-kategori-01' },
+      {
+        label: 'Website Lembaga, Organisasi & Institusi',
+        href: '#layanan-kategori-02',
+      },
+      { label: 'Web App Sistem Digital', href: '#layanan-kategori-03' },
     ],
   },
   { label: 'Harga', href: '#pricing-section', icon: 'fa-solid fa-tags' },
@@ -155,7 +157,7 @@ export const pricingPlans = [
   },
   {
     tag: 'Paling Dipilih',
-    name: 'Paket Standard',
+    name: 'Paket Standar',
     copy: 'Pilihan seimbang untuk bisnis yang butuh profil usaha yang lebih lengkap dan meyakinkan.',
     price: 'Rp 2.500.000 - Rp 5.000.000',
     download: '/downloads/paket-standard.pdf',

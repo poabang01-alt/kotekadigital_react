@@ -1,5 +1,6 @@
 :root {
   color-scheme: light;
+  --nav-offset: 82px;
   --bg: #eef4fb;
   --surface: rgba(255, 255, 255, 0.92);
   --surface-strong: #ffffff;
@@ -17,13 +18,536 @@
   --radius-sm: 14px;
 }
 
+/* Pricing section reference override */
+.pricing-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.pricing-section .container {
+  position: relative;
+  z-index: 1;
+}
+
+.pricing-header {
+  max-width: 860px;
+  margin: 0 auto 38px;
+  text-align: center;
+  padding-inline: 12px;
+}
+
+.pricing-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 7px 20px;
+  margin-bottom: 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ffcc00, #f2b400);
+  color: #08213a;
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.pricing-header h2 {
+  margin: 0;
+  color: #082c53;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  text-shadow: 0 12px 28px rgba(11, 58, 91, 0.12);
+}
+
+.pricing-header h2 span {
+  color: #ffcc00;
+  text-shadow: 0 10px 24px rgba(242, 180, 0, 0.18);
+}
+
+.pricing-header p {
+  max-width: 660px;
+  margin: 14px auto 0;
+  color: rgba(8, 44, 83, 0.78);
+  font-size: 1rem;
+  line-height: 1.7;
+  text-shadow: none;
+}
+
+.pricing-package-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+
+.pricing-card-reference {
+  position: relative;
+  padding: 22px 20px 24px;
+  border-radius: 20px;
+  border: 1px solid rgba(11, 58, 91, 0.12);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 251, 255, 0.98));
+  box-shadow:
+    0 14px 30px rgba(11, 58, 91, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  min-height: 100%;
+}
+
+.pricing-card-reference.featured {
+  border-color: rgba(255, 204, 0, 0.6);
+  box-shadow:
+    0 18px 34px rgba(11, 58, 91, 0.1),
+    0 0 0 1px rgba(255, 204, 0, 0.14);
+}
+
+.pricing-card-shell {
+  position: relative;
+  min-height: 38px;
+}
+
+.pricing-popular-badge {
+  position: absolute;
+  top: -42px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 6px 18px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ffcc00, #f2b400);
+  color: #07243d;
+  font-size: 0.88rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.pricing-card-icon {
+  position: absolute;
+  right: 4px;
+  top: -2px;
+  color: rgba(11, 58, 91, 0.12);
+  font-size: 2.6rem;
+}
+
+.pricing-card-reference h3 {
+  margin: 6px 0 10px;
+  text-align: center;
+  color: #123d63;
+  font-size: 2rem;
+  line-height: 1.1;
+  text-shadow: 0 10px 22px rgba(11, 58, 91, 0.08);
+}
+
+.pricing-card-reference .pricing-copy {
+  min-height: 72px;
+  margin: 0 0 12px;
+  text-align: center;
+  color: rgba(18, 61, 99, 0.72);
+  line-height: 1.65;
+  font-weight: 500;
+}
+
+.pricing-investment-label {
+  margin-top: 10px;
+  text-align: center;
+  color: rgba(18, 61, 99, 0.62);
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.pricing-card-reference .price {
+  display: block;
+  margin: 6px 0 14px;
+  text-align: center;
+  color: #cc9800;
+  font-size: clamp(1.9rem, 3vw, 2.35rem);
+  line-height: 1.1;
+}
+
+.pricing-feature-list {
+  gap: 10px;
+  margin-top: 0;
+}
+
+.pricing-feature-list li {
+  padding-left: 26px;
+  color: rgba(18, 61, 99, 0.84);
+  line-height: 1.55;
+}
+
+.pricing-feature-list li::before {
+  top: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(255, 204, 0, 0.14);
+  color: #c79200;
+  content: '\f00c';
+  font-family: 'Font Awesome 6 Free';
+  font-size: 9px;
+  font-weight: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pricing-card-reference .pricing-actions {
+  margin-top: 20px;
+}
+
+.pricing-card-reference .pricing-cta {
+  width: 100%;
+}
+
+.pricing-lower-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  margin-top: 18px;
+  align-items: start;
+}
+
+.pricing-comparison-card,
+.pricing-calculator-card {
+  padding: 20px;
+  border-radius: 22px;
+  border: 1px solid rgba(11, 58, 91, 0.12);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(247, 250, 254, 0.99));
+  box-shadow:
+    0 12px 26px rgba(11, 58, 91, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+.pricing-subsection-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.pricing-subsection-title > i {
+  color: #ffcc00;
+  font-size: 1.6rem;
+}
+
+.pricing-subsection-title h3 {
+  margin: 0;
+  color: #0b3a5b;
+  font-size: 1.9rem;
+  line-height: 1.15;
+}
+
+.pricing-subsection-title p {
+  margin: 4px 0 0;
+  color: rgba(18, 61, 99, 0.72);
+  line-height: 1.55;
+}
+
+.pricing-table-wrap {
+  overflow-x: auto;
+  border-radius: 18px;
+  scrollbar-color: rgba(255, 204, 0, 0.45) rgba(255, 255, 255, 0.06);
+}
+
+.pricing-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(11, 58, 91, 0.12);
+  background: #ffffff;
+}
+
+.pricing-table th,
+.pricing-table td {
+  padding: 16px 18px;
+  border-right: 1px solid rgba(11, 58, 91, 0.08);
+  border-bottom: 1px solid rgba(11, 58, 91, 0.08);
+  color: #234b6d;
+  text-align: left;
+  vertical-align: middle;
+  line-height: 1.5;
+}
+
+.pricing-table thead th {
+  background: linear-gradient(180deg, #123d63, #0b3a5b);
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.pricing-table tbody th {
+  font-weight: 700;
+  background: rgba(11, 58, 91, 0.03);
+  min-width: 172px;
+  color: #0f3d63;
+}
+
+.pricing-table .is-highlighted {
+  background: rgba(255, 204, 0, 0.12);
+  color: #0b3a5b;
+}
+
+.pricing-table-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  padding: 4px 12px;
+  margin-bottom: 6px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ffcc00, #f2b400);
+  color: #08213a;
+  font-size: 0.76rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  box-shadow: 0 8px 16px rgba(242, 180, 0, 0.22);
+}
+
+.pricing-table tbody td {
+  color: rgba(18, 61, 99, 0.84);
+}
+
+.pricing-table tbody tr:nth-child(even) td,
+.pricing-table tbody tr:nth-child(even) th {
+  background: rgba(11, 58, 91, 0.015);
+}
+
+.pricing-table tr > *:last-child {
+  border-right: 0;
+}
+
+.pricing-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.pricing-calculator-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(250px, 0.9fr);
+  gap: 16px;
+}
+
+.calculator-form {
+  display: grid;
+  gap: 14px;
+}
+
+.calculator-field,
+.calculator-fieldset {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 14px;
+  border: 1px solid rgba(11, 58, 91, 0.1);
+  border-radius: 16px;
+  background: rgba(11, 58, 91, 0.03);
+  min-width: 0;
+}
+
+.calculator-field > span,
+.calculator-fieldset legend {
+  color: #0b3a5b;
+  font-size: 0.98rem;
+  font-weight: 700;
+  padding: 0;
+}
+
+.calculator-field select {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(11, 58, 91, 0.14);
+  background: #ffffff;
+  color: #163047;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.calculator-field select:focus,
+.calculator-reset-button:focus,
+.calculator-wa-button:focus {
+  outline: 2px solid rgba(255, 204, 0, 0.45);
+  outline-offset: 2px;
+}
+
+.calculator-radio,
+.calculator-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: rgba(18, 61, 99, 0.84);
+  line-height: 1.5;
+}
+
+.calculator-radio input,
+.calculator-checkbox input {
+  accent-color: #ffcc00;
+  margin-top: 3px;
+  flex: 0 0 auto;
+}
+
+.calculator-summary {
+  min-width: 0;
+}
+
+.calculator-summary-card {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  padding: 22px 20px;
+  border-radius: 18px;
+  border: 1px solid rgba(11, 58, 91, 0.12);
+  background:
+    radial-gradient(circle at top center, rgba(255, 204, 0, 0.08), transparent 36%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(247, 250, 254, 0.99));
+  min-height: 100%;
+  text-align: center;
+  box-shadow:
+    0 10px 24px rgba(11, 58, 91, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+.calculator-summary-label,
+.calculator-summary-title,
+.calculator-summary-card small,
+.calculator-summary-meta span,
+.calculator-summary-meta b {
+  color: #234b6d;
+}
+
+.calculator-summary-label {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0b3a5b;
+}
+
+.calculator-summary-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: rgba(18, 61, 99, 0.76);
+}
+
+.calculator-summary-card strong {
+  color: #c79200;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-shadow: none;
+}
+
+.calculator-summary-meta {
+  display: grid;
+  gap: 6px;
+  padding: 15px 0;
+  border-top: 1px solid rgba(11, 58, 91, 0.1);
+  border-bottom: 1px solid rgba(11, 58, 91, 0.1);
+}
+
+.calculator-wa-button,
+.calculator-reset-button {
+  width: 100%;
+}
+
+.calculator-reset-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 50px;
+  padding: 0 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(11, 58, 91, 0.16);
+  background: #ffffff;
+  color: #0b3a5b;
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+.calculator-reset-button:hover {
+  border-color: rgba(255, 204, 0, 0.28);
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-1px);
+}
+
+.calculator-summary-card small {
+  display: block;
+  line-height: 1.6;
+  color: rgba(240, 246, 255, 0.76);
+}
+
+@media (max-width: 1100px) {
+  .pricing-package-grid,
+  .pricing-lower-grid,
+  .pricing-calculator-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pricing-lower-grid {
+    gap: 16px;
+  }
+
+  .pricing-card-reference .pricing-copy {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .pricing-header {
+    margin-bottom: 28px;
+  }
+
+  .pricing-package-grid {
+    gap: 16px;
+  }
+
+  .pricing-card-reference {
+    padding: 22px 16px 20px;
+  }
+
+  .pricing-comparison-card,
+  .pricing-calculator-card {
+    padding: 16px;
+  }
+
+  .pricing-subsection-title h3 {
+    font-size: 1.55rem;
+  }
+
+  .pricing-table th,
+  .pricing-table td {
+    padding: 14px 14px;
+  }
+
+  .pricing-table {
+    min-width: 640px;
+  }
+
+  .calculator-field,
+  .calculator-fieldset,
+  .calculator-summary-card {
+    padding: 14px;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 108px;
+  scroll-padding-top: var(--nav-offset);
 }
 
 body {
@@ -165,9 +689,14 @@ textarea {
   flex: 0 0 auto;
 }
 
+.nav-dropdown:hover {
+  z-index: 5;
+}
+
 .caret {
   font-size: 12px;
-  transition: transform 180ms ease;
+  flex-shrink: 0;
+  transition: transform 220ms ease;
 }
 
 .nav-dropdown.open .caret {
@@ -176,47 +705,72 @@ textarea {
 
 .dropdown-panel {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 10px);
   left: 0;
-  min-width: 220px;
+  min-width: min(320px, calc(100vw - 32px));
+  max-width: min(360px, calc(100vw - 32px));
   padding: 12px;
   display: grid;
-  gap: 6px;
-  border-radius: 16px;
-  background: rgba(7, 35, 60, 0.98);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: var(--shadow);
+  gap: 8px;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(10, 39, 62, 0.985), rgba(6, 24, 41, 0.985)),
+    rgba(7, 35, 60, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 18px 42px rgba(4, 20, 34, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
   opacity: 0;
   visibility: hidden;
-  transform: translateY(8px);
-  transition: all 180ms ease;
+  pointer-events: none;
+  transform: translateY(10px) scale(0.98);
+  transform-origin: top left;
+  transition:
+    opacity 240ms ease,
+    visibility 240ms ease,
+    transform 240ms ease;
 }
 
 .nav-dropdown.open .dropdown-panel {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0);
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
 }
 
 .dropdown-link {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  padding: 10px 12px;
-  border-radius: 12px;
+  gap: 10px;
+  min-height: 48px;
+  padding: 12px 14px;
+  border-radius: 14px;
   color: rgba(255, 255, 255, 0.88);
   font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
   overflow-wrap: anywhere;
+  transition:
+    color 220ms ease,
+    background 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms ease;
 }
 
 .dropdown-link:hover {
   color: #fff7cf;
-  background: linear-gradient(135deg, rgba(255, 204, 0, 0.14), rgba(255, 255, 255, 0.08));
+  background: linear-gradient(135deg, rgba(255, 204, 0, 0.18), rgba(255, 255, 255, 0.09));
+  box-shadow: inset 0 0 0 1px rgba(255, 204, 0, 0.1);
+  transform: translateY(-1px);
 }
 
 .dropdown-link.active {
-  background: linear-gradient(135deg, rgba(255, 204, 0, 0.18), rgba(255, 255, 255, 0.08));
+  background: linear-gradient(135deg, rgba(255, 204, 0, 0.22), rgba(255, 255, 255, 0.12));
   color: #fff6c7;
   font-weight: 700;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 204, 0, 0.14),
+    0 10px 22px rgba(0, 0, 0, 0.12);
 }
 
 .cta-pill,
@@ -3676,19 +4230,32 @@ main section {
   .dropdown-panel {
     position: static;
     min-width: 0;
+    max-width: 100%;
     margin-top: 6px;
     padding: 6px 0 0 10px;
     box-shadow: none;
     border: 0;
     background: transparent;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transform-origin: top center;
+    max-height: 0;
+    overflow: hidden;
+    transition:
+      max-height 240ms ease,
+      opacity 220ms ease,
+      transform 220ms ease,
+      visibility 220ms ease;
   }
 
   .nav-dropdown.open .dropdown-panel {
-    display: grid;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+    max-height: 320px;
   }
 
   .dropdown-link {
