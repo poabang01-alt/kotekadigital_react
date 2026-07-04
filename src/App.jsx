@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   aboutCards,
   blogPosts,
@@ -102,32 +102,6 @@ function App() {
     { feature: 'Backup', basic: '-', standard: '-', premium: 'Otomatis' },
     { feature: 'Training', basic: '-', standard: 'Ya', premium: 'Ya + Panduan Lengkap' },
   ]
-  const calculatorBasePrices = {
-    company: 1500000,
-    business: 2500000,
-    institution: 3500000,
-    webapp: 7000000,
-  }
-  const calculatorPagePrices = {
-    1: 0,
-    5: 450000,
-    8: 900000,
-    12: 1500000,
-  }
-  const calculatorDesignPrices = {
-    template: 0,
-    semi: 1000000,
-    full: 2500000,
-  }
-  const calculatorFeaturePrices = {
-    blog: 450000,
-    whatsapp: 300000,
-    email: 300000,
-    maps: 250000,
-    animation: 600000,
-    seo: 800000,
-  }
-
   const [menuOpen, setMenuOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState(null)
   const [isDesktopNav, setIsDesktopNav] = useState(() =>
@@ -138,16 +112,11 @@ function App() {
   const [testimonialIndex, setTestimonialIndex] = useState(0)
   const [testimonialDragOffset, setTestimonialDragOffset] = useState(0)
   const [openFaqIndex, setOpenFaqIndex] = useState(0)
-  const [calculatorForm, setCalculatorForm] = useState({
-    websiteType: 'company',
-    pageCount: '5',
-    design: 'semi',
-    extras: ['blog', 'whatsapp', 'email', 'maps'],
-  })
   const headerRef = useRef(null)
   const headerOffsetRef = useRef(0)
   const sectionRatiosRef = useRef(new Map())
   const mobileNavRef = useRef(null)
+  const sectionTransitionTimeoutRef = useRef(null)
   const testimonialInteractingRef = useRef(false)
   const testimonialGestureRef = useRef({
     pointerId: null,
@@ -334,24 +303,21 @@ function App() {
     return () => window.clearInterval(timer)
   }, [])
 
+  useEffect(() => () => {
+    if (sectionTransitionTimeoutRef.current) {
+      window.clearTimeout(sectionTransitionTimeoutRef.current)
+    }
+  }, [])
+
   const activePortfolio = portfolioItems[portfolioIndex]
   const activeTestimonial = testimonials[testimonialIndex]
-  const estimatedPrice = useMemo(() => {
-    const basePrice = calculatorBasePrices[calculatorForm.websiteType] ?? 0
-    const pagePrice = calculatorPagePrices[Number(calculatorForm.pageCount)] ?? 0
-    const designPrice = calculatorDesignPrices[calculatorForm.design] ?? 0
-    const extrasPrice = calculatorForm.extras.reduce(
-      (total, extra) => total + (calculatorFeaturePrices[extra] ?? 0),
-      0
-    )
-
-    return basePrice + pagePrice + designPrice + extrasPrice
-  }, [calculatorForm])
-  const estimatedTimeline = useMemo(() => {
-    if (estimatedPrice >= 9000000) return '14 - 30 hari kerja'
-    if (estimatedPrice >= 5000000) return '7 - 14 hari kerja'
-    return '3 - 7 hari kerja'
-  }, [estimatedPrice])
+  const bottomNavItems = [
+    { key: 'home', label: 'Home', icon: 'fa-solid fa-house', href: '#home' },
+    { key: 'about', label: 'About', icon: 'fa-solid fa-user', href: '#about' },
+    { key: 'pricing', label: 'Pricing', icon: 'fa-solid fa-tags', href: '#pricing-section' },
+    { key: 'services', label: 'Services', icon: 'fa-solid fa-briefcase', href: '#layanan' },
+    { key: 'menu', label: 'Menu', icon: 'fa-solid fa-bars' },
+  ]
 
   const closeNavigation = useCallback(() => {
     setMenuOpen(false)
@@ -374,6 +340,18 @@ function App() {
         top: Math.max(targetTop, 0),
         behavior: 'smooth',
       })
+
+      target.classList.remove('section-spotlight')
+      void target.offsetWidth
+      target.classList.add('section-spotlight')
+
+      if (sectionTransitionTimeoutRef.current) {
+        window.clearTimeout(sectionTransitionTimeoutRef.current)
+      }
+
+      sectionTransitionTimeoutRef.current = window.setTimeout(() => {
+        target.classList.remove('section-spotlight')
+      }, 900)
     }
 
     closeNavigation()
@@ -414,75 +392,35 @@ function App() {
     setOpenDropdown(null)
   }, [])
 
-  const handleCalculatorChange = useCallback((field, value) => {
-    setCalculatorForm((current) => ({
-      ...current,
-      [field]: value,
-    }))
-  }, [])
-
-  const handleCalculatorExtraToggle = useCallback((extra) => {
-    setCalculatorForm((current) => {
-      const hasExtra = current.extras.includes(extra)
-      return {
-        ...current,
-        extras: hasExtra
-          ? current.extras.filter((item) => item !== extra)
-          : [...current.extras, extra],
+  const isBottomNavActive = useCallback(
+    (key) => {
+      if (key === 'menu') return menuOpen
+      if (key === 'services') {
+        return activeSection === 'layanan' || activeSection.startsWith('layanan-kategori-')
       }
-    })
-  }, [])
+      if (key === 'pricing') return activeSection === 'pricing-section'
+      return activeSection === key
+    },
+    [activeSection, menuOpen]
+  )
 
-  const handleCalculatorReset = useCallback(() => {
-    setCalculatorForm({
-      websiteType: 'company',
-      pageCount: '5',
-      design: 'semi',
-      extras: ['blog', 'whatsapp', 'email', 'maps'],
-    })
-  }, [])
+  const handleBottomNavAction = useCallback(
+    (item) => {
+      if (item.key === 'menu') {
+        setMenuOpen(true)
+        setOpenDropdown(null)
+        return
+      }
 
-  const handleCalculatorWhatsapp = useCallback(() => {
-    const websiteTypeLabels = {
-      company: 'Company Profile',
-      business: 'Website Bisnis / UMKM',
-      institution: 'Website Lembaga / Institusi',
-      webapp: 'Web App Sistem Digital',
-    }
-    const designLabels = {
-      template: 'Template / Custom Ringan',
-      semi: 'Semi Custom',
-      full: 'Full Custom (UI/UX Profesional)',
-    }
-    const featureLabels = {
-      blog: 'Blog / Artikel',
-      whatsapp: 'Integrasi WhatsApp',
-      email: 'Integrasi Email',
-      maps: 'Google Maps',
-      animation: 'Animasi & Interaktif',
-      seo: 'SEO Lanjutan',
-    }
-    const message = [
-      'Halo Koteka Digital, saya ingin konsultasi estimasi harga website.',
-      `Jenis Website: ${websiteTypeLabels[calculatorForm.websiteType]}`,
-      `Jumlah Halaman: ${calculatorForm.pageCount} halaman`,
-      `Desain: ${designLabels[calculatorForm.design]}`,
-      `Fitur Tambahan: ${
-        calculatorForm.extras.length
-          ? calculatorForm.extras.map((extra) => featureLabels[extra]).join(', ')
-          : 'Tidak ada'
-      }`,
-      `Estimasi Harga: Rp ${estimatedPrice.toLocaleString('id-ID')}`,
-    ].join('\n')
+      activateAndScroll(item.href.slice(1))
+    },
+    [activateAndScroll]
+  )
 
-    window.open(
-      `https://wa.me/${contactInfo.whatsappNumber}?text=${encodeURIComponent(message)}`,
-      '_blank',
-      'noopener,noreferrer'
-    )
-  }, [calculatorForm, estimatedPrice])
+  const renderNavItems = (submenuIdPrefix) => {
+    const isMobileMenu = submenuIdPrefix.startsWith('mobile')
 
-  const renderNavItems = (submenuIdPrefix) =>
+    return (
     navItems.map((item) =>
       item.children ? (
         <div
@@ -504,7 +442,14 @@ function App() {
             aria-controls={`${submenuIdPrefix}-${item.label.toLowerCase()}`}
             aria-label={`Toggle submenu ${item.label}`}
           >
-            {item.label}
+            <span className="nav-link-copy">
+              {isMobileMenu ? (
+                <span className="nav-link-icon" aria-hidden="true">
+                  <i className={item.icon || 'fa-solid fa-circle'} />
+                </span>
+              ) : null}
+              <span className="nav-link-label">{item.label}</span>
+            </span>
             <i className="fa-solid fa-chevron-down caret" aria-hidden="true" />
           </button>
           <div className="dropdown-panel" id={`${submenuIdPrefix}-${item.label.toLowerCase()}`}>
@@ -517,6 +462,11 @@ function App() {
                 href={child.href}
                 onClick={(event) => handleNavClick(event, child.href)}
               >
+                {isMobileMenu ? (
+                  <span className="dropdown-link-bullet" aria-hidden="true">
+                    <i className="fa-solid fa-minus" />
+                  </span>
+                ) : null}
                 {child.label}
               </a>
             ))}
@@ -530,10 +480,19 @@ function App() {
           onClick={(event) => handleNavClick(event, item.href)}
           aria-current={activeSection === item.href.slice(1) ? 'page' : undefined}
         >
-          {item.label}
+          <span className="nav-link-copy">
+            {isMobileMenu ? (
+              <span className="nav-link-icon" aria-hidden="true">
+                <i className={item.icon || 'fa-solid fa-circle'} />
+              </span>
+            ) : null}
+            <span className="nav-link-label">{item.label}</span>
+          </span>
         </a>
       )
     )
+    )
+  }
 
   const nextPortfolio = () => {
     setPortfolioIndex((current) => (current + 1) % portfolioItems.length)
@@ -708,6 +667,27 @@ function App() {
         </div>
 
         <div className="mobile-menu-list">{renderNavItems('mobile-services-submenu')}</div>
+      </nav>
+
+      <nav className="mobile-bottom-nav" aria-label="Navigasi bawah mobile">
+        <div className="mobile-bottom-nav-shell">
+          {bottomNavItems.map((item) => (
+            <button
+              type="button"
+              key={item.key}
+              className={`mobile-bottom-nav-item ${isBottomNavActive(item.key) ? 'active' : ''}`}
+              onClick={() => handleBottomNavAction(item)}
+              aria-current={isBottomNavActive(item.key) && item.key !== 'menu' ? 'page' : undefined}
+              aria-label={item.label}
+            >
+              <span className="mobile-bottom-nav-icon" aria-hidden="true">
+                <i className={item.icon} />
+              </span>
+              <span className="mobile-bottom-nav-text">{item.label}</span>
+              <span className="mobile-bottom-nav-indicator" aria-hidden="true" />
+            </button>
+          ))}
+        </div>
       </nav>
 
       <main>
@@ -906,7 +886,10 @@ function App() {
           <div className="container">
             <div className="section-heading services-heading" data-reveal>
               <span className="eyebrow">Layanan</span>
-              <h2>Jasa Pembuatan Website Jayapura Profesional untuk UMKM</h2>
+              <h2>
+                <span>Jasa Pembuatan Website Jayapura</span>
+                <span>Profesional untuk UMKM</span>
+              </h2>
               <p>
                 Seluruh kelompok layanan lama tetap dipertahankan: fondasi website bisnis,
                 performa dan keamanan, sampai strategi lanjutan untuk scale-up.
@@ -1013,165 +996,39 @@ function App() {
                   </div>
                 </div>
 
-                <div className="pricing-table-wrap">
-                  <table className="pricing-table">
-                    <thead>
-                      <tr>
-                        <th>Fitur</th>
-                        <th>Basic</th>
-                        <th className="is-highlighted">
-                          <span className="pricing-table-badge">Paling Populer</span>
-                          Standard
-                        </th>
-                        <th>Premium</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {comparisonRows.map((row) => (
-                        <tr key={row.feature}>
-                          <th scope="row">{row.feature}</th>
-                          <td>{row.basic}</td>
-                          <td className="is-highlighted">{row.standard}</td>
-                          <td>{row.premium}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </article>
-
-              <article className="pricing-calculator-card" data-reveal>
-                <div className="pricing-subsection-title">
-                  <i className="fa-solid fa-calculator" aria-hidden="true" />
-                  <div>
-                    <h3>Kalkulator Harga Website</h3>
-                    <p>Hitung estimasi harga website sesuai kebutuhan Anda</p>
-                  </div>
-                </div>
-
-                <div className="pricing-calculator-grid">
-                  <div className="calculator-form">
-                    <label className="calculator-field">
-                      <span>1. Jenis Website</span>
-                      <select
-                        value={calculatorForm.websiteType}
-                        onChange={(event) =>
-                          handleCalculatorChange('websiteType', event.target.value)
-                        }
-                      >
-                        <option value="company">Company Profile</option>
-                        <option value="business">Website Bisnis / UMKM</option>
-                        <option value="institution">Website Lembaga / Institusi</option>
-                        <option value="webapp">Web App Sistem Digital</option>
-                      </select>
-                    </label>
-
-                    <label className="calculator-field">
-                      <span>2. Jumlah Halaman</span>
-                      <select
-                        value={calculatorForm.pageCount}
-                        onChange={(event) =>
-                          handleCalculatorChange('pageCount', event.target.value)
-                        }
-                      >
-                        <option value="1">1 Halaman</option>
-                        <option value="5">5 Halaman</option>
-                        <option value="8">8 Halaman</option>
-                        <option value="12">12+ Halaman</option>
-                      </select>
-                    </label>
-
-                    <fieldset className="calculator-fieldset">
-                      <legend>3. Desain</legend>
-                      <label className="calculator-radio">
-                        <input
-                          type="radio"
-                          name="design"
-                          value="template"
-                          checked={calculatorForm.design === 'template'}
-                          onChange={(event) =>
-                            handleCalculatorChange('design', event.target.value)
-                          }
-                        />
-                        <span>Template / Custom Ringan</span>
-                      </label>
-                      <label className="calculator-radio">
-                        <input
-                          type="radio"
-                          name="design"
-                          value="semi"
-                          checked={calculatorForm.design === 'semi'}
-                          onChange={(event) =>
-                            handleCalculatorChange('design', event.target.value)
-                          }
-                        />
-                        <span>Semi Custom</span>
-                      </label>
-                      <label className="calculator-radio">
-                        <input
-                          type="radio"
-                          name="design"
-                          value="full"
-                          checked={calculatorForm.design === 'full'}
-                          onChange={(event) =>
-                            handleCalculatorChange('design', event.target.value)
-                          }
-                        />
-                        <span>Full Custom (UI/UX Profesional)</span>
-                      </label>
-                    </fieldset>
-
-                    <fieldset className="calculator-fieldset">
-                      <legend>4. Fitur Tambahan</legend>
-                      {[
-                        ['blog', 'Blog / Artikel'],
-                        ['whatsapp', 'Integrasi WhatsApp'],
-                        ['email', 'Integrasi Email'],
-                        ['maps', 'Google Maps'],
-                        ['animation', 'Animasi & Interaktif'],
-                        ['seo', 'SEO Lanjutan'],
-                      ].map(([value, label]) => (
-                        <label className="calculator-checkbox" key={value}>
-                          <input
-                            type="checkbox"
-                            checked={calculatorForm.extras.includes(value)}
-                            onChange={() => handleCalculatorExtraToggle(value)}
-                          />
-                          <span>{label}</span>
-                        </label>
-                      ))}
-                    </fieldset>
-                  </div>
-
-                  <div className="calculator-summary">
-                    <div className="calculator-summary-card">
-                      <p className="calculator-summary-label">Estimasi Harga</p>
-                      <span className="calculator-summary-title">Total Estimasi</span>
-                      <strong>Rp {estimatedPrice.toLocaleString('id-ID')}</strong>
-                      <div className="calculator-summary-meta">
-                        <span>Estimasi waktu pengerjaan</span>
-                        <b>{estimatedTimeline}</b>
-                      </div>
-                      <button
-                        type="button"
-                        className="button button-primary calculator-wa-button"
-                        onClick={handleCalculatorWhatsapp}
-                      >
-                        <i className="fa-brands fa-whatsapp" aria-hidden="true" />
-                        Kirim ke WhatsApp
-                      </button>
-                      <button
-                        type="button"
-                        className="calculator-reset-button"
-                        onClick={handleCalculatorReset}
-                      >
-                        <i className="fa-solid fa-rotate-left" aria-hidden="true" />
-                        Reset Kalkulator
-                      </button>
-                      <small>
-                        * Harga bersifat estimasi dan dapat berubah sesuai kebutuhan spesifik
-                        proyek Anda.
-                      </small>
+                <div
+                  className="pricing-table-wrap"
+                >
+                  <div
+                    className="pricing-table-scroll"
+                    role="region"
+                    aria-label="Tabel perbandingan harga paket website"
+                    tabIndex={0}
+                  >
+                    <div className="pricing-table-inner">
+                      <table className="pricing-table">
+                        <thead>
+                          <tr>
+                            <th>Fitur</th>
+                            <th>Basic</th>
+                            <th className="is-highlighted">
+                              <span className="pricing-table-badge">Paling Populer</span>
+                              Standard
+                            </th>
+                            <th>Premium</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {comparisonRows.map((row) => (
+                            <tr key={row.feature}>
+                              <th scope="row">{row.feature}</th>
+                              <td>{row.basic}</td>
+                              <td className="is-highlighted">{row.standard}</td>
+                              <td>{row.premium}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
