@@ -36,7 +36,11 @@ export const navItems = [
 export const companyStats = [
   { value: 'SEO-Ready', label: 'Struktur konten dan CTA dibuat agar mudah dipercaya' },
   { value: 'Mobile First', label: 'Sidebar, tombol, dan section aman di layar kecil' },
-  { value: 'Siap Hosting', label: 'Build React ringan dan semua asset publik sudah dirapikan' },
+  {
+    value: 'Website Siap Go Live',
+    label:
+      'Website siap di-hosting dan langsung online dengan performa cepat, aman, dan stabil.',
+  },
 ]
 
 export const partners = ['UMKM Jayapura', 'Bisnis Lokal Papua', 'Personal Brand', 'Instansi', 'Coffee Shop', 'Sekolah']
@@ -45,17 +49,17 @@ export const aboutCards = [
   {
     icon: 'fa-solid fa-address-book',
     title: 'Profil Bisnis',
-    text: 'Koteka Digital membantu bisnis tampil kredibel lewat website yang cepat, rapi, dan relevan dengan kebutuhan pasar lokal Papua.',
+    text: 'Koteka Digital adalah mitra digital yang berfokus pada pembuatan website profesional untuk UMKM, bisnis lokal, personal brand, dan instansi di Tanah Papua. Kami menggabungkan desain yang kuat, performa website yang cepat, dan strategi SEO lokal yang terarah agar bisnis Anda tampil lebih kredibel, mudah ditemukan di Google, serta siap bersaing di era digital.',
   },
   {
     icon: 'fa-solid fa-eye',
     title: 'Visi',
-    text: 'Menjadi mitra digital tepercaya untuk UMKM, brand lokal, dan instansi yang ingin tumbuh lewat website profesional.',
+    text: 'Menjadi mitra digital terpercaya bagi UMKM, bisnis lokal, personal brand, dan instansi Jayapura, Papua, dan Indonesia melalui solusi website berkualitas yang berdampak nyata pada kredibilitas, visibilitas, dan pertumbuhan bisnis jangka panjang.',
   },
   {
     icon: 'fa-solid fa-bullseye',
     title: 'Misi',
-    text: 'Menggabungkan desain yang kuat, struktur konten yang meyakinkan, dan performa teknis yang aman agar website benar-benar berguna untuk bisnis.',
+    text: 'Menyediakan website yang cepat, aman, mobile-friendly, dan nyaman diakses pada semua perangkat.\nMengutamakan kebutuhan klien dengan proses kerja yang jelas, transparan, dan tepat waktu.\nMengembangkan solusi digital yang relevan dengan target pasar dan tujuan bisnis Anda.\nMemberikan pendampingan dari konsultasi, produksi, launching, hingga dukungan after-sales.',
   },
 ]
 
@@ -147,7 +151,7 @@ export const pricingPlans = [
   {
     tag: 'Starter',
     name: 'Paket Basic',
-    copy: 'Cocok untuk usaha kecil yang ingin punya landing page profesional dan cepat tayang.',
+    copy: 'Untuk UMKM, bisnis lokal, personal brand, dan instansi yang ingin cepat hadir secara profesional di dunia digital.',
     price: 'Rp 800.000 - Rp 1.500.000',
     download: '/downloads/paket-basic.pdf',
     orderLink: whatsappLinks.primary,
@@ -158,7 +162,7 @@ export const pricingPlans = [
   {
     tag: 'Paling Dipilih',
     name: 'Paket Standar',
-    copy: 'Pilihan seimbang untuk bisnis yang butuh profil usaha yang lebih lengkap dan meyakinkan.',
+    copy: 'Untuk UMKM, bisnis lokal, personal brand, dan instansi yang ingin memperkuat profil dan kredibilitas digital.',
     price: 'Rp 2.500.000 - Rp 5.000.000',
     download: '/downloads/paket-standard.pdf',
     orderLink: whatsappLinks.primary,
@@ -170,7 +174,7 @@ export const pricingPlans = [
   {
     tag: 'Growth',
     name: 'Paket Premium',
-    copy: 'Untuk bisnis yang ingin presentasi brand lebih kuat, struktur lebih lengkap, dan impact lebih serius.',
+    copy: 'Untuk UMKM, bisnis lokal, personal brand, dan instansi yang membutuhkan website dan sistem digital yang lebih lengkap.',
     price: 'Rp 7.000.000 - Rp 15.000.000+',
     download: '/downloads/paket-premium.pdf',
     orderLink: whatsappLinks.primary,
@@ -181,6 +185,15 @@ export const pricingPlans = [
 ]
 
 export const portfolioItems = [
+  {
+    label: 'Website Agency',
+    title: 'Website Koteka Digital',
+    description: 'Landing page jasa website dengan struktur hero yang kuat, CTA yang jelas, dan presentasi visual yang modern untuk membangun kesan profesional.',
+    impact: 'Menunjukkan kemampuan membuat website agency yang kuat secara branding, konversi, dan first impression.',
+    image: '/img/optimized/portofolio-koteka-digital-home.png',
+    link: 'https://kotekadigital.com/',
+    tech: ['React', 'CSS', 'JavaScript'],
+  },
   {
     label: 'Web App Sekolah',
     title: 'Sistem Sarana dan Prasarana Sekolah',
@@ -204,7 +217,7 @@ export const portfolioItems = [
     title: 'Website Layanan Digital',
     description: 'Contoh presentasi jasa yang fokus pada kejelasan layanan, value, dan CTA konsultasi.',
     impact: 'Menegaskan kemampuan membuat website jasa yang ringkas namun persuasif.',
-    image: '/img/optimized/jasa-pembuatan-website-jayapura-koteka-digital.png',
+    image: '/img/optimized/abangpo-website-preview.png',
     link: 'https://abangponetlify.netlify.app/',
     tech: ['HTML', 'CSS', 'JavaScript'],
   },
