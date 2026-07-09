@@ -444,7 +444,7 @@ function App() {
         >
           <button
             type="button"
-            className={`nav-link nav-button ${
+            className={`nav-link nav-button ${item.children && isMobileMenu ? 'has-mobile-submenu' : ''} ${
               activeSection === item.href.slice(1) ||
               item.children.some((child) => activeSection === child.href.slice(1))
                 ? 'active'
@@ -461,9 +461,28 @@ function App() {
                   <i className={item.icon || 'fa-solid fa-circle'} />
                 </span>
               ) : null}
-              <span className="nav-link-label">{item.label}</span>
+              <span className="nav-link-label">
+                {item.label}
+                {isMobileMenu ? (
+                  <span
+                    className={`mobile-submenu-inline-arrow ${
+                      openDropdown === item.label ? 'open' : ''
+                    }`}
+                    aria-hidden="true"
+                  />
+                ) : null}
+              </span>
             </span>
-            <i className="fa-solid fa-chevron-down caret" aria-hidden="true" />
+            {isMobileMenu ? (
+              <span
+                className={`mobile-submenu-arrow ${openDropdown === item.label ? 'open' : ''}`}
+                aria-hidden="true"
+              >
+                {openDropdown === item.label ? '^' : 'v'}
+              </span>
+            ) : (
+              <i className="fa-solid fa-chevron-down caret" aria-hidden="true" />
+            )}
           </button>
           <div className="dropdown-panel" id={`${submenuIdPrefix}-${item.label.toLowerCase()}`}>
             {item.children.map((child) => (
