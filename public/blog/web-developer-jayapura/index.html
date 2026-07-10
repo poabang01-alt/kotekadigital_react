@@ -71,8 +71,56 @@
 }
     </style>
 
-  </head>
-  <body>
+  <link rel="icon" type="image/png" href="../../img/koteka-digital-logo-jayapura-papua.png" />
+</head>
+<body>
+  <header class="article-topbar">
+    <div class="article-topbar-inner">
+      <div class="article-topbar-left">
+        <button type="button" class="article-menu-toggle" aria-label="Buka menu artikel">
+          <span></span>
+        </button>
+        <a class="article-brand" href="../../index.html#home">
+          <img src="../../img/koteka-digital-logo-jayapura-papua.png" alt="Koteka Digital" />
+          <span class="article-brand-copy">
+            <span class="article-brand-title">Koteka Digital</span>
+            <span class="article-brand-subtitle">Artikel Blog</span>
+          </span>
+        </a>
+      </div>
+      <nav class="article-topbar-nav" aria-label="Navigasi artikel">
+        <a href="../../index.html#home">Home</a>
+        <a href="../../index.html#layanan">Layanan</a>
+        <a href="../../index.html#blog">Blog</a>
+        <a href="../../index.html#kontak">Kontak</a>
+      </nav>
+    </div>
+  </header>
+  <div class="article-mobile-overlay"></div>
+  <aside class="article-mobile-sidebar" aria-label="Sidebar menu artikel">
+    <div class="article-mobile-sidebar-inner">
+      <div class="article-mobile-sidebar-head">
+        <a class="article-brand" href="../../index.html#home">
+          <img src="../../img/koteka-digital-logo-jayapura-papua.png" alt="Koteka Digital" />
+          <span class="article-brand-copy">
+            <span class="article-brand-title">Koteka Digital</span>
+            <span class="article-brand-subtitle">Artikel Blog</span>
+          </span>
+        </a>
+        <button type="button" class="article-mobile-sidebar-close" aria-label="Tutup menu">✕</button>
+      </div>
+      <nav>
+        <a href="../../index.html#home">Home</a>
+        <a href="../../index.html#about">About</a>
+        <a href="../../index.html#layanan">Layanan</a>
+        <a href="../../index.html#pricing-section">Harga</a>
+        <a href="../../index.html#portfolio">Portofolio</a>
+        <a href="../../index.html#blog">Blog</a>
+        <a href="../../index.html#testimoni">Testimoni</a>
+        <a href="../../index.html#kontak">Kontak</a>
+      </nav>
+    </div>
+  </aside>
     <main class="article-shell">
       <a class="back-link" href="../../index.html#blog"> <i class="fa-solid fa-backward"></i>Kembali ke Blog</a>
       <article>
@@ -117,6 +165,31 @@
             <a href="https://kemenkopukm.go.id/" rel="noopener">Kementerian Koperasi dan UKM</a>
             serta menghubungkan strategi konten dengan kebutuhan pelanggan lokal.
           </p>
+          <section class="article-proof">
+            <h2>Fakta yang sering dilihat calon klien saat memilih developer</h2>
+            <p>
+              Calon klien biasanya tidak hanya mencari orang yang bisa coding, tetapi partner yang
+              paham tujuan bisnis, pengalaman pengguna, dan kesiapan website untuk dipakai promosi.
+            </p>
+            <div class="article-proof-grid">
+              <div class="article-proof-item">
+                <strong>Portofolio memberi bukti nyata</strong>
+                <span>Contoh kerja langsung memperlihatkan kualitas visual, struktur, dan rasa profesional dari hasil yang dibuat.</span>
+              </div>
+              <div class="article-proof-item">
+                <strong>Developer yang baik menjelaskan alasan</strong>
+                <span>Bukan hanya membuat, tetapi bisa menjelaskan kenapa layout, CTA, dan struktur tertentu dipilih.</span>
+              </div>
+              <div class="article-proof-item">
+                <strong>Hasil harus siap dipakai</strong>
+                <span>Website yang baik bukan demo kosong, tetapi siap dipakai untuk presentasi, promosi, dan follow-up klien.</span>
+              </div>
+            </div>
+            <p class="article-proof-note">
+              Bukti yang paling mudah dilihat klien: website yang terasa rapi, cepat, dan jelas
+              biasanya langsung memberi kesan bahwa vendor ini bekerja serius.
+            </p>
+          </section>
           <h2>FAQ - Pertanyaan yang Sering Ditanyakan</h2>
           <h3>Apa beda web developer dan jasa website?</h3>
           <p>
@@ -151,6 +224,28 @@
         </div>
       </article>
     </main>
+    <script>
+      (() => {
+        const toggle = document.querySelector('.article-menu-toggle')
+        const sidebar = document.querySelector('.article-mobile-sidebar')
+        const overlay = document.querySelector('.article-mobile-overlay')
+        const closeButton = document.querySelector('.article-mobile-sidebar-close')
+        const links = sidebar?.querySelectorAll('a') ?? []
+        if (!toggle || !sidebar || !overlay || !closeButton) return
+        const closeMenu = () => {
+          sidebar.classList.remove('open')
+          overlay.classList.remove('open')
+        }
+        const openMenu = () => {
+          sidebar.classList.add('open')
+          overlay.classList.add('open')
+        }
+        toggle.addEventListener('click', openMenu)
+        closeButton.addEventListener('click', closeMenu)
+        overlay.addEventListener('click', closeMenu)
+        links.forEach((link) => link.addEventListener('click', closeMenu))
+      })()
+    </script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",

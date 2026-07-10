@@ -74,8 +74,56 @@
         width: 100%;
       }
     </style>
-  </head>
-  <body>
+  <link rel="icon" type="image/png" href="../../img/koteka-digital-logo-jayapura-papua.png" />
+</head>
+<body>
+  <header class="article-topbar">
+    <div class="article-topbar-inner">
+      <div class="article-topbar-left">
+        <button type="button" class="article-menu-toggle" aria-label="Buka menu artikel">
+          <span></span>
+        </button>
+        <a class="article-brand" href="../../index.html#home">
+          <img src="../../img/koteka-digital-logo-jayapura-papua.png" alt="Koteka Digital" />
+          <span class="article-brand-copy">
+            <span class="article-brand-title">Koteka Digital</span>
+            <span class="article-brand-subtitle">Artikel Blog</span>
+          </span>
+        </a>
+      </div>
+      <nav class="article-topbar-nav" aria-label="Navigasi artikel">
+        <a href="../../index.html#home">Home</a>
+        <a href="../../index.html#layanan">Layanan</a>
+        <a href="../../index.html#blog">Blog</a>
+        <a href="../../index.html#kontak">Kontak</a>
+      </nav>
+    </div>
+  </header>
+  <div class="article-mobile-overlay"></div>
+  <aside class="article-mobile-sidebar" aria-label="Sidebar menu artikel">
+    <div class="article-mobile-sidebar-inner">
+      <div class="article-mobile-sidebar-head">
+        <a class="article-brand" href="../../index.html#home">
+          <img src="../../img/koteka-digital-logo-jayapura-papua.png" alt="Koteka Digital" />
+          <span class="article-brand-copy">
+            <span class="article-brand-title">Koteka Digital</span>
+            <span class="article-brand-subtitle">Artikel Blog</span>
+          </span>
+        </a>
+        <button type="button" class="article-mobile-sidebar-close" aria-label="Tutup menu">✕</button>
+      </div>
+      <nav>
+        <a href="../../index.html#home">Home</a>
+        <a href="../../index.html#about">About</a>
+        <a href="../../index.html#layanan">Layanan</a>
+        <a href="../../index.html#pricing-section">Harga</a>
+        <a href="../../index.html#portfolio">Portofolio</a>
+        <a href="../../index.html#blog">Blog</a>
+        <a href="../../index.html#testimoni">Testimoni</a>
+        <a href="../../index.html#kontak">Kontak</a>
+      </nav>
+    </div>
+  </aside>
     <main class="article-shell">
       <a class="back-link" href="../../index.html#blog"> <i class="fa-solid fa-backward"> </i>Kembali ke Blog</a>
       <article>
@@ -123,6 +171,31 @@
             <a href="https://kemenkopukm.go.id/" rel="noopener">Kementerian Koperasi dan UKM</a>
             serta menghubungkan strategi konten dengan kebutuhan pelanggan lokal.
           </p>
+          <section class="article-proof">
+            <h2>Bukti dari pendekatan yang sering berhasil pada UMKM</h2>
+            <p>
+              Pada banyak kasus UMKM, halaman yang paling berdampak bukan yang paling rumit, tetapi
+              yang paling jelas: layanan, bukti kerja, testimoni, dan tombol konsultasi.
+            </p>
+            <div class="article-proof-grid">
+              <div class="article-proof-item">
+                <strong>CTA yang jelas menaikkan respons</strong>
+                <span>Tombol WhatsApp yang ditempatkan tepat sering membantu pengunjung lebih cepat menghubungi admin.</span>
+              </div>
+              <div class="article-proof-item">
+                <strong>Konten lokal lebih relevan</strong>
+                <span>Penyebutan Jayapura, Papua, dan kebutuhan pasar lokal membantu pesan terasa lebih dekat.</span>
+              </div>
+              <div class="article-proof-item">
+                <strong>Portofolio mempercepat trust</strong>
+                <span>Contoh kerja nyata membuat calon klien lebih yakin daripada janji promosi yang terlalu umum.</span>
+              </div>
+            </div>
+            <p class="article-proof-note">
+              Fakta penting: banyak keputusan konsultasi terjadi setelah pengunjung merasa “oh ini
+              jelas, ini cocok, dan ini terlihat serius”.
+            </p>
+          </section>
           <h2>FAQ - Pertanyaan yang Sering Ditanyakan</h2>
           <h3>Apakah studi kasus ini bisa diterapkan di bisnis lain?</h3>
           <p>
@@ -154,6 +227,28 @@
         </div>
       </article>
     </main>
+    <script>
+      (() => {
+        const toggle = document.querySelector('.article-menu-toggle')
+        const sidebar = document.querySelector('.article-mobile-sidebar')
+        const overlay = document.querySelector('.article-mobile-overlay')
+        const closeButton = document.querySelector('.article-mobile-sidebar-close')
+        const links = sidebar?.querySelectorAll('a') ?? []
+        if (!toggle || !sidebar || !overlay || !closeButton) return
+        const closeMenu = () => {
+          sidebar.classList.remove('open')
+          overlay.classList.remove('open')
+        }
+        const openMenu = () => {
+          sidebar.classList.add('open')
+          overlay.classList.add('open')
+        }
+        toggle.addEventListener('click', openMenu)
+        closeButton.addEventListener('click', closeMenu)
+        overlay.addEventListener('click', closeMenu)
+        links.forEach((link) => link.addEventListener('click', closeMenu))
+      })()
+    </script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",

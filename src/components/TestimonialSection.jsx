@@ -56,9 +56,18 @@ function TestimonialSection({
               <div>
                 <h3>{activeTestimonial.name}</h3>
                 <span>{activeTestimonial.role}</span>
+                {activeTestimonial.company ? (
+                  <small className="testimonial-company">{activeTestimonial.company}</small>
+                ) : null}
               </div>
             </div>
             <p>{activeTestimonial.quote}</p>
+            {(activeTestimonial.result || activeTestimonial.period) ? (
+              <div className="testimonial-meta">
+                {activeTestimonial.result ? <span>{activeTestimonial.result}</span> : null}
+                {activeTestimonial.period ? <span>{activeTestimonial.period}</span> : null}
+              </div>
+            ) : null}
           </article>
 
           <button

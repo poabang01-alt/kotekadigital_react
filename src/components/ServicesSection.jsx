@@ -5,11 +5,14 @@ function ServicesSection({ serviceGroups }) {
         <div className="section-heading services-heading" data-reveal>
           <span className="eyebrow">Layanan</span>
           <h2 id="services-heading">
-            <span>Jasa Pembuatan Website di tanah papua</span>
+            <span>Jasa Pembuatan Website di Jayapura dan Tanah Papua</span>
           
           </h2>
           <p>
-            Solusi website dan sistem digital profesional untuk UMKM, bisnis lokal, personal brand, dan instansi dengan desain modern, performa cepat, responsif, serta SEO-ready untuk meningkatkan kredibilitas, visibilitas, dan kualitas layanan.
+            Solusi website dan sistem digital profesional untuk UMKM, bisnis lokal, personal
+            brand, sekolah, lembaga, dan instansi di Papua dengan desain modern, performa cepat,
+            responsif, serta SEO-ready untuk meningkatkan kredibilitas, visibilitas, dan kualitas
+            layanan.
           </p>
         </div>
 

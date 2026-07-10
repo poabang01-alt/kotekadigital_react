@@ -67,6 +67,7 @@ function PricingSection({
               <i className="fa-solid fa-scale-balanced" aria-hidden="true" />
               <div>
                 <h3>Tabel Perbandingan Paket</h3>
+                <p>Bandingkan fitur utama setiap paket dengan tampilan yang lebih ringkas dan mudah dibaca.</p>
               </div>
             </div>
 
@@ -82,12 +83,16 @@ function PricingSection({
                     <thead>
                       <tr>
                         <th>Fitur</th>
-                        <th>Basic</th>
+                        <th>
+                          <span className="pricing-table-plan">Paket Basic</span>
+                        </th>
                         <th className="is-highlighted">
                           <span className="pricing-table-badge">Paling Populer</span>
-                          Standard
+                          <span className="pricing-table-plan">Paket Standar</span>
                         </th>
-                        <th>Premium</th>
+                        <th>
+                          <span className="pricing-table-plan">Paket Premium</span>
+                        </th>
                       </tr>
                     </thead>
                     <tbody>

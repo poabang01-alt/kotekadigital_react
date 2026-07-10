@@ -70,8 +70,56 @@
         width: 100%;
       }
     </style>
-  </head>
-  <body>
+  <link rel="icon" type="image/png" href="../../img/koteka-digital-logo-jayapura-papua.png" />
+</head>
+<body>
+  <header class="article-topbar">
+    <div class="article-topbar-inner">
+      <div class="article-topbar-left">
+        <button type="button" class="article-menu-toggle" aria-label="Buka menu artikel">
+          <span></span>
+        </button>
+        <a class="article-brand" href="../../index.html#home">
+          <img src="../../img/koteka-digital-logo-jayapura-papua.png" alt="Koteka Digital" />
+          <span class="article-brand-copy">
+            <span class="article-brand-title">Koteka Digital</span>
+            <span class="article-brand-subtitle">Artikel Blog</span>
+          </span>
+        </a>
+      </div>
+      <nav class="article-topbar-nav" aria-label="Navigasi artikel">
+        <a href="../../index.html#home">Home</a>
+        <a href="../../index.html#layanan">Layanan</a>
+        <a href="../../index.html#blog">Blog</a>
+        <a href="../../index.html#kontak">Kontak</a>
+      </nav>
+    </div>
+  </header>
+  <div class="article-mobile-overlay"></div>
+  <aside class="article-mobile-sidebar" aria-label="Sidebar menu artikel">
+    <div class="article-mobile-sidebar-inner">
+      <div class="article-mobile-sidebar-head">
+        <a class="article-brand" href="../../index.html#home">
+          <img src="../../img/koteka-digital-logo-jayapura-papua.png" alt="Koteka Digital" />
+          <span class="article-brand-copy">
+            <span class="article-brand-title">Koteka Digital</span>
+            <span class="article-brand-subtitle">Artikel Blog</span>
+          </span>
+        </a>
+        <button type="button" class="article-mobile-sidebar-close" aria-label="Tutup menu">✕</button>
+      </div>
+      <nav>
+        <a href="../../index.html#home">Home</a>
+        <a href="../../index.html#about">About</a>
+        <a href="../../index.html#layanan">Layanan</a>
+        <a href="../../index.html#pricing-section">Harga</a>
+        <a href="../../index.html#portfolio">Portofolio</a>
+        <a href="../../index.html#blog">Blog</a>
+        <a href="../../index.html#testimoni">Testimoni</a>
+        <a href="../../index.html#kontak">Kontak</a>
+      </nav>
+    </div>
+  </aside>
     <main class="article-shell">
       <a class="back-link" href="../../index.html#blog"> <i class="fa-solid fa-backward"> </i>Kembali ke Blog</a>
       <article>
@@ -116,6 +164,31 @@
             <a href="https://kemenkopukm.go.id/" rel="noopener">Kementerian Koperasi dan UKM</a>
             serta menghubungkan strategi konten dengan kebutuhan pelanggan lokal.
           </p>
+          <section class="article-proof">
+            <h2>Mengapa company profile sering jadi penentu kesan pertama</h2>
+            <p>
+              Untuk banyak bisnis jasa dan lembaga, calon klien menilai keseriusan bukan hanya dari
+              logo atau nama brand, tetapi dari cara informasi disusun dan ditampilkan secara online.
+            </p>
+            <div class="article-proof-grid">
+              <div class="article-proof-item">
+                <strong>Profil bisnis lebih meyakinkan</strong>
+                <span>Visi, layanan, portofolio, dan kontak yang tertata membuat bisnis lebih pantas dipresentasikan.</span>
+              </div>
+              <div class="article-proof-item">
+                <strong>Membantu closing lebih cepat</strong>
+                <span>Calon klien bisa memahami brand lebih dulu sebelum masuk ke tahap konsultasi atau penawaran.</span>
+              </div>
+              <div class="article-proof-item">
+                <strong>Siap dipakai jangka panjang</strong>
+                <span>Website company profile dapat berkembang menjadi pusat informasi, blog, dan landing page promosi.</span>
+              </div>
+            </div>
+            <p class="article-proof-note">
+              Fakta yang paling sering disukai klien: company profile yang bersih dan profesional
+              membantu brand terlihat lebih matang bahkan sebelum meeting pertama terjadi.
+            </p>
+          </section>
           <h2>FAQ - Pertanyaan yang Sering Ditanyakan</h2>
           <h3>Siapa yang cocok memakai company profile?</h3>
           <p>Bisnis jasa, lembaga, komunitas, kontraktor, klinik, sekolah, dan perusahaan lokal.</p>
@@ -142,6 +215,28 @@
         </div>
       </article>
     </main>
+    <script>
+      (() => {
+        const toggle = document.querySelector('.article-menu-toggle')
+        const sidebar = document.querySelector('.article-mobile-sidebar')
+        const overlay = document.querySelector('.article-mobile-overlay')
+        const closeButton = document.querySelector('.article-mobile-sidebar-close')
+        const links = sidebar?.querySelectorAll('a') ?? []
+        if (!toggle || !sidebar || !overlay || !closeButton) return
+        const closeMenu = () => {
+          sidebar.classList.remove('open')
+          overlay.classList.remove('open')
+        }
+        const openMenu = () => {
+          sidebar.classList.add('open')
+          overlay.classList.add('open')
+        }
+        toggle.addEventListener('click', openMenu)
+        closeButton.addEventListener('click', closeMenu)
+        overlay.addEventListener('click', closeMenu)
+        links.forEach((link) => link.addEventListener('click', closeMenu))
+      })()
+    </script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",

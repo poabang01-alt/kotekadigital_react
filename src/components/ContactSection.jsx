@@ -83,7 +83,7 @@ function ContactSection({ contactInfo }) {
               <div>
                 <h3>Lokasi Kami</h3>
                 <p className="contact-panel-copy">
-                  Temukan lokasi kantor kami di peta
+                  Area layanan kami berpusat di Jayapura, Papua dan siap melayani konsultasi secara online.
                 </p>
               </div>
             </div>
@@ -92,14 +92,14 @@ function ContactSection({ contactInfo }) {
               <li>
                 <i className="fa-solid fa-building" aria-hidden="true" />
                 <div>
-                  <strong>Kantor</strong>
+                  <strong>Basis Layanan</strong>
                   <span>Koteka Digital Studio</span>
                 </div>
               </li>
               <li>
                 <i className="fa-solid fa-location-dot" aria-hidden="true" />
                 <div>
-                  <strong>Alamat</strong>
+                  <strong>Wilayah</strong>
                   <span>{contactInfo.location}</span>
                 </div>
               </li>
@@ -107,7 +107,7 @@ function ContactSection({ contactInfo }) {
                 <i className="fa-regular fa-clock" aria-hidden="true" />
                 <div>
                   <strong>Jam Operasional</strong>
-                  <span>Senin - Sabtu, 08.00 - 17.00 WIT</span>
+                  <span>24 jam setiap hari</span>
                 </div>
               </li>
             </ul>
@@ -117,7 +117,7 @@ function ContactSection({ contactInfo }) {
             <div className="map-wrap">
               <iframe
                 title="Lokasi Koteka Digital"
-                src="https://www.google.com/maps?q=Jayapura%2C%20Papua&output=embed"
+                src="https://www.google.com/maps?q=Jayapura%2C%20Papua%2C%20Indonesia&output=embed"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />

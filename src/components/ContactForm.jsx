@@ -10,6 +10,7 @@ function ContactForm({ contactInfo }) {
   })
 
   const submitLabel = form.kirimVia === 'email' ? 'Kirim via Email' : 'Kirim via WhatsApp'
+  const isEmailDelivery = form.kirimVia === 'email'
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -83,7 +84,7 @@ function ContactForm({ contactInfo }) {
               value={form.email}
               onChange={handleChange}
               autoComplete="email"
-              required
+              required={isEmailDelivery}
             />
           </div>
         </div>

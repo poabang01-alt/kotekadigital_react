@@ -10,14 +10,17 @@ function HeroSection({
       <section className="hero-section" id="home" aria-labelledby="home-heading">
         <div className="container hero-grid">
           <div className="hero-copy" data-reveal>
-            <span className="eyebrow">Website Profesional untuk Jayapura dan Papua</span>
-            <h1 id="home-heading">Jasa Pembuatan Website Profesional di tanah Papua</h1>
+            <span className="eyebrow">Website Profesional untuk Jayapura, Papua, dan Tanah Papua</span>
+            <h1 id="home-heading">Jasa Pembuatan Website Profesional di Jayapura dan Tanah Papua</h1>
             <p>
-              Kami membantu UMKM, bisnis lokal, personal brand, dan instansi tampil lebih profesional dan terpercaya melalui website modern, cepat, responsif, serta SEO-ready, sehingga mudah ditemukan di Google, meningkatkan kepercayaan pelanggan, dan mempermudah konversi penjualan.
+              Kami membantu UMKM, bisnis lokal, personal brand, sekolah, lembaga, dan instansi
+              di Jayapura serta Tanah Papua tampil lebih profesional dan terpercaya melalui
+              website modern, cepat, responsif, serta SEO-ready agar lebih mudah ditemukan di
+              Google, meningkatkan kepercayaan pelanggan, dan mempermudah konversi penjualan.
             </p>
             <p className="hero-note">
-              Fokus kami : kredibilitas brand, visibilias di
-              Google, dan pengalaman pengguna yang nyaman di desktop maupun mobile.
+              Fokus kami: kredibilitas brand, visibilitas di Google, dan pengalaman pengguna yang
+              nyaman di desktop maupun mobile.
             </p>
             <div className="hero-actions">
               <a

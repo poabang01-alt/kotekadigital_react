@@ -107,14 +107,90 @@ function App() {
     ],
   }
   const comparisonRows = [
-    { feature: 'Jumlah Halaman', basic: '1 - 4 Halaman', standard: '4 - 8 Halaman', premium: 'Custom (Bebas)' },
-    { feature: 'Desain UI', basic: 'Template / Custom Ringan', standard: 'Semi Custom', premium: 'Full Custom (UI/UX Profesional)' },
-    { feature: 'SEO', basic: 'Dasar', standard: 'Dasar + Struktur', premium: 'Lanjutan' },
-    { feature: 'Integrasi', basic: 'WhatsApp', standard: 'WhatsApp + Email + Sosial Media', premium: 'Lengkap + Optimasi Kecepatan' },
-    { feature: 'Revisi', basic: '1 - 2x', standard: '2 - 3x', premium: 'Lebih Fleksibel' },
-    { feature: 'Keamanan', basic: 'Dasar', standard: 'Standar', premium: 'Tinggi' },
-    { feature: 'Backup', basic: '-', standard: '-', premium: 'Otomatis' },
-    { feature: 'Training', basic: '-', standard: 'Ya', premium: 'Ya + Panduan Lengkap' },
+    {
+      feature: 'Cocok Untuk',
+      basic: 'Landing Page, Website UMKM, Personal Website',
+      standard: 'Company Profile, Portfolio Website, Website Sekolah, Website Organisasi / Yayasan',
+      premium: 'Portal Berita, Toko Online / E-Commerce, Dashboard Admin, Web Application',
+    },
+    {
+      feature: 'Kategori Layanan',
+      basic: 'Website Bisnis & Branding Dasar',
+      standard: 'Website Profesional & Institusi',
+      premium: 'Sistem Digital & Layanan Premium',
+    },
+    {
+      feature: 'Jumlah Halaman',
+      basic: '1 - 4 Halaman',
+      standard: '4 - 8 Halaman',
+      premium: 'Custom / Sesuai Kebutuhan Sistem',
+    },
+    {
+      feature: 'Struktur Konten',
+      basic: 'Profil singkat, layanan utama, CTA WhatsApp',
+      standard: 'Profil lengkap, layanan, galeri, kontak, informasi tambahan',
+      premium: 'Multi fitur, multi peran, alur data dan halaman lebih kompleks',
+    },
+    {
+      feature: 'Desain UI',
+      basic: 'Template / Custom Ringan',
+      standard: 'Semi Custom',
+      premium: 'Full Custom (UI/UX Profesional)',
+    },
+    {
+      feature: 'Fitur Inti',
+      basic: 'Form kontak, CTA WhatsApp, responsive',
+      standard: 'Form kontak, Maps, WhatsApp, email, sosial media',
+      premium: 'Dashboard, reservasi, integrasi API, fitur interaktif khusus',
+    },
+    {
+      feature: 'SEO',
+      basic: 'Dasar',
+      standard: 'Dasar + Struktur Website',
+      premium: 'Lanjutan + Optimasi Konten',
+    },
+    {
+      feature: 'Integrasi',
+      basic: 'WhatsApp',
+      standard: 'WhatsApp + Email + Sosial Media',
+      premium: 'Lengkap + WhatsApp API + Integrasi Sistem',
+    },
+    {
+      feature: 'Blog / Portal Konten',
+      basic: '-',
+      standard: 'Opsional',
+      premium: 'Ya / Cocok untuk Portal Berita',
+    },
+    {
+      feature: 'E-Commerce / Reservasi',
+      basic: '-',
+      standard: 'Opsional Sederhana',
+      premium: 'Ya / Sesuai Kebutuhan Project',
+    },
+    {
+      feature: 'Revisi',
+      basic: '1 - 2x',
+      standard: '2 - 3x',
+      premium: 'Lebih Fleksibel',
+    },
+    {
+      feature: 'Keamanan',
+      basic: 'Dasar',
+      standard: 'Standar',
+      premium: 'Tinggi',
+    },
+    {
+      feature: 'Backup',
+      basic: '-',
+      standard: '-',
+      premium: 'Otomatis',
+    },
+    {
+      feature: 'Training',
+      basic: '-',
+      standard: 'Ya',
+      premium: 'Ya + Panduan Lengkap',
+    },
   ]
   const [menuOpen, setMenuOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState(null)
@@ -127,10 +203,13 @@ function App() {
   const [testimonialDragOffset, setTestimonialDragOffset] = useState(0)
   const [openFaqIndex, setOpenFaqIndex] = useState(0)
   const headerRef = useRef(null)
+  const hamburgerRef = useRef(null)
   const headerOffsetRef = useRef(0)
   const sectionRatiosRef = useRef(new Map())
   const mobileNavRef = useRef(null)
   const sectionTransitionTimeoutRef = useRef(null)
+  const activeSectionLockRef = useRef(null)
+  const activeSectionLockTimeoutRef = useRef(null)
   const testimonialInteractingRef = useRef(false)
   const testimonialGestureRef = useRef({
     pointerId: null,
@@ -185,12 +264,48 @@ function App() {
   }, [menuOpen])
 
   useEffect(() => {
-    if (!menuOpen) return undefined
+    if (!menuOpen) {
+      hamburgerRef.current?.focus()
+      return undefined
+    }
 
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
         setMenuOpen(false)
         setOpenDropdown(null)
+        return
+      }
+
+      if (event.key !== 'Tab') return
+
+      const focusableSelector = [
+        'a[href]',
+        'button:not([disabled])',
+        'input:not([disabled])',
+        'select:not([disabled])',
+        'textarea:not([disabled])',
+        '[tabindex]:not([tabindex="-1"])',
+      ].join(', ')
+
+      const focusableElements = mobileNavRef.current
+        ? Array.from(mobileNavRef.current.querySelectorAll(focusableSelector))
+        : []
+
+      if (!focusableElements.length) return
+
+      const firstElement = focusableElements[0]
+      const lastElement = focusableElements[focusableElements.length - 1]
+      const activeElement = document.activeElement
+
+      if (event.shiftKey && activeElement === firstElement) {
+        event.preventDefault()
+        lastElement.focus()
+        return
+      }
+
+      if (!event.shiftKey && activeElement === lastElement) {
+        event.preventDefault()
+        firstElement.focus()
       }
     }
 
@@ -238,6 +353,42 @@ function App() {
   }, [])
 
   useEffect(() => {
+    const syncHashSection = () => {
+      const hash = window.location.hash?.replace('#', '')
+      if (!hash) return
+
+      const target = document.getElementById(hash)
+      if (!target) return
+
+      activeSectionLockRef.current = hash
+      setActiveSection(hash)
+
+      if (activeSectionLockTimeoutRef.current) {
+        window.clearTimeout(activeSectionLockTimeoutRef.current)
+      }
+
+      activeSectionLockTimeoutRef.current = window.setTimeout(() => {
+        activeSectionLockRef.current = null
+      }, 1400)
+
+      window.requestAnimationFrame(() => {
+        const headerOffset = headerOffsetRef.current
+        const targetTop = target.getBoundingClientRect().top + window.scrollY - headerOffset
+
+        window.scrollTo({
+          top: Math.max(targetTop, 0),
+          behavior: 'auto',
+        })
+      })
+    }
+
+    syncHashSection()
+    window.addEventListener('hashchange', syncHashSection)
+
+    return () => window.removeEventListener('hashchange', syncHashSection)
+  }, [])
+
+  useEffect(() => {
     const trackedSectionIds = [
       'home',
       'about',
@@ -271,6 +422,13 @@ function App() {
         })[0]
 
         if (dominantSection && dominantSection[1] > 0.15) {
+          if (
+            activeSectionLockRef.current &&
+            activeSectionLockRef.current !== dominantSection[0]
+          ) {
+            return
+          }
+
           setActiveSection((current) =>
             current === dominantSection[0] ? current : dominantSection[0]
           )
@@ -320,6 +478,9 @@ function App() {
     if (sectionTransitionTimeoutRef.current) {
       window.clearTimeout(sectionTransitionTimeoutRef.current)
     }
+    if (activeSectionLockTimeoutRef.current) {
+      window.clearTimeout(activeSectionLockTimeoutRef.current)
+    }
   }, [])
 
   const activePortfolio = portfolioItems[portfolioIndex]
@@ -343,7 +504,17 @@ function App() {
 
   const activateAndScroll = useCallback((sectionId) => {
     const target = document.getElementById(sectionId)
+    activeSectionLockRef.current = sectionId
     setActiveSection(sectionId)
+    window.history.replaceState(null, '', `#${sectionId}`)
+
+    if (activeSectionLockTimeoutRef.current) {
+      window.clearTimeout(activeSectionLockTimeoutRef.current)
+    }
+
+    activeSectionLockTimeoutRef.current = window.setTimeout(() => {
+      activeSectionLockRef.current = null
+    }, 1400)
 
     if (target) {
       const headerOffset = headerOffsetRef.current
@@ -405,6 +576,28 @@ function App() {
     setOpenDropdown(null)
   }, [])
 
+  useEffect(() => {
+    if (isDesktopNav || !menuOpen) return
+
+    const matchedDropdown = navItems.find(
+      (item) =>
+        item.children &&
+        (activeSection === item.href.slice(1) ||
+          item.children.some((child) => activeSection === child.href.slice(1)))
+    )
+
+    if (matchedDropdown) {
+      setOpenDropdown(matchedDropdown.label)
+    }
+  }, [activeSection, isDesktopNav, menuOpen])
+
+  const isNavItemActive = useCallback(
+    (item) =>
+      activeSection === item.href.slice(1) ||
+      item.children?.some((child) => activeSection === child.href.slice(1)),
+    [activeSection]
+  )
+
   const isBottomNavActive = useCallback(
     (key) => {
       if (key === 'menu') return menuOpen
@@ -445,10 +638,7 @@ function App() {
           <button
             type="button"
             className={`nav-link nav-button ${item.children && isMobileMenu ? 'has-mobile-submenu' : ''} ${
-              activeSection === item.href.slice(1) ||
-              item.children.some((child) => activeSection === child.href.slice(1))
-                ? 'active'
-                : ''
+              isNavItemActive(item) ? 'active' : ''
             }`}
             onClick={(event) => handleDropdownButtonClick(event, item)}
             aria-expanded={openDropdown === item.label}
@@ -507,10 +697,10 @@ function App() {
       ) : (
         <a
           key={item.label}
-          className={`nav-link ${activeSection === item.href.slice(1) ? 'active' : ''}`}
+          className={`nav-link ${isNavItemActive(item) ? 'active' : ''}`}
           href={item.href}
           onClick={(event) => handleNavClick(event, item.href)}
-          aria-current={activeSection === item.href.slice(1) ? 'page' : undefined}
+          aria-current={isNavItemActive(item) ? 'page' : undefined}
         >
           <span className="nav-link-copy">
             {isMobileMenu ? (
@@ -653,6 +843,7 @@ function App() {
             aria-label={menuOpen ? 'Tutup menu' : 'Buka menu'}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
+            ref={hamburgerRef}
           >
             <span />
             <span />

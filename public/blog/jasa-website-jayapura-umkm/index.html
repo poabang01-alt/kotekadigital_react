@@ -68,8 +68,56 @@
         width: 100%;
       }
     </style>
-  </head>
-  <body>
+  <link rel="icon" type="image/png" href="../../img/koteka-digital-logo-jayapura-papua.png" />
+</head>
+<body>
+  <header class="article-topbar">
+    <div class="article-topbar-inner">
+      <div class="article-topbar-left">
+        <button type="button" class="article-menu-toggle" aria-label="Buka menu artikel">
+          <span></span>
+        </button>
+        <a class="article-brand" href="../../index.html#home">
+          <img src="../../img/koteka-digital-logo-jayapura-papua.png" alt="Koteka Digital" />
+          <span class="article-brand-copy">
+            <span class="article-brand-title">Koteka Digital</span>
+            <span class="article-brand-subtitle">Artikel Blog</span>
+          </span>
+        </a>
+      </div>
+      <nav class="article-topbar-nav" aria-label="Navigasi artikel">
+        <a href="../../index.html#home">Home</a>
+        <a href="../../index.html#layanan">Layanan</a>
+        <a href="../../index.html#blog">Blog</a>
+        <a href="../../index.html#kontak">Kontak</a>
+      </nav>
+    </div>
+  </header>
+  <div class="article-mobile-overlay"></div>
+  <aside class="article-mobile-sidebar" aria-label="Sidebar menu artikel">
+    <div class="article-mobile-sidebar-inner">
+      <div class="article-mobile-sidebar-head">
+        <a class="article-brand" href="../../index.html#home">
+          <img src="../../img/koteka-digital-logo-jayapura-papua.png" alt="Koteka Digital" />
+          <span class="article-brand-copy">
+            <span class="article-brand-title">Koteka Digital</span>
+            <span class="article-brand-subtitle">Artikel Blog</span>
+          </span>
+        </a>
+        <button type="button" class="article-mobile-sidebar-close" aria-label="Tutup menu">✕</button>
+      </div>
+      <nav>
+        <a href="../../index.html#home">Home</a>
+        <a href="../../index.html#about">About</a>
+        <a href="../../index.html#layanan">Layanan</a>
+        <a href="../../index.html#pricing-section">Harga</a>
+        <a href="../../index.html#portfolio">Portofolio</a>
+        <a href="../../index.html#blog">Blog</a>
+        <a href="../../index.html#testimoni">Testimoni</a>
+        <a href="../../index.html#kontak">Kontak</a>
+      </nav>
+    </div>
+  </aside>
     <main class="article-shell">
       <a class="back-link" href="../../index.html#blog"> <i class="fa-solid fa-backward"> </i>Kembali ke Blog</a>
       <article>
@@ -116,6 +164,32 @@
             <a href="https://kemenkopukm.go.id/" rel="noopener">Kementerian Koperasi dan UKM</a>
             serta menghubungkan strategi konten dengan kebutuhan pelanggan lokal.
           </p>
+          <section class="article-proof">
+            <h2>Kenapa website UMKM sering langsung terasa manfaatnya</h2>
+            <p>
+              Banyak UMKM sebenarnya kehilangan calon pelanggan hanya karena informasi bisnis tidak
+              tersusun rapi. Website membantu menjawab pertanyaan yang sama berulang-ulang dengan
+              tampilan yang lebih profesional dan lebih meyakinkan.
+            </p>
+            <div class="article-proof-grid">
+              <div class="article-proof-item">
+                <strong>Produk dan jasa lebih jelas</strong>
+                <span>Pelanggan bisa melihat penawaran, foto, harga awal, dan cara menghubungi tanpa harus bertanya dari nol.</span>
+              </div>
+              <div class="article-proof-item">
+                <strong>Brand lebih dipercaya</strong>
+                <span>Website membuat bisnis terlihat lebih serius dibanding hanya mengandalkan status atau feed media sosial.</span>
+              </div>
+              <div class="article-proof-item">
+                <strong>Mudah diarahkan ke WhatsApp</strong>
+                <span>CTA yang jelas membantu pengunjung berubah menjadi chat konsultasi yang lebih siap closing.</span>
+              </div>
+            </div>
+            <p class="article-proof-note">
+              Fakta yang paling sering menarik minat klien: website UMKM yang sederhana tapi rapi
+              biasanya sudah cukup untuk menaikkan kesan profesional dalam waktu cepat.
+            </p>
+          </section>
           <h2>FAQ - Pertanyaan yang Sering Ditanyakan</h2>
           <h3>Apakah UMKM kecil perlu website?</h3>
           <p>
@@ -151,6 +225,28 @@
         </div>
       </article>
     </main>
+    <script>
+      (() => {
+        const toggle = document.querySelector('.article-menu-toggle')
+        const sidebar = document.querySelector('.article-mobile-sidebar')
+        const overlay = document.querySelector('.article-mobile-overlay')
+        const closeButton = document.querySelector('.article-mobile-sidebar-close')
+        const links = sidebar?.querySelectorAll('a') ?? []
+        if (!toggle || !sidebar || !overlay || !closeButton) return
+        const closeMenu = () => {
+          sidebar.classList.remove('open')
+          overlay.classList.remove('open')
+        }
+        const openMenu = () => {
+          sidebar.classList.add('open')
+          overlay.classList.add('open')
+        }
+        toggle.addEventListener('click', openMenu)
+        closeButton.addEventListener('click', closeMenu)
+        overlay.addEventListener('click', closeMenu)
+        links.forEach((link) => link.addEventListener('click', closeMenu))
+      })()
+    </script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
