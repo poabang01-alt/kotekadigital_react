@@ -932,6 +932,7 @@ function App() {
         <PricingSection
           comparisonRows={comparisonRows}
           handlePricingAction={handlePricingAction}
+          logoSrc={logoBaru}
           pricingFeatureMap={pricingFeatureMap}
           pricingPlans={pricingPlans}
         />
