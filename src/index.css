@@ -395,11 +395,12 @@
 .pricing-table-scroll {
   width: 100%;
   max-width: 100%;
-  touch-action: pan-x;
+  touch-action: pan-x pan-y;
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
   border-radius: inherit;
   scrollbar-color: rgba(255, 204, 0, 0.45) rgba(232, 239, 247, 0.8);
   scrollbar-gutter: stable both-edges;
@@ -686,20 +687,40 @@
 }
 
 @media (max-width: 768px) {
+  :root {
+    --section-title-size: clamp(1.58rem, 5.8vw, 1.92rem);
+    --section-title-line: 1.14;
+    --hero-title-size: clamp(1.98rem, 7.2vw, 2.42rem);
+    --hero-title-line: 1.1;
+  }
+
   .pricing-header {
-    margin-bottom: 26px;
-    padding-inline: 8px;
+    margin-bottom: 18px;
+    padding-inline: 4px;
+  }
+
+  .pricing-badge {
+    min-height: 30px;
+    padding: 6px 14px;
+    margin-bottom: 10px;
+    font-size: 0.66rem;
+  }
+
+  .pricing-header p {
+    margin-top: 8px;
+    font-size: 0.76rem;
+    line-height: 1.34;
   }
 
   .pricing-package-grid {
-    gap: 14px;
+    gap: 10px;
   }
 
   .pricing-card-reference {
-    padding: 20px 16px 18px;
-    border-radius: 22px;
+    padding: 12px 10px 11px;
+    border-radius: 16px;
     box-shadow:
-      0 16px 28px rgba(11, 58, 91, 0.08),
+      0 10px 18px rgba(11, 58, 91, 0.06),
       inset 0 1px 0 rgba(255, 255, 255, 0.94);
   }
 
@@ -713,47 +734,65 @@
   }
 
   .pricing-popular-badge {
-    top: -24px;
-    min-height: 28px;
-    padding-inline: 11px;
-    font-size: 0.64rem;
+    top: -18px;
+    min-height: 24px;
+    padding-inline: 9px;
+    font-size: 0.58rem;
+  }
+
+  .pricing-card-shell {
+    min-height: 20px;
+  }
+
+  .pricing-card-icon {
+    right: 0;
+    top: -2px;
+    font-size: 1.9rem;
   }
 
   .pricing-card-reference .price {
-    margin: 4px 0 9px;
-    font-size: clamp(1.12rem, 3.8vw, 1.38rem);
+    margin: 1px 0 4px;
+    font-size: clamp(0.94rem, 3.5vw, 1.14rem);
     line-height: 1.05;
   }
 
   .pricing-card-reference h3 {
-    margin-bottom: 6px;
-    font-size: clamp(1.28rem, 4.8vw, 1.52rem);
+    margin-bottom: 3px;
+    font-size: clamp(1rem, 4vw, 1.18rem);
   }
 
   .pricing-card-reference .pricing-copy {
-    margin-bottom: 8px;
-    font-size: 0.88rem;
-    line-height: 1.52;
+    min-height: 0;
+    margin-bottom: 4px;
+    font-size: 0.72rem;
+    line-height: 1.3;
   }
 
   .pricing-investment-label {
-    font-size: 0.7rem;
+    font-size: 0.58rem;
     letter-spacing: 0.05em;
   }
 
+  .pricing-feature-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+  }
+
   .pricing-feature-list li {
-    padding-left: 22px;
-    font-size: 0.84rem;
-    line-height: 1.36;
+    padding-left: 18px;
+    font-size: 0.7rem;
+    line-height: 1.22;
   }
 
   .pricing-card-reference .pricing-actions {
-    margin-top: 12px;
+    margin-top: 6px;
   }
 
   .pricing-card-reference .pricing-cta {
-    min-height: 46px;
-    font-size: 0.88rem;
+    min-height: 36px;
+    font-size: 0.72rem;
+    padding-inline: 8px;
   }
 
   .pricing-lower-grid {
@@ -762,32 +801,36 @@
   }
 
   .pricing-comparison-card {
-    padding: 16px;
-    border-radius: 20px;
+    padding: 12px;
+    border-radius: 18px;
     overflow: hidden;
   }
 
   .pricing-subsection-title {
-    gap: 10px;
-    margin-bottom: 14px;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .pricing-subsection-title > i {
+    font-size: 1.2rem;
   }
 
   .pricing-subsection-title h3 {
-    font-size: 1.36rem;
+    font-size: 1.08rem;
   }
 
   .pricing-subsection-title p {
-    margin-top: 3px;
-    font-size: 0.9rem;
-    line-height: 1.5;
+    margin-top: 2px;
+    font-size: 0.76rem;
+    line-height: 1.34;
   }
 
   .pricing-table-wrap {
-    border-radius: 18px;
+    border-radius: 16px;
   }
 
   .pricing-table-scroll {
-    padding-bottom: 10px;
+    padding-bottom: 8px;
     background:
       linear-gradient(90deg, rgba(241, 246, 252, 0.98) 0, rgba(241, 246, 252, 0) 18px),
       linear-gradient(270deg, rgba(241, 246, 252, 0.98) 0, rgba(241, 246, 252, 0) 18px);
@@ -795,20 +838,20 @@
 
   .pricing-table th,
   .pricing-table td {
-    padding: 12px 11px;
-    font-size: 0.82rem;
-    line-height: 1.4;
+    padding: 10px 9px;
+    font-size: 0.72rem;
+    line-height: 1.28;
     white-space: normal;
     text-align: left;
   }
 
   .pricing-table {
     width: 100%;
-    min-width: 620px;
+    min-width: 520px;
   }
 
   .pricing-table thead th {
-    font-size: 0.86rem;
+    font-size: 0.76rem;
   }
 
   .pricing-table thead th:not(:first-child) {
@@ -818,25 +861,45 @@
 
   .pricing-table thead th.is-highlighted {
     padding-top: 16px;
+    white-space: normal;
   }
 
   .pricing-table thead th:first-child,
   .pricing-table tbody th {
-    min-width: 148px;
+    min-width: 120px;
   }
 
   .pricing-table-badge {
-    min-height: 22px;
-    padding: 3px 9px;
-    margin-right: 8px;
-    font-size: 0.62rem;
+    min-height: 20px;
+    padding: 2px 8px;
+    margin-right: 0;
+    font-size: 0.56rem;
   }
 
   .pricing-table-plan {
+    min-height: 30px;
+    padding: 6px 8px;
+    border-radius: 10px;
+    font-size: 0.68rem;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .pricing-table thead th:not(:first-child) {
+    min-width: 138px;
+  }
+
+  .pricing-table thead th.is-highlighted .pricing-table-badge {
+    display: inline-flex;
+    margin: 0 auto 4px;
+  }
+
+  .pricing-table thead th.is-highlighted .pricing-table-plan {
+    display: flex;
+    width: 100%;
     min-height: 34px;
-    padding: 7px 10px;
-    border-radius: 12px;
-    font-size: 0.78rem;
+    align-items: center;
+    justify-content: center;
   }
 
 }
@@ -987,8 +1050,10 @@ main section.section-spotlight {
 }
 
 .brand img {
-  width: 48px;
+  width: 54px;
+  height: 54px;
   flex-shrink: 0;
+  object-fit: contain;
 }
 
 .brand-text {
@@ -2006,7 +2071,7 @@ main section {
   display: grid;
   place-items: center;
   min-height: clamp(260px, 32vw, 420px);
-  padding: 22px 22px 30px;
+  padding: 18px 18px 22px;
   margin-bottom: 0;
   border-radius: 34px;
   background:
@@ -2036,25 +2101,14 @@ main section {
   transition: opacity 220ms ease, transform 220ms ease;
 }
 
-.about-logo-frame::after {
-  content: '';
-  position: absolute;
-  inset: 16px;
-  border-radius: 26px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  pointer-events: none;
-}
-
 .about-logo {
   position: relative;
   z-index: 1;
   width: min(100%, 360px);
   aspect-ratio: 1 / 1;
-  border-radius: 28px;
-  object-fit: cover;
-  box-shadow:
-    0 18px 34px rgba(0, 0, 0, 0.26),
-    0 0 0 1px rgba(255, 255, 255, 0.08);
+  border-radius: 0;
+  object-fit: contain;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.22);
   animation: aboutLogoFloat 6.8s ease-in-out infinite;
   transition:
     transform 220ms ease,
@@ -2082,10 +2136,7 @@ main section {
 .about-logo-frame:hover .about-logo,
 .about-logo-frame:focus-within .about-logo {
   transform: translateY(-4px) scale(1.018);
-  box-shadow:
-    0 24px 42px rgba(0, 0, 0, 0.32),
-    0 0 24px rgba(255, 179, 0, 0.14),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 24px 42px rgba(0, 0, 0, 0.28);
 }
 
 .about-logo-contact {
@@ -2303,11 +2354,26 @@ main section {
 .about-team-heading {
   position: relative;
   z-index: 1;
-  max-width: 640px;
+  width: 100%;
+  max-width: 100%;
   margin-inline: auto;
   margin-bottom: 76px;
   text-align: center;
   justify-items: center;
+}
+
+.about-team-heading-copy {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  max-width: 100%;
+  justify-items: stretch;
+}
+
+.about-team-heading-copy p,
+.about-team-heading-copy h2 {
+  width: 100%;
+  max-width: none;
 }
 
 .about-eyebrow {
@@ -5391,10 +5457,11 @@ main section {
   }
 
   .mobile-menu-brand img {
-    width: 34px;
-    height: 34px;
+    width: 42px;
+    height: 42px;
     flex: 0 0 auto;
     border-radius: 10px;
+    object-fit: contain;
   }
 
   .mobile-menu-brand-copy {
@@ -6113,6 +6180,12 @@ main section {
 }
 
 @media (max-width: 640px) {
+  :root {
+    --section-title-size: clamp(1.46rem, 6vw, 1.72rem);
+    --hero-title-size: clamp(1.62rem, 6.3vw, 1.92rem);
+    --hero-title-line: 1.04;
+  }
+
   body {
     padding-bottom: calc(82px + env(safe-area-inset-bottom));
   }
@@ -6128,6 +6201,31 @@ main section {
 
   .container {
     padding-inline: 10px;
+  }
+
+  .hero-copy h1,
+  .section-heading h2,
+  .pricing-header h2,
+  .blog-section-intro h2,
+  .about-heading h2,
+  .contact-heading h2,
+  .faq-section .section-heading h2,
+  .services-heading h2 {
+    letter-spacing: -0.03em;
+  }
+
+  .pricing-card-reference h3,
+  .pricing-subsection-title h3,
+  .service-group-title,
+  .portfolio-content h3,
+  .blog-card h3,
+  .testimonial-head h3,
+  .contact-card h3,
+  .contact-form-card h3,
+  .map-card h3,
+  .site-footer h3 {
+    font-size: clamp(1.05rem, 4.4vw, 1.22rem);
+    line-height: 1.3;
   }
 
   html {
@@ -6202,17 +6300,19 @@ main section {
   }
 
   main section {
-    padding: 76px 0;
+    padding: 60px 0;
   }
 
   .hero-grid {
-    min-height: auto;
-    gap: 22px;
-    padding-top: 8px;
+    min-height: calc(100svh - 148px);
+    gap: 12px;
+    padding-top: 2px;
+    align-content: start;
   }
 
   .hero-copy {
-    gap: 12px;
+    gap: 8px;
+    padding-inline-start: 0;
   }
 
   .site-header {
@@ -6297,6 +6397,11 @@ main section {
     letter-spacing: -0.045em;
   }
 
+  .hero-actions {
+    gap: 10px;
+    margin-top: 12px;
+  }
+
   .hero-actions .button {
     width: 100%;
     min-width: 0;
@@ -6344,46 +6449,46 @@ main section {
   }
 
   .service-group-premium {
-    padding: 20px 14px 16px;
-    border-radius: 20px;
+    padding: 16px 10px 12px;
+    border-radius: 18px;
   }
 
   .service-group-head {
-    gap: 6px;
-    margin-bottom: 14px;
+    gap: 4px;
+    margin-bottom: 10px;
   }
 
   .service-group-head p {
-    font-size: 0.9rem;
-    line-height: 1.5;
+    font-size: 0.8rem;
+    line-height: 1.38;
   }
 
   .services-section .card-grid-five,
   .card-grid-five {
-    gap: 12px;
+    gap: 8px;
   }
 
   .service-card {
-    grid-template-columns: 46px minmax(0, 1fr);
-    gap: 10px 12px;
-    padding: 15px 14px 14px;
-    border-radius: 18px;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 8px 10px;
+    padding: 12px 10px 11px;
+    border-radius: 16px;
     box-shadow:
-      0 10px 18px rgba(4, 29, 51, 0.07),
+      0 8px 14px rgba(4, 29, 51, 0.06),
       inset 0 1px 0 rgba(255, 255, 255, 0.9);
   }
 
   .service-card-icon {
-    width: 46px;
-    height: 46px;
-    border-radius: 14px;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.7),
-      0 8px 16px rgba(4, 29, 51, 0.06);
+      0 6px 12px rgba(4, 29, 51, 0.05);
   }
 
   .service-card i {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .service-card h4 {
@@ -6648,7 +6753,8 @@ main section {
   }
 
   .contact-card h3 {
-    font-size: 1.28rem;
+    font-size: clamp(1.05rem, 4.4vw, 1.22rem);
+    line-height: 1.3;
   }
 
   .contact-form {
@@ -6686,8 +6792,8 @@ main section {
   }
 
   .faq-section .section-heading h2 {
-    font-size: clamp(1.85rem, 9vw, 2.7rem);
-    line-height: 1.08;
+    font-size: var(--section-title-size);
+    line-height: var(--section-title-line);
   }
 
   .faq-item {
@@ -6715,14 +6821,93 @@ main section {
     line-height: 1.74;
   }
 
+  .hero-copy .eyebrow {
+    padding: 5px 9px;
+    font-size: 0.58rem;
+    letter-spacing: 0.05em;
+  }
+
   .hero-copy h1 {
-    font-size: 2rem;
+    max-width: none;
+    font-size: var(--hero-title-size);
+    line-height: var(--hero-title-line);
+  }
+
+  .hero-copy p,
+  .hero-note {
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  .hero-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .hero-actions .button {
+    min-height: 40px;
+    padding-inline: 10px;
+    border-radius: 12px;
+    font-size: 0.76rem;
+    line-height: 1.2;
+  }
+
+  .hero-social {
+    gap: 8px;
+    margin-top: 8px;
+    width: 100%;
+  }
+
+  .hero-social-link {
+    width: 40px;
+    height: 40px;
+  }
+
+  .hero-social-link i {
+    font-size: 1.05rem;
+  }
+
+  .hero-visual {
+    gap: 8px;
+    padding-bottom: 0;
+  }
+
+  .hero-card-main {
+    border-radius: 18px;
+  }
+
+  .hero-card-main img {
+    aspect-ratio: 1.7 / 1;
+  }
+
+  .hero-stat-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: -12px;
+    padding-inline: 0;
+  }
+
+  .hero-stat {
+    border-radius: 16px;
+    padding: 10px 8px 9px;
+    gap: 4px;
+  }
+
+  .hero-stat strong {
+    font-size: 0.76rem;
+  }
+
+  .hero-stat span {
+    font-size: 0.66rem;
+    line-height: 1.28;
   }
 
   .services-heading h2 {
     max-width: none;
-    font-size: clamp(1.18rem, 4.6vw, 1.55rem);
-    line-height: 1.12;
+    font-size: var(--section-title-size);
+    line-height: var(--section-title-line);
   }
 
   .pricing-card-reference {
@@ -6750,105 +6935,294 @@ main section {
   }
 
   .service-group-head {
-    gap: 5px;
-    margin-bottom: 16px;
+    gap: 4px;
+    margin-bottom: 10px;
   }
 
   .service-group-head p {
-    line-height: 1.5;
+    line-height: 1.38;
   }
 
   .service-group-kicker {
-    min-height: 32px;
-    padding-inline: 12px;
-    font-size: 0.68rem;
+    min-height: 28px;
+    padding-inline: 10px;
+    font-size: 0.62rem;
   }
 
   .service-card h4 {
     min-height: auto;
-    font-size: 0.98rem;
-    line-height: 1.28;
+    font-size: 0.86rem;
+    line-height: 1.22;
   }
 
   .service-card p {
-    font-size: 0.9rem;
-    line-height: 1.56;
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+
+  .service-group-title {
+    font-size: 1.12rem;
+    line-height: 1.1;
+  }
+
+  .services-heading {
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .services-heading p {
+    display: none;
+  }
+
+  .service-group-list {
+    gap: 12px;
+  }
+
+  .service-group-premium::after {
+    inset: 10px;
+    border-radius: 14px;
+  }
+
+  .service-cta {
+    min-height: 44px;
+    margin-top: 8px;
+    padding-inline: 12px;
+    font-size: 0.82rem;
   }
 
   .about-heading h2 {
-    font-size: 2rem;
+    font-size: 1.72rem;
   }
 
   .about-lead {
     width: 100%;
-    font-size: 1rem;
-    line-height: 1.74;
+    font-size: 0.88rem;
+    line-height: 1.52;
   }
 
   .about-copy {
-    font-size: 0.95rem;
-    line-height: 1.72;
+    font-size: 0.84rem;
+    line-height: 1.48;
+  }
+
+  .about-heading {
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .about-layout {
+    gap: 14px;
+  }
+
+  .about-logo-panel {
+    gap: 12px;
+  }
+
+  .about-logo-frame {
+    min-height: 168px;
+    padding: 14px 14px 18px;
+    border-radius: 24px;
+  }
+
+  .about-logo {
+    width: min(100%, 184px);
+    border-radius: 0;
   }
 
   .about-logo-contact {
-    padding: 14px;
+    padding: 10px;
+    border-radius: 18px;
+    gap: 10px;
+  }
+
+  .about-logo-socials-label {
+    font-size: 0.72rem;
   }
 
   .about-logo-social-links {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     justify-items: center;
+    gap: 8px;
+  }
+
+  .about-logo-social-links a,
+  .about-logo-social-link-static {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+
+  .about-logo-social-links a i,
+  .about-logo-social-link-static i {
+    font-size: 0.96rem;
   }
 
   .about-card-head {
     align-items: center;
-    gap: 14px;
+    gap: 10px;
+    min-height: 0;
   }
 
   .about-card-icon {
-    flex-basis: 56px;
-    width: 56px;
-    height: 56px;
+    flex-basis: 44px;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
   }
 
-  .partner-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+  .about-card-head h3 {
+    font-size: 0.98rem;
+    line-height: 1.24;
   }
 
-  .partner-card {
-    min-height: 118px;
-    padding: 16px 12px 14px;
+  .about-card-grid {
     gap: 10px;
   }
 
-  .partner-icon {
-    width: 46px;
-    height: 46px;
-    border-radius: 14px;
+  .about-info-card {
+    padding: 16px 14px 14px;
+    border-radius: 20px;
+    gap: 10px;
   }
 
-  .partner-label {
-    font-size: 0.86rem;
-    line-height: 1.32;
+  .about-info-card p {
+    font-size: 0.84rem;
+    line-height: 1.45;
   }
 
-  .team-socials {
+  .about-team {
+    margin-top: 24px;
+    padding: 18px 14px 16px;
+    border-radius: 24px;
+    overflow: visible;
+  }
+
+  .about-team-heading {
+    gap: 10px;
+    margin-bottom: 44px;
+  }
+
+  .about-team-heading-copy {
+    display: none;
+  }
+
+  .about-team-grid {
+    margin-top: 0;
+    padding-top: 18px;
+    gap: 44px 12px;
+  }
+
+  .partner-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
   }
 
+  .partner-card {
+    min-height: 92px;
+    padding: 12px 8px 10px;
+    gap: 8px;
+    border-radius: 18px;
+  }
+
+  .partner-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+  }
+
+  .partner-icon i {
+    font-size: 17px;
+  }
+
+  .partner-label {
+    font-size: 0.74rem;
+    line-height: 1.2;
+  }
+
+  .partner-section {
+    padding-top: 20px;
+    padding-bottom: 44px;
+  }
+
+  .partner-section .container {
+    display: grid;
+    gap: 10px;
+  }
+
+  .partner-section .section-kicker {
+    min-height: 28px;
+    padding: 5px 10px;
+    font-size: 0.62rem;
+    margin-bottom: 0;
+  }
+
+  .team-socials {
+    gap: 6px;
+    margin-top: 2px;
+  }
+
   .team-social-link {
-    width: 42px;
-    min-width: 42px;
-    height: 42px;
-    border-radius: 14px;
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+    border-radius: 12px;
   }
 
   .team-social-link i {
-    font-size: 0.95rem;
+    font-size: 0.86rem;
   }
 
   .team-card-copy h4 {
-    font-size: 1.2rem;
+    font-size: 1.12rem;
+  }
+
+  .team-card {
+    padding: 96px 14px 14px;
+    border-radius: 22px;
+    gap: 10px;
+    overflow: visible;
+    z-index: 1;
+  }
+
+  .team-card::after {
+    width: 132px;
+    height: 66px;
+  }
+
+  .team-avatar-wrap {
+    width: 148px;
+    height: 148px;
+    margin-top: -150px;
+    margin-bottom: 14px;
+  }
+
+  .team-avatar {
+    width: 112px;
+    height: 112px;
+  }
+
+  .team-avatar-ring-two {
+    inset: 8px;
+  }
+
+  .team-card-copy {
+    gap: 8px;
+  }
+
+  .team-role {
+    padding: 7px 12px;
+    font-size: 0.64rem;
+  }
+
+  .team-description {
+    font-size: 0.82rem;
+    line-height: 1.46;
+  }
+
+  .team-description {
+    max-width: none;
+    font-size: 0.8rem;
+    line-height: 1.42;
   }
 
   .service-cta {

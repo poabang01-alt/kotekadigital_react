@@ -1,4 +1,4 @@
-function AboutSection({ aboutCards, contactInfo, teamMembers }) {
+function AboutSection({ aboutCards, contactInfo, logoSrc, teamMembers }) {
   return (
     <section className="about-section" id="about" aria-labelledby="about-heading">
       <div className="container">
@@ -15,7 +15,7 @@ function AboutSection({ aboutCards, contactInfo, teamMembers }) {
             <div className="about-logo-frame">
               <img
                 className="about-logo"
-                src="/img/koteka-digital-logo-jayapura-papua.png"
+                src={logoSrc}
                 alt="Logo Koteka Digital"
                 loading="lazy"
                 decoding="async"
@@ -94,11 +94,13 @@ function AboutSection({ aboutCards, contactInfo, teamMembers }) {
         <div className="about-team" data-reveal>
           <div className="section-heading about-team-heading">
             <span className="eyebrow about-eyebrow">Tim Kami</span>
-            <h2>Orang-Orang di Balik Koteka Digital</h2>
-            <p>
-              Tim kami bekerja untuk merancang website yang rapi, strategis, dan nyaman dipakai
-              oleh bisnis, personal brand, maupun instansi.
-            </p>
+            <div className="about-team-heading-copy">
+              <h2>Orang-Orang di Balik Koteka Digital</h2>
+              <p>
+                Tim kami bekerja untuk merancang website yang rapi, strategis, dan nyaman dipakai
+                oleh bisnis, personal brand, maupun instansi.
+              </p>
+            </div>
           </div>
 
           <div className="card-grid card-grid-three about-team-grid" role="list">

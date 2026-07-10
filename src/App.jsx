@@ -13,6 +13,7 @@ import {
   testimonials,
   whatsappLinks,
 } from './data/siteData'
+import logoBaru from '../logo-baru.svg'
 import AboutSection from './components/AboutSection'
 import BlogSection from './components/BlogSection'
 import ContactSection from './components/ContactSection'
@@ -818,7 +819,7 @@ function App() {
         <div className="container nav-shell">
           <a className="brand" href="#home" onClick={(event) => handleNavClick(event, '#home')}>
             <img
-              src="/img/koteka-digital-logo-jayapura-papua.png"
+              src={logoBaru}
               alt="Logo Koteka Digital"
             />
             <span className="brand-text">
@@ -871,7 +872,7 @@ function App() {
         <div className="mobile-menu-header">
           <div className="mobile-menu-brand">
             <img
-              src="/img/koteka-digital-logo-jayapura-papua.png"
+              src={logoBaru}
               alt="Logo Koteka Digital"
             />
             <div className="mobile-menu-brand-copy">
@@ -921,7 +922,12 @@ function App() {
           homeConsultationLink={homeConsultationLink}
           partnerCards={partnerCards}
         />
-        <AboutSection aboutCards={aboutCards} contactInfo={contactInfo} teamMembers={teamMembers} />
+          <AboutSection
+            aboutCards={aboutCards}
+            contactInfo={contactInfo}
+            logoSrc={logoBaru}
+            teamMembers={teamMembers}
+          />
         <ServicesSection serviceGroups={serviceGroups} />
         <PricingSection
           comparisonRows={comparisonRows}
