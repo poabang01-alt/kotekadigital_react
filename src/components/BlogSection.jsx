@@ -15,28 +15,21 @@ function BlogSection({ blogPosts }) {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 640) {
-        setCardsPerView(1)
-        return
-      }
+      const nextCardsPerView =
+        window.innerWidth <= 640 ? 1 : window.innerWidth <= 1024 ? 2 : 3
 
-      if (window.innerWidth <= 1024) {
-        setCardsPerView(2)
-        return
-      }
-
-      setCardsPerView(3)
+      setCardsPerView((current) => {
+        if (current === nextCardsPerView) return current
+        setCurrentIndex(nextCardsPerView)
+        setIsTransitionEnabled(false)
+        return nextCardsPerView
+      })
     }
 
     handleResize()
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
-
-  useEffect(() => {
-    setCurrentIndex(cardsPerView)
-    setIsTransitionEnabled(false)
-  }, [cardsPerView])
 
   const extendedPosts = useMemo(() => {
     if (!blogPosts.length) return []

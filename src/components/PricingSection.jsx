@@ -20,13 +20,6 @@ function PricingSection({
     { key: 'premium', label: 'Paket Premium' },
   ]
 
-  const escapeHtml = (value) =>
-    String(value)
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;')
-
   const escapeXml = (value) =>
     String(value)
       .replaceAll('&', '&amp;')
@@ -343,6 +336,8 @@ function PricingSection({
       </html>
     `
   }
+
+  void buildExportDocument
 
   const wrapText = (text, maxChars) => {
     const words = String(text).split(/\s+/)
