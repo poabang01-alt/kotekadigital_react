@@ -91,7 +91,7 @@ export const teamMembers = [
   {
     name: 'Tim Bertumbuh',
     role: 'Kolaborasi & Support',
-    description: 'Kami terus membuka ruang kolaborasi untuk talenta yang ingin tumbuh bersama dalam pengembangan website, branding, dan eksekusi digital yang rapi.',
+    description: 'Membuka ruang kolaborasi untuk talenta yang ingin tumbuh bersama dalam website dan eksekusi digital.',
     image: '/img/user3.jpg',
     socials: [
       { label: 'Website Koteka Digital', href: 'https://kotekadigital.com/', icon: 'fa-solid fa-globe' },

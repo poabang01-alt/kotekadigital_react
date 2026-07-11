@@ -198,6 +198,7 @@ function App() {
   const [isDesktopNav, setIsDesktopNav] = useState(() =>
     typeof window !== 'undefined' ? window.matchMedia('(min-width: 901px)').matches : true
   )
+  const [isHeaderHidden, setIsHeaderHidden] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
   const [portfolioIndex, setPortfolioIndex] = useState(0)
   const [testimonialIndex, setTestimonialIndex] = useState(0)
@@ -206,6 +207,9 @@ function App() {
   const headerRef = useRef(null)
   const hamburgerRef = useRef(null)
   const headerOffsetRef = useRef(0)
+  const lastScrollYRef = useRef(
+    typeof window !== 'undefined' ? window.scrollY : 0
+  )
   const sectionRatiosRef = useRef(new Map())
   const mobileNavRef = useRef(null)
   const sectionTransitionTimeoutRef = useRef(null)
@@ -320,6 +324,7 @@ function App() {
     const mediaQuery = window.matchMedia('(min-width: 901px)')
     const handleMediaChange = (event) => {
       setIsDesktopNav(event.matches)
+      setIsHeaderHidden(false)
       setOpenDropdown(null)
     }
 
@@ -327,6 +332,40 @@ function App() {
 
     return () => mediaQuery.removeEventListener('change', handleMediaChange)
   }, [])
+
+  useEffect(() => {
+    if (menuOpen) {
+      setIsHeaderHidden(false)
+      return undefined
+    }
+
+    lastScrollYRef.current = window.scrollY
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      const previousScrollY = lastScrollYRef.current
+      const isScrollingDown = currentScrollY > previousScrollY
+      const hasPassedHeader = currentScrollY > 80
+      const scrollDelta = Math.abs(currentScrollY - previousScrollY)
+
+      if (scrollDelta < 6) {
+        lastScrollYRef.current = currentScrollY
+        return
+      }
+
+      if (!hasPassedHeader || currentScrollY <= 0) {
+        setIsHeaderHidden(false)
+      } else {
+        setIsHeaderHidden(isScrollingDown)
+      }
+
+      lastScrollYRef.current = currentScrollY
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [menuOpen])
 
   useEffect(() => {
     const syncHeaderOffset = () => {
@@ -815,7 +854,10 @@ function App() {
 
   return (
     <>
-      <header className="site-header" ref={headerRef}>
+      <header
+        className={`site-header ${isHeaderHidden ? 'header-hidden' : ''}`}
+        ref={headerRef}
+      >
         <div className="container nav-shell">
           <a className="brand" href="#home" onClick={(event) => handleNavClick(event, '#home')}>
             <img
@@ -920,14 +962,28 @@ function App() {
           handleNavClick={handleNavClick}
           heroSocialLinks={heroSocialLinks}
           homeConsultationLink={homeConsultationLink}
-          partnerCards={partnerCards}
         />
-          <AboutSection
-            aboutCards={aboutCards}
-            contactInfo={contactInfo}
-            logoSrc={logoBaru}
-            teamMembers={teamMembers}
-          />
+        <section className="partner-section partner-section-bridge" aria-label="Klien dan partner">
+          <div className="container" data-reveal>
+            <p className="section-kicker">Dipercaya bisnis lokal dan institusi</p>
+            <div className="partner-grid" role="list">
+              {partnerCards.map((partner) => (
+                <article className="partner-card" key={partner.label} role="listitem">
+                  <span className="partner-icon" aria-hidden="true">
+                    <i className={partner.icon} />
+                  </span>
+                  <span className="partner-label">{partner.label}</span>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+        <AboutSection
+          aboutCards={aboutCards}
+          contactInfo={contactInfo}
+          logoSrc={logoBaru}
+          teamMembers={teamMembers}
+        />
         <ServicesSection serviceGroups={serviceGroups} />
         <PricingSection
           comparisonRows={comparisonRows}
