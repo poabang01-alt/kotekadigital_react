@@ -25,6 +25,67 @@
   --motion-base: 320ms;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+}
+
+.section-placeholder {
+  width: 100%;
+}
+
+.map-embed-trigger {
+  width: 100%;
+  min-height: 272px;
+  display: grid;
+  align-content: center;
+  gap: 14px;
+  padding: 24px;
+  border: 0;
+  background:
+    radial-gradient(circle at top right, rgba(255, 204, 0, 0.18), transparent 22%),
+    linear-gradient(180deg, rgba(11, 58, 91, 0.96), rgba(7, 32, 51, 0.98));
+  color: #ffffff;
+  text-align: left;
+}
+
+.map-embed-trigger-copy {
+  display: grid;
+  gap: 8px;
+  line-height: 1.6;
+}
+
+.map-embed-trigger-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  width: fit-content;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: #ffcc00;
+  color: #08213a;
+  font-weight: 800;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @supports (content-visibility: auto) {
   .pricing-section,
   .portfolio-section,

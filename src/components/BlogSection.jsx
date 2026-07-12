@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion'
 
 function BlogSection({ blogPosts }) {
+  const prefersReducedMotion = usePrefersReducedMotion()
   const [showAll, setShowAll] = useState(false)
   const [cardsPerView, setCardsPerView] = useState(() => {
     if (typeof window === 'undefined') return 3
@@ -46,7 +48,7 @@ function BlogSection({ blogPosts }) {
   }, [cardsPerView, currentIndex, totalSlides])
 
   useEffect(() => {
-    if (!totalSlides || showAll) return undefined
+    if (!totalSlides || showAll || prefersReducedMotion) return undefined
 
     const timer = window.setInterval(() => {
       setIsTransitionEnabled(true)
@@ -54,7 +56,7 @@ function BlogSection({ blogPosts }) {
     }, 3400)
 
     return () => window.clearInterval(timer)
-  }, [showAll, totalSlides])
+  }, [prefersReducedMotion, showAll, totalSlides])
 
   const goToPrev = () => {
     setIsTransitionEnabled(true)
@@ -166,6 +168,8 @@ function BlogSection({ blogPosts }) {
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
+                aria-roledescription="carousel"
+                aria-label="Slider artikel unggulan"
               >
                 <div
                   className={`blog-carousel-track ${isTransitionEnabled ? 'is-animated' : ''}`}

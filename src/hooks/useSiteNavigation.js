@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { navItems } from '../data/siteData'
+import usePrefersReducedMotion from './usePrefersReducedMotion'
 
 function useSiteNavigation(trackedSectionIds) {
+  const prefersReducedMotion = usePrefersReducedMotion()
   const [menuOpen, setMenuOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState(null)
   const [isDesktopNav, setIsDesktopNav] = useState(() =>
@@ -64,7 +66,7 @@ function useSiteNavigation(trackedSectionIds) {
 
       window.scrollTo({
         top: Math.max(targetTop, 0),
-        behavior: 'smooth',
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
       })
 
       target.classList.remove('section-spotlight')
@@ -87,7 +89,7 @@ function useSiteNavigation(trackedSectionIds) {
     }
 
     performScroll()
-  }, [closeNavigation, isDesktopNav, menuOpen])
+  }, [closeNavigation, isDesktopNav, menuOpen, prefersReducedMotion])
 
   const handleNavClick = useCallback((event, href) => {
     if (!href?.startsWith('#')) {
@@ -422,4 +424,3 @@ function useSiteNavigation(trackedSectionIds) {
 }
 
 export default useSiteNavigation
-

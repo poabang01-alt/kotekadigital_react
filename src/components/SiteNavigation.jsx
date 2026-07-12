@@ -25,6 +25,10 @@ function SiteNavigation({
 
     return navItems.map((item) =>
       item.children ? (
+        (() => {
+          const isExpanded = openDropdown === item.label
+
+          return (
         <div
           className={`nav-dropdown ${openDropdown === item.label ? 'open' : ''}`}
           key={item.label}
@@ -37,8 +41,9 @@ function SiteNavigation({
               isNavItemActive(item) ? 'active' : ''
             }`}
             onClick={(event) => handleDropdownButtonClick(event, item)}
-            aria-expanded={openDropdown === item.label}
+            aria-expanded={isExpanded}
             aria-controls={`${submenuIdPrefix}-${item.label.toLowerCase()}`}
+            aria-haspopup="true"
             aria-label={`Toggle submenu ${item.label}`}
           >
             <span className="nav-link-copy">
@@ -70,7 +75,11 @@ function SiteNavigation({
               <i className="fa-solid fa-chevron-down caret" aria-hidden="true" />
             )}
           </button>
-          <div className="dropdown-panel" id={`${submenuIdPrefix}-${item.label.toLowerCase()}`}>
+          <div
+            className="dropdown-panel"
+            id={`${submenuIdPrefix}-${item.label.toLowerCase()}`}
+            hidden={!isExpanded}
+          >
             {item.children.map((child) => (
               <a
                 key={child.label}
@@ -90,6 +99,8 @@ function SiteNavigation({
             ))}
           </div>
         </div>
+          )
+        })()
       ) : (
         <a
           key={item.label}

@@ -1,6 +1,9 @@
+import { useState } from 'react'
 import ContactForm from './ContactForm'
 
 function ContactSection({ contactInfo }) {
+  const [isMapVisible, setIsMapVisible] = useState(false)
+
   return (
     <section className="contact-section" id="kontak" aria-labelledby="contact-heading">
       <div className="container">
@@ -115,12 +118,27 @@ function ContactSection({ contactInfo }) {
 
           <div className="map-card contact-map-panel">
             <div className="map-wrap">
-              <iframe
-                title="Lokasi Koteka Digital"
-                src="https://www.google.com/maps?q=Jayapura%2C%20Papua%2C%20Indonesia&output=embed"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
+              {isMapVisible ? (
+                <iframe
+                  title="Lokasi Koteka Digital"
+                  src="https://www.google.com/maps?q=Jayapura%2C%20Papua%2C%20Indonesia&output=embed"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              ) : (
+                <button
+                  type="button"
+                  className="map-embed-trigger"
+                  onClick={() => setIsMapVisible(true)}
+                  aria-label="Tampilkan peta lokasi Koteka Digital"
+                >
+                  <span className="map-embed-trigger-copy">
+                    <strong>Lihat peta lokasi</strong>
+                    <span>Embed Google Maps dimuat saat diperlukan agar halaman tetap cepat.</span>
+                  </span>
+                  <span className="map-embed-trigger-action">Muat peta</span>
+                </button>
+              )}
             </div>
           </div>
         </article>
