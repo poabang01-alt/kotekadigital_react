@@ -1,16 +1,8 @@
 import { useEffect } from 'react'
-import usePrefersReducedMotion from './usePrefersReducedMotion'
 
 function useRevealOnScroll() {
-  const prefersReducedMotion = usePrefersReducedMotion()
-
   useEffect(() => {
     const revealItems = document.querySelectorAll('[data-reveal]')
-
-    if (prefersReducedMotion) {
-      revealItems.forEach((item) => item.classList.add('is-visible'))
-      return undefined
-    }
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -26,7 +18,7 @@ function useRevealOnScroll() {
 
     revealItems.forEach((item) => observer.observe(item))
     return () => observer.disconnect()
-  }, [prefersReducedMotion])
+  }, [])
 }
 
 export default useRevealOnScroll

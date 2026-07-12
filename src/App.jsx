@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react'
+import { useState } from 'react'
 import {
   aboutCards,
   blogPosts,
@@ -23,23 +23,21 @@ import {
   trackedSectionIds,
 } from './data/appConfig'
 import AboutSection from './components/AboutSection'
-import DeferredSection from './components/DeferredSection'
+import BlogSection from './components/BlogSection'
+import ContactSection from './components/ContactSection'
+import FaqSection from './components/FaqSection'
+import Footer from './components/Footer'
 import HeroSection from './components/HeroSection'
 import PartnerSection from './components/PartnerSection'
+import PortfolioSection from './components/PortfolioSection'
+import PricingSection from './components/PricingSection'
 import ServicesSection from './components/ServicesSection'
 import SiteNavigation from './components/SiteNavigation'
+import TestimonialSection from './components/TestimonialSection'
 import useRevealOnScroll from './hooks/useRevealOnScroll'
 import useSiteNavigation from './hooks/useSiteNavigation'
 import useTestimonialSlider from './hooks/useTestimonialSlider'
 import './index.css'
-
-const DeferredPricingSection = lazy(() => import('./components/PricingSection'))
-const DeferredPortfolioSection = lazy(() => import('./components/PortfolioSection'))
-const DeferredBlogSection = lazy(() => import('./components/BlogSection'))
-const DeferredTestimonialSection = lazy(() => import('./components/TestimonialSection'))
-const DeferredFaqSection = lazy(() => import('./components/FaqSection'))
-const DeferredContactSection = lazy(() => import('./components/ContactSection'))
-const DeferredFooter = lazy(() => import('./components/Footer'))
 
 function App() {
   const [portfolioIndex, setPortfolioIndex] = useState(0)
@@ -97,61 +95,29 @@ function App() {
           teamMembers={teamMembers}
         />
         <ServicesSection serviceGroups={serviceGroups} />
-        <DeferredSection className="section-placeholder" minHeight={960}>
-          <Suspense fallback={<div className="section-placeholder" aria-hidden="true" />}>
-            <DeferredPricingSection
-              comparisonRows={pricingComparisonRows}
-              handlePricingAction={handlePricingAction}
-              logoSrc={brandLogoSrc}
-              pricingFeatureMap={pricingFeatureMap}
-              pricingPlans={pricingPlans}
-            />
-          </Suspense>
-        </DeferredSection>
-        <DeferredSection className="section-placeholder" minHeight={920}>
-          <Suspense fallback={<div className="section-placeholder" aria-hidden="true" />}>
-            <DeferredPortfolioSection
-              activePortfolio={activePortfolio}
-              nextPortfolio={nextPortfolio}
-              portfolioIndex={portfolioIndex}
-              portfolioItems={portfolioItems}
-              prevPortfolio={prevPortfolio}
-              setPortfolioIndex={setPortfolioIndex}
-              techIcons={techIcons}
-            />
-          </Suspense>
-        </DeferredSection>
-        <DeferredSection className="section-placeholder" minHeight={900}>
-          <Suspense fallback={<div className="section-placeholder" aria-hidden="true" />}>
-            <DeferredBlogSection blogPosts={blogPosts} />
-          </Suspense>
-        </DeferredSection>
-        <DeferredSection className="section-placeholder" minHeight={780}>
-          <Suspense fallback={<div className="section-placeholder" aria-hidden="true" />}>
-            <DeferredTestimonialSection testimonials={testimonials} {...testimonialSlider} />
-          </Suspense>
-        </DeferredSection>
-        <DeferredSection className="section-placeholder" minHeight={720}>
-          <Suspense fallback={<div className="section-placeholder" aria-hidden="true" />}>
-            <DeferredFaqSection
-              faqs={faqs}
-              openFaqIndex={openFaqIndex}
-              setOpenFaqIndex={setOpenFaqIndex}
-            />
-          </Suspense>
-        </DeferredSection>
-        <DeferredSection className="section-placeholder" minHeight={1100}>
-          <Suspense fallback={<div className="section-placeholder" aria-hidden="true" />}>
-            <DeferredContactSection contactInfo={contactInfo} />
-          </Suspense>
-        </DeferredSection>
+        <PricingSection
+          comparisonRows={pricingComparisonRows}
+          handlePricingAction={handlePricingAction}
+          logoSrc={brandLogoSrc}
+          pricingFeatureMap={pricingFeatureMap}
+          pricingPlans={pricingPlans}
+        />
+        <PortfolioSection
+          activePortfolio={activePortfolio}
+          nextPortfolio={nextPortfolio}
+          portfolioIndex={portfolioIndex}
+          portfolioItems={portfolioItems}
+          prevPortfolio={prevPortfolio}
+          setPortfolioIndex={setPortfolioIndex}
+          techIcons={techIcons}
+        />
+        <BlogSection blogPosts={blogPosts} />
+        <TestimonialSection testimonials={testimonials} {...testimonialSlider} />
+        <FaqSection faqs={faqs} openFaqIndex={openFaqIndex} setOpenFaqIndex={setOpenFaqIndex} />
+        <ContactSection contactInfo={contactInfo} />
       </main>
 
-      <DeferredSection className="section-placeholder" minHeight={320}>
-        <Suspense fallback={<div className="section-placeholder" aria-hidden="true" />}>
-          <DeferredFooter contactInfo={contactInfo} whatsappLinks={whatsappLinks} />
-        </Suspense>
-      </DeferredSection>
+      <Footer contactInfo={contactInfo} whatsappLinks={whatsappLinks} />
     </>
   )
 }

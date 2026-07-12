@@ -11,8 +11,6 @@ function PricingSection({
   const [isWebsiteLinkCopied, setIsWebsiteLinkCopied] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
   const copyFeedbackTimeoutRef = useRef(null)
-  const dialogRef = useRef(null)
-  const triggerRef = useRef(null)
 
   const runExport = async (type) => {
     setIsExporting(true)
@@ -64,54 +62,6 @@ function PricingSection({
     },
     []
   )
-
-  useEffect(() => {
-    if (!downloadMenuOpen) {
-      triggerRef.current?.focus()
-      return undefined
-    }
-
-    const dialogNode = dialogRef.current
-    const focusableSelector = [
-      'button:not([disabled])',
-      'a[href]',
-      'input:not([disabled])',
-      'select:not([disabled])',
-      'textarea:not([disabled])',
-      '[tabindex]:not([tabindex="-1"])',
-    ].join(', ')
-
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        setDownloadMenuOpen(false)
-        return
-      }
-
-      if (event.key !== 'Tab' || !dialogNode) return
-
-      const focusableElements = Array.from(dialogNode.querySelectorAll(focusableSelector))
-      if (!focusableElements.length) return
-
-      const firstElement = focusableElements[0]
-      const lastElement = focusableElements[focusableElements.length - 1]
-
-      if (event.shiftKey && document.activeElement === firstElement) {
-        event.preventDefault()
-        lastElement.focus()
-        return
-      }
-
-      if (!event.shiftKey && document.activeElement === lastElement) {
-        event.preventDefault()
-        firstElement.focus()
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    dialogNode?.focus()
-
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [downloadMenuOpen])
 
   return (
     <section className="pricing-section" id="pricing-section" aria-labelledby="pricing-heading">
@@ -187,9 +137,6 @@ function PricingSection({
                 type="button"
                 className="button pricing-download-trigger"
                 onClick={() => setDownloadMenuOpen(true)}
-                ref={triggerRef}
-                aria-haspopup="dialog"
-                aria-expanded={downloadMenuOpen}
               >
                 <i className="fa-solid fa-download" aria-hidden="true" />
                 Download Tabel
@@ -245,7 +192,7 @@ function PricingSection({
             aria-label="Pilih format download tabel"
           >
             <div className="pricing-download-backdrop" onClick={() => setDownloadMenuOpen(false)} />
-            <div className="pricing-download-sheet" ref={dialogRef} tabIndex={-1}>
+            <div className="pricing-download-sheet">
               <button
                 type="button"
                 className="pricing-download-close"

@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { navItems } from '../data/siteData'
-import usePrefersReducedMotion from './usePrefersReducedMotion'
 
 function useSiteNavigation(trackedSectionIds) {
-  const prefersReducedMotion = usePrefersReducedMotion()
   const [menuOpen, setMenuOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState(null)
   const [isDesktopNav, setIsDesktopNav] = useState(() =>
@@ -66,7 +64,7 @@ function useSiteNavigation(trackedSectionIds) {
 
       window.scrollTo({
         top: Math.max(targetTop, 0),
-        behavior: prefersReducedMotion ? 'auto' : 'smooth',
+        behavior: 'smooth',
       })
 
       target.classList.remove('section-spotlight')
@@ -89,7 +87,7 @@ function useSiteNavigation(trackedSectionIds) {
     }
 
     performScroll()
-  }, [closeNavigation, isDesktopNav, menuOpen, prefersReducedMotion])
+  }, [closeNavigation, isDesktopNav, menuOpen])
 
   const handleNavClick = useCallback((event, href) => {
     if (!href?.startsWith('#')) {
@@ -205,6 +203,31 @@ function useSiteNavigation(trackedSectionIds) {
       if (event.key === 'Escape') {
         setMenuOpen(false)
         setOpenDropdown(null)
+        return
+      }
+
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        const focusableSelector = [
+          'a[href]',
+          'button:not([disabled])',
+          '[tabindex]:not([tabindex="-1"])',
+        ].join(', ')
+
+        const focusableElements = mobileNavRef.current
+          ? Array.from(mobileNavRef.current.querySelectorAll(focusableSelector))
+          : []
+
+        if (!focusableElements.length) return
+
+        const currentIndex = focusableElements.indexOf(document.activeElement)
+        if (currentIndex === -1) return
+
+        event.preventDefault()
+        const nextIndex =
+          event.key === 'ArrowDown'
+            ? (currentIndex + 1) % focusableElements.length
+            : (currentIndex - 1 + focusableElements.length) % focusableElements.length
+        focusableElements[nextIndex]?.focus()
         return
       }
 

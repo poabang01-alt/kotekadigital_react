@@ -93,6 +93,7 @@ function ContactForm({ contactInfo }) {
           <label htmlFor="wa">Nomor WhatsApp Aktif</label>
           <input
             id="wa"
+            type="tel"
             name="wa"
             placeholder="Masukkan nomor WhatsApp"
             value={form.wa}

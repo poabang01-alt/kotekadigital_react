@@ -33,6 +33,7 @@ function FaqSection({ faqs, openFaqIndex, setOpenFaqIndex }) {
                   className="faq-answer-wrap"
                   role="region"
                   aria-labelledby={buttonId}
+                  hidden={!isOpen}
                 >
                   <div className="faq-answer">
                     <p>{faq.answer}</p>
