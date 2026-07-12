@@ -8,6 +8,7 @@ function PricingSection({
   pricingPlans,
 }) {
   const [downloadMenuOpen, setDownloadMenuOpen] = useState(false)
+  const [isWebsiteLinkCopied, setIsWebsiteLinkCopied] = useState(false)
   const companyName = 'Koteka Digital'
   const companyDescription =
     'Jasa pembuatan website profesional untuk UMKM, bisnis lokal, personal brand, sekolah, lembaga, instansi, portal konten, dan sistem digital di Jayapura, Papua, dan Tanah Papua.'
@@ -899,6 +900,26 @@ function PricingSection({
     setDownloadMenuOpen(false)
   }
 
+  const handleCopyWebsiteLink = async () => {
+    const websiteUrl = 'https://kotekadigital.com/'
+
+    try {
+      await navigator.clipboard.writeText(websiteUrl)
+    } catch {
+      const tempInput = document.createElement('input')
+      tempInput.value = websiteUrl
+      document.body.appendChild(tempInput)
+      tempInput.select()
+      document.execCommand('copy')
+      document.body.removeChild(tempInput)
+    }
+
+    setIsWebsiteLinkCopied(true)
+    window.setTimeout(() => {
+      setIsWebsiteLinkCopied(false)
+    }, 1800)
+  }
+
   return (
     <section className="pricing-section" id="pricing-section" aria-labelledby="pricing-heading">
       <div className="container">
@@ -1036,6 +1057,18 @@ function PricingSection({
                 Pilih format file yang ingin Anda simpan. Versi export sudah disiapkan dengan
                 logo Koteka Digital, ringkasan paket, tabel perbandingan, dan penjelasan layanan.
               </p>
+              <button
+                type="button"
+                className="pricing-download-link"
+                onClick={handleCopyWebsiteLink}
+                aria-label="Copy link Koteka Digital"
+              >
+                <span className="pricing-download-link-icon" aria-hidden="true">
+                  <i className={`fa-solid ${isWebsiteLinkCopied ? 'fa-check' : 'fa-link'}`} />
+                </span>
+                <span>{isWebsiteLinkCopied ? 'Link berhasil dicopy' : 'kotekadigital.com'}</span>
+                <i className="fa-regular fa-copy" aria-hidden="true" />
+              </button>
               <div className="pricing-download-options">
                 <button type="button" className="pricing-download-card" onClick={handlePdfDownload}>
                   <span className="pricing-download-icon" aria-hidden="true">
