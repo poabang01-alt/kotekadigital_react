@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import Icon from './Icon'
 
 function PricingSection({
   comparisonRows,
@@ -11,6 +12,8 @@ function PricingSection({
   const [isWebsiteLinkCopied, setIsWebsiteLinkCopied] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
   const copyFeedbackTimeoutRef = useRef(null)
+  const dialogRef = useRef(null)
+  const triggerRef = useRef(null)
 
   const runExport = async (type) => {
     setIsExporting(true)
@@ -63,6 +66,54 @@ function PricingSection({
     []
   )
 
+  useEffect(() => {
+    if (!downloadMenuOpen) {
+      triggerRef.current?.focus()
+      return undefined
+    }
+
+    const dialogNode = dialogRef.current
+    const focusableSelector = [
+      'button:not([disabled])',
+      'a[href]',
+      'input:not([disabled])',
+      'select:not([disabled])',
+      'textarea:not([disabled])',
+      '[tabindex]:not([tabindex="-1"])',
+    ].join(', ')
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setDownloadMenuOpen(false)
+        return
+      }
+
+      if (event.key !== 'Tab' || !dialogNode) return
+
+      const focusableElements = Array.from(dialogNode.querySelectorAll(focusableSelector))
+      if (!focusableElements.length) return
+
+      const firstElement = focusableElements[0]
+      const lastElement = focusableElements[focusableElements.length - 1]
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault()
+        lastElement.focus()
+        return
+      }
+
+      if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault()
+        firstElement.focus()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    dialogNode?.focus()
+
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [downloadMenuOpen])
+
   return (
     <section className="pricing-section" id="pricing-section" aria-labelledby="pricing-heading">
       <div className="container">
@@ -86,8 +137,8 @@ function PricingSection({
               <div className="pricing-card-shell">
                 {plan.featured ? <span className="pricing-popular-badge">Paling Populer</span> : null}
                 <div className="pricing-card-icon" aria-hidden="true">
-                  <i
-                    className={
+                  <Icon
+                    name={
                       plan.name === 'Paket Basic'
                         ? 'fa-solid fa-rocket'
                         : plan.name === 'Paket Standar'
@@ -122,7 +173,7 @@ function PricingSection({
         <div className="pricing-lower-grid">
           <article className="pricing-comparison-card" data-reveal>
             <div className="pricing-subsection-title">
-              <i className="fa-solid fa-scale-balanced" aria-hidden="true" />
+              <Icon name="fa-solid fa-scale-balanced" />
               <div>
                 <h3>Tabel Perbandingan Paket</h3>
                 <p>
@@ -137,8 +188,11 @@ function PricingSection({
                 type="button"
                 className="button pricing-download-trigger"
                 onClick={() => setDownloadMenuOpen(true)}
+                ref={triggerRef}
+                aria-haspopup="dialog"
+                aria-expanded={downloadMenuOpen}
               >
-                <i className="fa-solid fa-download" aria-hidden="true" />
+                <Icon name="fa-solid fa-download" />
                 Download Tabel
               </button>
             </div>
@@ -192,14 +246,14 @@ function PricingSection({
             aria-label="Pilih format download tabel"
           >
             <div className="pricing-download-backdrop" onClick={() => setDownloadMenuOpen(false)} />
-            <div className="pricing-download-sheet">
+            <div className="pricing-download-sheet" ref={dialogRef} tabIndex={-1}>
               <button
                 type="button"
                 className="pricing-download-close"
                 onClick={() => setDownloadMenuOpen(false)}
                 aria-label="Tutup pilihan download"
               >
-                <i className="fa-solid fa-xmark" aria-hidden="true" />
+                <Icon name="fa-solid fa-xmark" />
               </button>
               <span className="pricing-download-kicker">Export Tabel</span>
               <h3>Download Tabel Perbandingan Harga</h3>
@@ -214,10 +268,10 @@ function PricingSection({
                 aria-label="Copy link Koteka Digital"
               >
                 <span className="pricing-download-link-icon" aria-hidden="true">
-                  <i className={`fa-solid ${isWebsiteLinkCopied ? 'fa-check' : 'fa-link'}`} />
+                  <Icon name={`fa-solid ${isWebsiteLinkCopied ? 'fa-check' : 'fa-link'}`} />
                 </span>
                 <span>{isWebsiteLinkCopied ? 'Link berhasil dicopy' : 'kotekadigital.com'}</span>
-                <i className="fa-regular fa-copy" aria-hidden="true" />
+                <Icon name="fa-regular fa-copy" />
               </button>
               <div className="pricing-download-options">
                 <button
@@ -227,7 +281,7 @@ function PricingSection({
                   disabled={isExporting}
                 >
                   <span className="pricing-download-icon" aria-hidden="true">
-                    <i className="fa-solid fa-file-pdf" />
+                    <Icon name="fa-solid fa-file-pdf" />
                   </span>
                   <strong>{isExporting ? 'Menyiapkan File...' : 'Download PDF'}</strong>
                   <span>
@@ -242,7 +296,7 @@ function PricingSection({
                   disabled={isExporting}
                 >
                   <span className="pricing-download-icon" aria-hidden="true">
-                    <i className="fa-solid fa-file-excel" />
+                    <Icon name="fa-solid fa-file-excel" />
                   </span>
                   <strong>{isExporting ? 'Menyiapkan File...' : 'Download .XLSX'}</strong>
                   <span>

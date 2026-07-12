@@ -1,3 +1,5 @@
+import Icon from './Icon'
+
 function PortfolioSection({
   activePortfolio,
   nextPortfolio,
@@ -29,7 +31,7 @@ function PortfolioSection({
             onClick={prevPortfolio}
             aria-label="Portofolio sebelumnya"
           >
-            <i className="fa-solid fa-arrow-left" aria-hidden="true" />
+            <Icon name="fa-solid fa-arrow-left" />
           </button>
 
           <article className="portfolio-card featured portfolio-card-animated" key={activePortfolio.title}>
@@ -49,7 +51,7 @@ function PortfolioSection({
               <div className="tech-list" aria-label="Teknologi yang digunakan">
                 {activePortfolio.tech.map((tech) => (
                   <span key={tech}>
-                    <i className={techIcons[tech] || 'fa-solid fa-code'} aria-hidden="true" />
+                    <Icon name={techIcons[tech] || 'fa-solid fa-code'} />
                     {tech}
                   </span>
                 ))}
@@ -58,9 +60,9 @@ function PortfolioSection({
                 className="button button-primary portfolio-cta"
                 href={activePortfolio.link}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
               >
-                <i className="fa-solid fa-up-right-from-square" aria-hidden="true" />
+                <Icon name="fa-solid fa-arrow-up-right-from-square" />
                 Live Demo
               </a>
             </div>
@@ -72,7 +74,7 @@ function PortfolioSection({
             onClick={nextPortfolio}
             aria-label="Portofolio berikutnya"
           >
-            <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+            <Icon name="fa-solid fa-arrow-right" />
           </button>
         </div>
 

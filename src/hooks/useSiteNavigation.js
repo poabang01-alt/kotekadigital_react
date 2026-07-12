@@ -68,8 +68,12 @@ function useSiteNavigation(trackedSectionIds) {
       })
 
       target.classList.remove('section-spotlight')
+      target.classList.remove('section-spotlight-deep')
       void target.offsetWidth
       target.classList.add('section-spotlight')
+      window.setTimeout(() => {
+        target.classList.add('section-spotlight-deep')
+      }, 110)
 
       if (sectionTransitionTimeoutRef.current) {
         window.clearTimeout(sectionTransitionTimeoutRef.current)
@@ -77,7 +81,8 @@ function useSiteNavigation(trackedSectionIds) {
 
       sectionTransitionTimeoutRef.current = window.setTimeout(() => {
         target.classList.remove('section-spotlight')
-      }, 900)
+        target.classList.remove('section-spotlight-deep')
+      }, 1300)
     }
 
     if (menuOpen && !isDesktopNav) {

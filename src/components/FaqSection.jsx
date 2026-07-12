@@ -1,3 +1,5 @@
+import Icon from './Icon'
+
 function FaqSection({ faqs, openFaqIndex, setOpenFaqIndex }) {
   return (
     <section className="faq-section" id="faq" aria-labelledby="faq-heading">
@@ -25,7 +27,7 @@ function FaqSection({ faqs, openFaqIndex, setOpenFaqIndex }) {
                 >
                   <span className="faq-question">{faq.question}</span>
                   <span className="faq-icon" aria-hidden="true">
-                    <i className={`fa-solid ${isOpen ? 'fa-minus' : 'fa-plus'}`} />
+                    <Icon name={`fa-solid ${isOpen ? 'fa-minus' : 'fa-plus'}`} />
                   </span>
                 </button>
                 <div

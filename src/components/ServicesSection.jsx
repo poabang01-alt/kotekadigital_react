@@ -1,3 +1,5 @@
+import Icon from './Icon'
+
 function ServicesSection({ serviceGroups }) {
   return (
     <section className="services-section" id="layanan" aria-labelledby="services-heading">
@@ -36,7 +38,7 @@ function ServicesSection({ serviceGroups }) {
                 {group.items.map((item) => (
                   <article className="service-card" key={item.title} role="listitem">
                     <span className="service-card-icon" aria-hidden="true">
-                      <i className={item.icon} />
+                      <Icon name={item.icon} />
                     </span>
                     <h4>{item.title}</h4>
                     <p>{item.text}</p>
@@ -47,7 +49,7 @@ function ServicesSection({ serviceGroups }) {
                 className="button button-tertiary service-cta"
                 href={group.link}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
               >
                 Diskusi Layanan Ini
               </a>

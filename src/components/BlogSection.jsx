@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import Icon from './Icon'
 
 function BlogSection({ blogPosts }) {
   const [showAll, setShowAll] = useState(false)
@@ -127,10 +128,7 @@ function BlogSection({ blogPosts }) {
             aria-pressed={showAll}
           >
             {showAll ? 'Tampilkan slider' : 'Lihat semua'}
-            <i
-              className={`fa-solid ${showAll ? 'fa-grip' : 'fa-arrow-up-right-from-square'}`}
-              aria-hidden="true"
-            />
+            <Icon name={`fa-solid ${showAll ? 'fa-grip' : 'fa-arrow-up-right-from-square'}`} />
           </button>
           </div>
 
@@ -166,6 +164,8 @@ function BlogSection({ blogPosts }) {
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
+                aria-roledescription="carousel"
+                aria-label="Slider artikel unggulan"
               >
                 <div
                   className={`blog-carousel-track ${isTransitionEnabled ? 'is-animated' : ''}`}
@@ -215,10 +215,10 @@ function BlogSection({ blogPosts }) {
 
                 <div className="blog-carousel-actions">
                   <button type="button" className="blog-arrow-button" onClick={goToPrev} aria-label="Slide sebelumnya">
-                    <i className="fa-solid fa-arrow-left" aria-hidden="true" />
+                    <Icon name="fa-solid fa-arrow-left" />
                   </button>
                   <button type="button" className="blog-arrow-button" onClick={goToNext} aria-label="Slide berikutnya">
-                    <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+                    <Icon name="fa-solid fa-arrow-right" />
                   </button>
                 </div>
               </div>

@@ -1,3 +1,5 @@
+import Icon from './Icon'
+
 function PartnerSection({ partnerCards }) {
   return (
     <section className="partner-section partner-section-bridge" aria-label="Klien dan partner">
@@ -7,7 +9,7 @@ function PartnerSection({ partnerCards }) {
           {partnerCards.map((partner) => (
             <article className="partner-card" key={partner.label} role="listitem">
               <span className="partner-icon" aria-hidden="true">
-                <i className={partner.icon} />
+                <Icon name={partner.icon} />
               </span>
               <span className="partner-label">{partner.label}</span>
             </article>
@@ -19,4 +21,3 @@ function PartnerSection({ partnerCards }) {
 }
 
 export default PartnerSection
-

@@ -2,7 +2,12 @@ import { useEffect } from 'react'
 
 function useRevealOnScroll() {
   useEffect(() => {
-    const revealItems = document.querySelectorAll('[data-reveal]')
+    const revealItems = Array.from(document.querySelectorAll('[data-reveal]'))
+
+    revealItems.forEach((item, index) => {
+      item.style.setProperty('--reveal-delay', `${Math.min(index * 70, 280)}ms`)
+      item.style.setProperty('--reveal-distance', index % 3 === 0 ? '34px' : '26px')
+    })
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -13,11 +18,17 @@ function useRevealOnScroll() {
           }
         })
       },
-      { threshold: 0.12, rootMargin: '0px 0px -10% 0px' }
+      { threshold: 0.14, rootMargin: '0px 0px -8% 0px' }
     )
 
     revealItems.forEach((item) => observer.observe(item))
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      revealItems.forEach((item) => {
+        item.style.removeProperty('--reveal-delay')
+        item.style.removeProperty('--reveal-distance')
+      })
+    }
   }, [])
 }
 

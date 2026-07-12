@@ -1,4 +1,6 @@
-function Footer({ contactInfo, whatsappLinks }) {
+import Icon from './Icon'
+
+function Footer({ contactInfo, handleNavClick, whatsappLinks }) {
   return (
     <>
       <footer className="site-footer">
@@ -16,28 +18,28 @@ function Footer({ contactInfo, whatsappLinks }) {
             <h4>Navigasi</h4>
             <span className="footer-accent" aria-hidden="true" />
             <div className="footer-links footer-links-nav">
-              <a href="#home">
-                <i className="fa-solid fa-house" aria-hidden="true" />
+              <a href="#home" onClick={(event) => handleNavClick?.(event, '#home')}>
+                <Icon name="fa-solid fa-house" />
                 <span>Home</span>
               </a>
-              <a href="#layanan">
-                <i className="fa-solid fa-briefcase" aria-hidden="true" />
+              <a href="#layanan" onClick={(event) => handleNavClick?.(event, '#layanan')}>
+                <Icon name="fa-solid fa-briefcase" />
                 <span>Layanan</span>
               </a>
-              <a href="#portfolio">
-                <i className="fa-solid fa-image" aria-hidden="true" />
+              <a href="#portfolio" onClick={(event) => handleNavClick?.(event, '#portfolio')}>
+                <Icon name="fa-solid fa-image" />
                 <span>Portofolio</span>
               </a>
-              <a href="#pricing-section">
-                <i className="fa-solid fa-tags" aria-hidden="true" />
+              <a href="#pricing-section" onClick={(event) => handleNavClick?.(event, '#pricing-section')}>
+                <Icon name="fa-solid fa-tags" />
                 <span>Harga</span>
               </a>
-              <a href="#faq">
-                <i className="fa-solid fa-circle-question" aria-hidden="true" />
+              <a href="#faq" onClick={(event) => handleNavClick?.(event, '#faq')}>
+                <Icon name="fa-solid fa-circle-question" />
                 <span>FAQ</span>
               </a>
-              <a href="#kontak">
-                <i className="fa-solid fa-envelope" aria-hidden="true" />
+              <a href="#kontak" onClick={(event) => handleNavClick?.(event, '#kontak')}>
+                <Icon name="fa-solid fa-envelope" />
                 <span>Kontak</span>
               </a>
             </div>
@@ -46,20 +48,20 @@ function Footer({ contactInfo, whatsappLinks }) {
             <h4>Hubungi Kami</h4>
             <span className="footer-accent" aria-hidden="true" />
             <div className="footer-links footer-links-contact">
-              <a href={contactInfo.whatsappLink} target="_blank" rel="noreferrer">
-                <i className="fa-brands fa-whatsapp" aria-hidden="true" />
+              <a href={contactInfo.whatsappLink} target="_blank" rel="noopener noreferrer">
+                <Icon name="fa-brands fa-whatsapp" />
                 <span>{contactInfo.whatsappLabel}</span>
               </a>
               <a href={`mailto:${contactInfo.email}`}>
-                <i className="fa-solid fa-envelope" aria-hidden="true" />
+                <Icon name="fa-solid fa-envelope" />
                 <span>{contactInfo.email}</span>
               </a>
-              <a href="https://kotekadigital.com/" target="_blank" rel="noreferrer">
-                <i className="fa-solid fa-globe" aria-hidden="true" />
+              <a href="https://kotekadigital.com/" target="_blank" rel="noopener noreferrer">
+                <Icon name="fa-solid fa-globe" />
                 <span>kotekadigital.com</span>
               </a>
               <div className="footer-contact-item">
-                <i className="fa-solid fa-location-dot" aria-hidden="true" />
+                <Icon name="fa-solid fa-location-dot" />
                 <span>Jayapura, Papua, Indonesia</span>
               </div>
             </div>
@@ -68,17 +70,17 @@ function Footer({ contactInfo, whatsappLinks }) {
             <h4>Media Sosial</h4>
             <span className="footer-accent" aria-hidden="true" />
             <div className="footer-socials">
-              <a href="https://www.instagram.com/kotekadigital/" target="_blank" rel="noreferrer" aria-label="Instagram Koteka Digital">
-                <i className="fa-brands fa-instagram" aria-hidden="true" />
+              <a href="https://www.instagram.com/kotekadigital/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Koteka Digital">
+                <Icon name="fa-brands fa-instagram" />
               </a>
-              <a href="https://web.facebook.com/profile.php?id=61573476356920" target="_blank" rel="noreferrer" aria-label="Facebook Koteka Digital">
-                <i className="fa-brands fa-facebook-f" aria-hidden="true" />
+              <a href="https://web.facebook.com/profile.php?id=61573476356920" target="_blank" rel="noopener noreferrer" aria-label="Facebook Koteka Digital">
+                <Icon name="fa-brands fa-facebook-f" />
               </a>
-              <a href="https://www.tiktok.com/@kotekadigitalstudio?_r=1&_t=ZS-97V638s9hhd" target="_blank" rel="noreferrer" aria-label="TikTok Koteka Digital">
-                <i className="fa-brands fa-tiktok" aria-hidden="true" />
+              <a href="https://www.tiktok.com/@kotekadigitalstudio?_r=1&_t=ZS-97V638s9hhd" target="_blank" rel="noopener noreferrer" aria-label="TikTok Koteka Digital">
+                <Icon name="fa-brands fa-tiktok" />
               </a>
-              <a href="https://kotekadigital.com/" target="_blank" rel="noreferrer" aria-label="Website Koteka Digital">
-                <i className="fa-solid fa-globe" aria-hidden="true" />
+              <a href="https://kotekadigital.com/" target="_blank" rel="noopener noreferrer" aria-label="Website Koteka Digital">
+                <Icon name="fa-solid fa-globe" />
               </a>
             </div>
           </div>
@@ -88,8 +90,8 @@ function Footer({ contactInfo, whatsappLinks }) {
         </div>
       </footer>
 
-      <a className="floating-wa" href={whatsappLinks.floating} target="_blank" rel="noreferrer">
-        <i className="fa-brands fa-whatsapp" aria-hidden="true" />
+      <a className="floating-wa" href={whatsappLinks.floating} target="_blank" rel="noopener noreferrer">
+        <Icon name="fa-brands fa-whatsapp" />
         <span>Konsultasi Gratis</span>
       </a>
     </>
