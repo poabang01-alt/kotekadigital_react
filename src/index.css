@@ -25,6 +25,19 @@
   --motion-base: 320ms;
 }
 
+@supports (content-visibility: auto) {
+  .pricing-section,
+  .portfolio-section,
+  .blog-section,
+  .testimonial-section,
+  .faq-section,
+  .contact-section,
+  .site-footer {
+    content-visibility: auto;
+    contain-intrinsic-size: 960px;
+  }
+}
+
 /* Pricing section reference override */
 .pricing-section {
   position: relative;

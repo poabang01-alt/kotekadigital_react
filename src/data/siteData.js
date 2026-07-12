@@ -43,8 +43,6 @@ export const companyStats = [
   },
 ]
 
-export const partners = ['UMKM Jayapura', 'Bisnis Lokal Papua', 'Personal Brand', 'Instansi', 'Coffee Shop', 'Sekolah']
-
 export const aboutCards = [
   {
     icon: 'fa-solid fa-address-book',
