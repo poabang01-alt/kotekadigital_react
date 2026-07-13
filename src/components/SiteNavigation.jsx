@@ -1,6 +1,5 @@
 import { navItems, whatsappLinks } from '../data/siteData'
 import { bottomNavItems } from '../data/appConfig'
-import Icon from './Icon'
 
 function SiteNavigation({
   activeSection,
@@ -45,7 +44,7 @@ function SiteNavigation({
             <span className="nav-link-copy">
               {isMobileMenu ? (
                 <span className="nav-link-icon" aria-hidden="true">
-                  <Icon name={item.icon || 'fa-solid fa-circle'} />
+                  <i className={item.icon || 'fa-solid fa-circle'} />
                 </span>
               ) : null}
               <span className="nav-link-label">
@@ -68,7 +67,7 @@ function SiteNavigation({
                 {openDropdown === item.label ? '^' : 'v'}
               </span>
             ) : (
-              <Icon name="fa-solid fa-chevron-down" className="caret" />
+              <i className="fa-solid fa-chevron-down caret" aria-hidden="true" />
             )}
           </button>
           <div
@@ -86,7 +85,7 @@ function SiteNavigation({
               >
                 {isMobileMenu ? (
                   <span className="dropdown-link-bullet" aria-hidden="true">
-                    <Icon name="fa-solid fa-minus" />
+                    <i className="fa-solid fa-minus" />
                   </span>
                 ) : null}
                 {child.label}
@@ -105,7 +104,7 @@ function SiteNavigation({
           <span className="nav-link-copy">
             {isMobileMenu ? (
               <span className="nav-link-icon" aria-hidden="true">
-                <Icon name={item.icon || 'fa-solid fa-circle'} />
+                <i className={item.icon || 'fa-solid fa-circle'} />
               </span>
             ) : null}
             <span className="nav-link-label">{item.label}</span>
@@ -195,7 +194,7 @@ function SiteNavigation({
             onClick={closeNavigation}
             aria-label="Tutup menu"
           >
-            <Icon name="fa-solid fa-xmark" />
+            <i className="fa-solid fa-xmark" aria-hidden="true" />
           </button>
         </div>
 
@@ -214,7 +213,7 @@ function SiteNavigation({
               aria-label={item.label}
             >
               <span className="mobile-bottom-nav-icon" aria-hidden="true">
-                <Icon name={item.icon} />
+                <i className={item.icon} />
               </span>
               <span className="mobile-bottom-nav-text">{item.label}</span>
               <span className="mobile-bottom-nav-indicator" aria-hidden="true" />

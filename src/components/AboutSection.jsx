@@ -1,5 +1,3 @@
-import Icon from './Icon'
-
 function AboutSection({ aboutCards, contactInfo, logoSrc, teamMembers }) {
   return (
     <section className="about-section" id="about" aria-labelledby="about-heading">
@@ -33,14 +31,14 @@ function AboutSection({ aboutCards, contactInfo, logoSrc, teamMembers }) {
                   rel="noopener noreferrer"
                   aria-label={`WhatsApp ${contactInfo.whatsappLabel}`}
                 >
-                  <Icon name="fa-brands fa-whatsapp" />
+                  <i className="fa-brands fa-whatsapp" aria-hidden="true" />
                 </a>
                 <span
                   className="about-logo-social-link-static"
                   aria-label={`Lokasi ${contactInfo.location}`}
                   title={contactInfo.location}
                 >
-                  <Icon name="fa-solid fa-location-dot" />
+                  <i className="fa-solid fa-location-dot" aria-hidden="true" />
                 </span>
                 <a
                   href="https://www.instagram.com/kotekadigital/"
@@ -48,7 +46,7 @@ function AboutSection({ aboutCards, contactInfo, logoSrc, teamMembers }) {
                   rel="noopener noreferrer"
                   aria-label="Instagram Koteka Digital"
                 >
-                  <Icon name="fa-brands fa-instagram" />
+                  <i className="fa-brands fa-instagram" aria-hidden="true" />
                 </a>
                 <a
                   href="https://web.facebook.com/profile.php?id=61573476356920"
@@ -56,7 +54,7 @@ function AboutSection({ aboutCards, contactInfo, logoSrc, teamMembers }) {
                   rel="noopener noreferrer"
                   aria-label="Facebook Koteka Digital"
                 >
-                  <Icon name="fa-brands fa-facebook-f" />
+                  <i className="fa-brands fa-facebook-f" aria-hidden="true" />
                 </a>
                 <a
                   href="https://www.tiktok.com/@kotekadigitalstudio?_r=1&_t=ZS-97V638s9hhd"
@@ -64,7 +62,7 @@ function AboutSection({ aboutCards, contactInfo, logoSrc, teamMembers }) {
                   rel="noopener noreferrer"
                   aria-label="TikTok Koteka Digital"
                 >
-                  <Icon name="fa-brands fa-tiktok" />
+                  <i className="fa-brands fa-tiktok" aria-hidden="true" />
                 </a>
                 <a
                   href="https://kotekadigital.com/"
@@ -72,7 +70,7 @@ function AboutSection({ aboutCards, contactInfo, logoSrc, teamMembers }) {
                   rel="noopener noreferrer"
                   aria-label="Website Koteka Digital"
                 >
-                  <Icon name="fa-solid fa-globe" />
+                  <i className="fa-solid fa-globe" aria-hidden="true" />
                 </a>
               </div>
             </div>
@@ -83,7 +81,7 @@ function AboutSection({ aboutCards, contactInfo, logoSrc, teamMembers }) {
               <article className="info-card about-info-card" key={card.title}>
                 <div className="about-card-head">
                   <div className="card-icon about-card-icon">
-                    <Icon name={card.icon} />
+                    <i className={card.icon} aria-hidden="true" />
                   </div>
                   <h3>{card.title}</h3>
                 </div>
@@ -136,7 +134,7 @@ function AboutSection({ aboutCards, contactInfo, logoSrc, teamMembers }) {
                       rel="noopener noreferrer"
                       aria-label={social.label}
                     >
-                      <Icon name={social.icon} />
+                      <i className={social.icon} aria-hidden="true" />
                     </a>
                   ))}
                 </div>

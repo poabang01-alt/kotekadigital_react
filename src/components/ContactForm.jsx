@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import Icon from './Icon'
 
 function ContactForm({ contactInfo }) {
   const [form, setForm] = useState({
@@ -54,7 +53,7 @@ function ContactForm({ contactInfo }) {
     <article className="contact-card contact-form-card" data-reveal>
       <div className="contact-panel-head">
         <span className="contact-panel-icon" aria-hidden="true">
-          <Icon name="fa-solid fa-pen-ruler" />
+          <i className="fa-solid fa-pen-ruler" />
         </span>
         <div>
           <h3>Form Konsultasi</h3>

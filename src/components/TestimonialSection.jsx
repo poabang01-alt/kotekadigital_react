@@ -1,5 +1,3 @@
-import Icon from './Icon'
-
 function TestimonialSection({
   activeTestimonial,
   handleTestimonialPointerCancel,
@@ -40,7 +38,7 @@ function TestimonialSection({
             onClick={prevTestimonial}
             aria-label="Testimoni sebelumnya"
           >
-            <Icon name="fa-solid fa-arrow-left" />
+            <i className="fa-solid fa-arrow-left" aria-hidden="true" />
           </button>
 
           <article
@@ -78,7 +76,7 @@ function TestimonialSection({
             onClick={nextTestimonial}
             aria-label="Testimoni berikutnya"
           >
-            <Icon name="fa-solid fa-arrow-right" />
+            <i className="fa-solid fa-arrow-right" aria-hidden="true" />
           </button>
         </div>
         <div className="dot-list" role="list" aria-label="Pilih testimoni klien">

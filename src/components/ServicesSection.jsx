@@ -1,5 +1,3 @@
-import Icon from './Icon'
-
 function ServicesSection({ serviceGroups }) {
   return (
     <section className="services-section" id="layanan" aria-labelledby="services-heading">
@@ -38,7 +36,7 @@ function ServicesSection({ serviceGroups }) {
                 {group.items.map((item) => (
                   <article className="service-card" key={item.title} role="listitem">
                     <span className="service-card-icon" aria-hidden="true">
-                      <Icon name={item.icon} />
+                      <i className={item.icon} />
                     </span>
                     <h4>{item.title}</h4>
                     <p>{item.text}</p>

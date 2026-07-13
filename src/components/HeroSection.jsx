@@ -1,5 +1,3 @@
-import Icon from './Icon'
-
 function HeroSection({
   companyStats,
   handleNavClick,
@@ -49,7 +47,7 @@ function HeroSection({
                 rel="noopener noreferrer"
                 aria-label={item.label}
               >
-                <Icon name={item.icon} />
+                <i className={item.icon} aria-hidden="true" />
               </a>
             ))}
           </div>

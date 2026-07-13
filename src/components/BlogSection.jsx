@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import Icon from './Icon'
 
 function BlogSection({ blogPosts }) {
   const [showAll, setShowAll] = useState(false)
@@ -128,7 +127,10 @@ function BlogSection({ blogPosts }) {
             aria-pressed={showAll}
           >
             {showAll ? 'Tampilkan slider' : 'Lihat semua'}
-            <Icon name={`fa-solid ${showAll ? 'fa-grip' : 'fa-arrow-up-right-from-square'}`} />
+            <i
+              className={`fa-solid ${showAll ? 'fa-grip' : 'fa-arrow-up-right-from-square'}`}
+              aria-hidden="true"
+            />
           </button>
           </div>
 
@@ -215,10 +217,10 @@ function BlogSection({ blogPosts }) {
 
                 <div className="blog-carousel-actions">
                   <button type="button" className="blog-arrow-button" onClick={goToPrev} aria-label="Slide sebelumnya">
-                    <Icon name="fa-solid fa-arrow-left" />
+                    <i className="fa-solid fa-arrow-left" aria-hidden="true" />
                   </button>
                   <button type="button" className="blog-arrow-button" onClick={goToNext} aria-label="Slide berikutnya">
-                    <Icon name="fa-solid fa-arrow-right" />
+                    <i className="fa-solid fa-arrow-right" aria-hidden="true" />
                   </button>
                 </div>
               </div>

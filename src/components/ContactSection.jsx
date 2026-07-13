@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import ContactForm from './ContactForm'
-import Icon from './Icon'
 
 function ContactSection({ contactInfo }) {
   const [isMapVisible, setIsMapVisible] = useState(false)
@@ -26,7 +25,7 @@ function ContactSection({ contactInfo }) {
               <div className="contact-intro">
                 <div className="contact-panel-head">
                   <span className="contact-panel-icon" aria-hidden="true">
-                    <Icon name="fa-solid fa-comments" />
+                    <i className="fa-solid fa-comments" />
                   </span>
                   <div>
                     <h3>Informasi Kontak & Layanan</h3>
@@ -42,29 +41,29 @@ function ContactSection({ contactInfo }) {
 
                 <div className="contact-benefits">
                   <div className="contact-benefit">
-                    <Icon name="fa-solid fa-bolt" />
+                    <i className="fa-solid fa-bolt" aria-hidden="true" />
                     <span>Respon cepat untuk kebutuhan konsultasi awal</span>
                   </div>
                   <div className="contact-benefit">
-                    <Icon name="fa-solid fa-shield-heart" />
+                    <i className="fa-solid fa-shield-heart" aria-hidden="true" />
                     <span>Diskusi lebih terarah sesuai target bisnis Anda</span>
                   </div>
                   <div className="contact-benefit">
-                    <Icon name="fa-solid fa-laptop-code" />
+                    <i className="fa-solid fa-laptop-code" aria-hidden="true" />
                     <span>Solusi website, sistem digital, dan optimasi yang relevan</span>
                   </div>
                 </div>
 
                 <div className="contact-social-grid">
                   <a className="contact-social-card" href={contactInfo.whatsappLink} target="_blank" rel="noopener noreferrer">
-                    <Icon name="fa-brands fa-whatsapp" />
+                    <i className="fa-brands fa-whatsapp" aria-hidden="true" />
                     <div>
                       <strong>WhatsApp</strong>
                       <span>{contactInfo.whatsappLabel}</span>
                     </div>
                   </a>
                   <a className="contact-social-card" href={`mailto:${contactInfo.email}`}>
-                    <Icon name="fa-solid fa-envelope" />
+                    <i className="fa-solid fa-envelope" aria-hidden="true" />
                     <div>
                       <strong>Email</strong>
                       <span>{contactInfo.email}</span>
@@ -82,7 +81,7 @@ function ContactSection({ contactInfo }) {
           <div className="contact-location-copy">
             <div className="contact-panel-head">
               <span className="contact-panel-icon" aria-hidden="true">
-                <Icon name="fa-solid fa-location-dot" />
+                <i className="fa-solid fa-location-dot" />
               </span>
               <div>
                 <h3>Lokasi Kami</h3>
@@ -94,21 +93,21 @@ function ContactSection({ contactInfo }) {
 
             <ul className="contact-list contact-location-list">
               <li>
-                <Icon name="fa-solid fa-building" />
+                <i className="fa-solid fa-building" aria-hidden="true" />
                 <div>
                   <strong>Basis Layanan</strong>
                   <span>Koteka Digital Studio</span>
                 </div>
               </li>
               <li>
-                <Icon name="fa-solid fa-location-dot" />
+                <i className="fa-solid fa-location-dot" aria-hidden="true" />
                 <div>
                   <strong>Wilayah</strong>
                   <span>{contactInfo.location}</span>
                 </div>
               </li>
               <li>
-                <Icon name="fa-regular fa-clock" />
+                <i className="fa-regular fa-clock" aria-hidden="true" />
                 <div>
                   <strong>Jam Operasional</strong>
                   <span>24 jam setiap hari</span>
@@ -147,7 +146,7 @@ function ContactSection({ contactInfo }) {
         <article className="contact-card contact-cta-card" data-reveal>
           <div className="contact-cta-copy">
             <span className="contact-panel-icon contact-panel-icon-small" aria-hidden="true">
-              <Icon name="fa-solid fa-headset" />
+              <i className="fa-solid fa-headset" />
             </span>
             <div>
               <h3>Butuh bantuan cepat?</h3>
@@ -155,9 +154,9 @@ function ContactSection({ contactInfo }) {
             </div>
           </div>
           <a className="contact-cta-button" href={contactInfo.whatsappLink} target="_blank" rel="noopener noreferrer">
-            <Icon name="fa-brands fa-whatsapp" />
+            <i className="fa-brands fa-whatsapp" aria-hidden="true" />
             Chat WhatsApp Sekarang
-            <Icon name="fa-solid fa-arrow-right" />
+            <i className="fa-solid fa-arrow-right" aria-hidden="true" />
           </a>
         </article>
       </div>

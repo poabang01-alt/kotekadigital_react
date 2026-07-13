@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import Icon from './Icon'
 
 function PricingSection({
   comparisonRows,
@@ -137,8 +136,8 @@ function PricingSection({
               <div className="pricing-card-shell">
                 {plan.featured ? <span className="pricing-popular-badge">Paling Populer</span> : null}
                 <div className="pricing-card-icon" aria-hidden="true">
-                  <Icon
-                    name={
+                  <i
+                    className={
                       plan.name === 'Paket Basic'
                         ? 'fa-solid fa-rocket'
                         : plan.name === 'Paket Standar'
@@ -173,7 +172,7 @@ function PricingSection({
         <div className="pricing-lower-grid">
           <article className="pricing-comparison-card" data-reveal>
             <div className="pricing-subsection-title">
-              <Icon name="fa-solid fa-scale-balanced" />
+              <i className="fa-solid fa-scale-balanced" aria-hidden="true" />
               <div>
                 <h3>Tabel Perbandingan Paket</h3>
                 <p>
@@ -192,7 +191,7 @@ function PricingSection({
                 aria-haspopup="dialog"
                 aria-expanded={downloadMenuOpen}
               >
-                <Icon name="fa-solid fa-download" />
+                <i className="fa-solid fa-download" aria-hidden="true" />
                 Download Tabel
               </button>
             </div>
@@ -253,7 +252,7 @@ function PricingSection({
                 onClick={() => setDownloadMenuOpen(false)}
                 aria-label="Tutup pilihan download"
               >
-                <Icon name="fa-solid fa-xmark" />
+                <i className="fa-solid fa-xmark" aria-hidden="true" />
               </button>
               <span className="pricing-download-kicker">Export Tabel</span>
               <h3>Download Tabel Perbandingan Harga</h3>
@@ -268,10 +267,10 @@ function PricingSection({
                 aria-label="Copy link Koteka Digital"
               >
                 <span className="pricing-download-link-icon" aria-hidden="true">
-                  <Icon name={`fa-solid ${isWebsiteLinkCopied ? 'fa-check' : 'fa-link'}`} />
+                  <i className={`fa-solid ${isWebsiteLinkCopied ? 'fa-check' : 'fa-link'}`} />
                 </span>
                 <span>{isWebsiteLinkCopied ? 'Link berhasil dicopy' : 'kotekadigital.com'}</span>
-                <Icon name="fa-regular fa-copy" />
+                <i className="fa-regular fa-copy" aria-hidden="true" />
               </button>
               <div className="pricing-download-options">
                 <button
@@ -281,7 +280,7 @@ function PricingSection({
                   disabled={isExporting}
                 >
                   <span className="pricing-download-icon" aria-hidden="true">
-                    <Icon name="fa-solid fa-file-pdf" />
+                    <i className="fa-solid fa-file-pdf" />
                   </span>
                   <strong>{isExporting ? 'Menyiapkan File...' : 'Download PDF'}</strong>
                   <span>
@@ -296,7 +295,7 @@ function PricingSection({
                   disabled={isExporting}
                 >
                   <span className="pricing-download-icon" aria-hidden="true">
-                    <Icon name="fa-solid fa-file-excel" />
+                    <i className="fa-solid fa-file-excel" />
                   </span>
                   <strong>{isExporting ? 'Menyiapkan File...' : 'Download .XLSX'}</strong>
                   <span>
