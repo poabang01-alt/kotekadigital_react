@@ -1,4 +1,13 @@
+import { AnimatePresence, m } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
+import { interactions, viewportOnce } from '../animations/motionConfig'
+import {
+  fadeUp,
+  modalBackdrop,
+  modalContent,
+  staggerContainer,
+  staggerItem,
+} from '../animations/motionVariants'
 
 function PricingSection({
   comparisonRows,
@@ -116,25 +125,30 @@ function PricingSection({
   return (
     <section className="pricing-section" id="pricing-section" aria-labelledby="pricing-heading">
       <div className="container">
-        <div className="pricing-header" data-reveal>
+        <m.div className="pricing-header" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
           <span className="pricing-badge">Harga</span>
           <h2 id="pricing-heading">Pilih Paket Website</h2>
           <p>
             Kami menyediakan berbagai paket pembuatan website profesional yang dapat disesuaikan
             dengan kebutuhan dan budget Anda.
           </p>
-        </div>
+        </m.div>
 
-        <div className="pricing-package-grid" role="list">
+        <m.div className="pricing-package-grid" role="list" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
           {pricingPlans.map((plan) => (
-            <article
+            <m.article
               className={`pricing-card-reference ${plan.featured ? 'featured' : ''}`}
               key={plan.name}
-              data-reveal
               role="listitem"
+              variants={staggerItem}
+              {...interactions.card}
             >
               <div className="pricing-card-shell">
-                {plan.featured ? <span className="pricing-popular-badge">Paling Populer</span> : null}
+                {plan.featured ? (
+                  <m.span className="pricing-popular-badge" initial={{ scale: 0.94, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={viewportOnce}>
+                    Paling Populer
+                  </m.span>
+                ) : null}
                 <div className="pricing-card-icon" aria-hidden="true">
                   <i
                     className={
@@ -151,26 +165,27 @@ function PricingSection({
               <p className="pricing-copy">{plan.copy}</p>
               <div className="pricing-investment-label">Investasi Paket</div>
               <strong className="price">{plan.price}</strong>
-              <ul className="feature-list pricing-feature-list">
+              <m.ul className="feature-list pricing-feature-list" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
                 {(pricingFeatureMap[plan.name] || plan.features).map((feature) => (
-                  <li key={feature}>{feature}</li>
+                  <m.li key={feature} variants={staggerItem}>{feature}</m.li>
                 ))}
-              </ul>
+              </m.ul>
               <div className="pricing-actions">
-                <button
+                <m.button
                   type="button"
                   className="button button-primary pricing-cta"
                   onClick={() => handlePricingAction(plan)}
+                  {...interactions.button}
                 >
                   Chat WA & Download PDF
-                </button>
+                </m.button>
               </div>
-            </article>
+            </m.article>
           ))}
-        </div>
+        </m.div>
 
         <div className="pricing-lower-grid">
-          <article className="pricing-comparison-card" data-reveal>
+          <m.article className="pricing-comparison-card" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
             <div className="pricing-subsection-title">
               <i className="fa-solid fa-scale-balanced" aria-hidden="true" />
               <div>
@@ -183,17 +198,18 @@ function PricingSection({
             </div>
 
             <div className="pricing-download-actions">
-              <button
+              <m.button
                 type="button"
                 className="button pricing-download-trigger"
                 onClick={() => setDownloadMenuOpen(true)}
                 ref={triggerRef}
                 aria-haspopup="dialog"
                 aria-expanded={downloadMenuOpen}
+                {...interactions.button}
               >
                 <i className="fa-solid fa-download" aria-hidden="true" />
                 Download Tabel
-              </button>
+              </m.button>
             </div>
 
             <div className="pricing-table-wrap">
@@ -234,79 +250,102 @@ function PricingSection({
                 </div>
               </div>
             </div>
-          </article>
+          </m.article>
         </div>
 
-        {downloadMenuOpen ? (
-          <div
-            className="pricing-download-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Pilih format download tabel"
-          >
-            <div className="pricing-download-backdrop" onClick={() => setDownloadMenuOpen(false)} />
-            <div className="pricing-download-sheet" ref={dialogRef} tabIndex={-1}>
-              <button
-                type="button"
-                className="pricing-download-close"
+        <AnimatePresence>
+          {downloadMenuOpen ? (
+            <m.div
+              className="pricing-download-modal"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Pilih format download tabel"
+            >
+              <m.div
+                className="pricing-download-backdrop"
                 onClick={() => setDownloadMenuOpen(false)}
-                aria-label="Tutup pilihan download"
+                variants={modalBackdrop}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              />
+              <m.div
+                className="pricing-download-sheet"
+                ref={dialogRef}
+                tabIndex={-1}
+                variants={modalContent}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
               >
-                <i className="fa-solid fa-xmark" aria-hidden="true" />
-              </button>
-              <span className="pricing-download-kicker">Export Tabel</span>
-              <h3>Download Tabel Perbandingan Harga</h3>
-              <p>
-                Pilih format file yang ingin Anda simpan. Versi export sudah disiapkan dengan
-                logo Koteka Digital, ringkasan paket, tabel perbandingan, dan penjelasan layanan.
-              </p>
-              <button
-                type="button"
-                className="pricing-download-link"
-                onClick={handleCopyWebsiteLink}
-                aria-label="Copy link Koteka Digital"
-              >
-                <span className="pricing-download-link-icon" aria-hidden="true">
-                  <i className={`fa-solid ${isWebsiteLinkCopied ? 'fa-check' : 'fa-link'}`} />
-                </span>
-                <span>{isWebsiteLinkCopied ? 'Link berhasil dicopy' : 'kotekadigital.com'}</span>
-                <i className="fa-regular fa-copy" aria-hidden="true" />
-              </button>
-              <div className="pricing-download-options">
-                <button
+                <m.button
                   type="button"
-                  className="pricing-download-card"
-                  onClick={() => runExport('pdf')}
-                  disabled={isExporting}
+                  className="pricing-download-close"
+                  onClick={() => setDownloadMenuOpen(false)}
+                  aria-label="Tutup pilihan download"
+                  {...interactions.button}
                 >
-                  <span className="pricing-download-icon" aria-hidden="true">
-                    <i className="fa-solid fa-file-pdf" />
-                  </span>
-                  <strong>{isExporting ? 'Menyiapkan File...' : 'Download PDF'}</strong>
-                  <span>
-                    Unduh file PDF langsung dengan layout premium, tabel rapi, dan ringkasan
-                    layanan lengkap.
-                  </span>
-                </button>
-                <button
+                  <i className="fa-solid fa-xmark" aria-hidden="true" />
+                </m.button>
+                <span className="pricing-download-kicker">Export Tabel</span>
+                <h3>Download Tabel Perbandingan Harga</h3>
+                <p>
+                  Pilih format file yang ingin Anda simpan. Versi export sudah disiapkan dengan
+                  logo Koteka Digital, ringkasan paket, tabel perbandingan, dan penjelasan layanan.
+                </p>
+                <m.button
                   type="button"
-                  className="pricing-download-card"
-                  onClick={() => runExport('xlsx')}
-                  disabled={isExporting}
+                  className="pricing-download-link"
+                  onClick={handleCopyWebsiteLink}
+                  aria-label="Copy link Koteka Digital"
+                  {...interactions.button}
                 >
-                  <span className="pricing-download-icon" aria-hidden="true">
-                    <i className="fa-solid fa-file-excel" />
+                  <span className="pricing-download-link-icon" aria-hidden="true">
+                    <i className={`fa-solid ${isWebsiteLinkCopied ? 'fa-check' : 'fa-link'}`} />
                   </span>
-                  <strong>{isExporting ? 'Menyiapkan File...' : 'Download .XLSX'}</strong>
-                  <span>
-                    Unduh spreadsheet `.xlsx` dengan styling rapi dan struktur data yang siap
-                    dibagikan atau diedit.
-                  </span>
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : null}
+                  <span>{isWebsiteLinkCopied ? 'Link berhasil dicopy' : 'kotekadigital.com'}</span>
+                  <i className="fa-regular fa-copy" aria-hidden="true" />
+                </m.button>
+                <m.div className="pricing-download-options" variants={staggerContainer} initial="hidden" animate="visible">
+                  <m.button
+                    type="button"
+                    className="pricing-download-card"
+                    onClick={() => runExport('pdf')}
+                    disabled={isExporting}
+                    variants={staggerItem}
+                    {...interactions.card}
+                  >
+                    <span className="pricing-download-icon" aria-hidden="true">
+                      <i className="fa-solid fa-file-pdf" />
+                    </span>
+                    <strong>{isExporting ? 'Menyiapkan File...' : 'Download PDF'}</strong>
+                    <span>
+                      Unduh file PDF langsung dengan layout premium, tabel rapi, dan ringkasan
+                      layanan lengkap.
+                    </span>
+                  </m.button>
+                  <m.button
+                    type="button"
+                    className="pricing-download-card"
+                    onClick={() => runExport('xlsx')}
+                    disabled={isExporting}
+                    variants={staggerItem}
+                    {...interactions.card}
+                  >
+                    <span className="pricing-download-icon" aria-hidden="true">
+                      <i className="fa-solid fa-file-excel" />
+                    </span>
+                    <strong>{isExporting ? 'Menyiapkan File...' : 'Download .XLSX'}</strong>
+                    <span>
+                      Unduh spreadsheet `.xlsx` dengan styling rapi dan struktur data yang siap
+                      dibagikan atau diedit.
+                    </span>
+                  </m.button>
+                </m.div>
+              </m.div>
+            </m.div>
+          ) : null}
+        </AnimatePresence>
       </div>
     </section>
   )

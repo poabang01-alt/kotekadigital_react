@@ -1,5 +1,8 @@
 import { useState } from 'react'
+import { m } from 'motion/react'
 import ContactForm from './ContactForm'
+import { interactions, viewportOnce } from '../animations/motionConfig'
+import { fadeLeft, fadeRight, fadeUp } from '../animations/motionVariants'
 
 function ContactSection({ contactInfo }) {
   const [isMapVisible, setIsMapVisible] = useState(false)
@@ -7,7 +10,7 @@ function ContactSection({ contactInfo }) {
   return (
     <section className="contact-section" id="kontak" aria-labelledby="contact-heading">
       <div className="container">
-        <div className="section-heading contact-heading" data-reveal>
+        <m.div className="section-heading contact-heading" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
           <span className="eyebrow">Kontak</span>
           <h2 id="contact-heading">
             <span>Kontak</span> <span>Kami</span>
@@ -17,10 +20,10 @@ function ContactSection({ contactInfo }) {
             <span className="contact-highlight">SEO</span>, dan{' '}
             <span className="contact-highlight">strategi digital</span> yang sesuai kebutuhan bisnis Anda.
           </p>
-        </div>
+        </m.div>
 
-        <div className="contact-main-grid" data-reveal>
-          <div className="contact-left-column">
+        <m.div className="contact-main-grid" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
+          <m.div className="contact-left-column" variants={fadeLeft} initial="hidden" whileInView="visible" viewport={viewportOnce}>
             <article className="contact-card contact-intro-card">
               <div className="contact-intro">
                 <div className="contact-panel-head">
@@ -55,29 +58,29 @@ function ContactSection({ contactInfo }) {
                 </div>
 
                 <div className="contact-social-grid">
-                  <a className="contact-social-card" href={contactInfo.whatsappLink} target="_blank" rel="noopener noreferrer">
+                  <m.a className="contact-social-card" href={contactInfo.whatsappLink} target="_blank" rel="noopener noreferrer" {...interactions.card}>
                     <i className="fa-brands fa-whatsapp" aria-hidden="true" />
                     <div>
                       <strong>WhatsApp</strong>
                       <span>{contactInfo.whatsappLabel}</span>
                     </div>
-                  </a>
-                  <a className="contact-social-card" href={`mailto:${contactInfo.email}`}>
+                  </m.a>
+                  <m.a className="contact-social-card" href={`mailto:${contactInfo.email}`} {...interactions.card}>
                     <i className="fa-solid fa-envelope" aria-hidden="true" />
                     <div>
                       <strong>Email</strong>
                       <span>{contactInfo.email}</span>
                     </div>
-                  </a>
+                  </m.a>
                 </div>
               </div>
             </article>
-          </div>
+          </m.div>
 
           <ContactForm contactInfo={contactInfo} />
-        </div>
+        </m.div>
 
-        <article className="contact-card contact-location-card" data-reveal>
+        <m.article className="contact-card contact-location-card" variants={fadeRight} initial="hidden" whileInView="visible" viewport={viewportOnce}>
           <div className="contact-location-copy">
             <div className="contact-panel-head">
               <span className="contact-panel-icon" aria-hidden="true">
@@ -126,24 +129,25 @@ function ContactSection({ contactInfo }) {
                   referrerPolicy="no-referrer-when-downgrade"
                 />
               ) : (
-                <button
+                <m.button
                   type="button"
                   className="map-embed-trigger"
                   onClick={() => setIsMapVisible(true)}
                   aria-label="Tampilkan peta lokasi Koteka Digital"
+                  {...interactions.button}
                 >
                   <span className="map-embed-trigger-copy">
                     <strong>Lihat peta lokasi</strong>
                     <span>Google Maps hanya dimuat saat dibutuhkan agar halaman tetap lebih ringan.</span>
                   </span>
                   <span className="map-embed-trigger-action">Muat peta</span>
-                </button>
+                </m.button>
               )}
             </div>
           </div>
-        </article>
+        </m.article>
 
-        <article className="contact-card contact-cta-card" data-reveal>
+        <m.article className="contact-card contact-cta-card" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
           <div className="contact-cta-copy">
             <span className="contact-panel-icon contact-panel-icon-small" aria-hidden="true">
               <i className="fa-solid fa-headset" />
@@ -153,12 +157,12 @@ function ContactSection({ contactInfo }) {
               <p>Klik tombol di samping untuk langsung chat via WhatsApp.</p>
             </div>
           </div>
-          <a className="contact-cta-button" href={contactInfo.whatsappLink} target="_blank" rel="noopener noreferrer">
+          <m.a className="contact-cta-button" href={contactInfo.whatsappLink} target="_blank" rel="noopener noreferrer" {...interactions.button}>
             <i className="fa-brands fa-whatsapp" aria-hidden="true" />
             Chat WhatsApp Sekarang
             <i className="fa-solid fa-arrow-right" aria-hidden="true" />
-          </a>
-        </article>
+          </m.a>
+        </m.article>
       </div>
     </section>
   )

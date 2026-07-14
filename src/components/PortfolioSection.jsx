@@ -1,3 +1,7 @@
+import { AnimatePresence, m } from 'motion/react'
+import { interactions, transitions, viewportOnce } from '../animations/motionConfig'
+import { fadeUp, modalContent, staggerContainer, staggerItem } from '../animations/motionVariants'
+
 function PortfolioSection({
   activePortfolio,
   nextPortfolio,
@@ -10,87 +14,106 @@ function PortfolioSection({
   return (
     <section className="portfolio-section" id="portfolio" aria-labelledby="portfolio-heading">
       <div className="container">
-        <div className="section-heading" data-reveal>
+        <m.div className="section-heading" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
           <span className="eyebrow">Portofolio</span>
           <h2 id="portfolio-heading">Proyek yang sudah tayang dan bisa langsung dilihat</h2>
-        </div>
+        </m.div>
 
-        <div
+        <m.div
           className="portfolio-showcase"
-          data-reveal
           role="region"
           aria-roledescription="carousel"
           aria-label="Carousel portofolio unggulan"
           aria-live="polite"
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
         >
-          <button
+          <m.button
             type="button"
             className="slider-control"
             onClick={prevPortfolio}
             aria-label="Portofolio sebelumnya"
+            {...interactions.button}
           >
             <i className="fa-solid fa-arrow-left" aria-hidden="true" />
-          </button>
+          </m.button>
 
-          <article className="portfolio-card featured portfolio-card-animated" key={activePortfolio.title}>
-            <div className="portfolio-image">
-              <img
-                src={activePortfolio.image}
-                alt={activePortfolio.title}
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <div className="portfolio-content">
-              <span className="portfolio-label">{activePortfolio.label}</span>
-              <h3>{activePortfolio.title}</h3>
-              <p>{activePortfolio.description}</p>
-              <p className="portfolio-impact">{activePortfolio.impact}</p>
-              <div className="tech-list" aria-label="Teknologi yang digunakan">
-                {activePortfolio.tech.map((tech) => (
-                  <span key={tech}>
-                    <i className={techIcons[tech] || 'fa-solid fa-code'} aria-hidden="true" />
-                    {tech}
-                  </span>
-                ))}
-              </div>
-              <a
-                className="button button-primary portfolio-cta"
-                href={activePortfolio.link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <i className="fa-solid fa-up-right-from-square" aria-hidden="true" />
-                Live Demo
-              </a>
-            </div>
-          </article>
+          <AnimatePresence mode="wait">
+            <m.article
+              className="portfolio-card featured portfolio-card-animated"
+              key={activePortfolio.title}
+              variants={modalContent}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              transition={transitions.normal}
+            >
+              <m.div className="portfolio-image" whileHover={{ scale: 1.01 }}>
+                <img
+                  src={activePortfolio.image}
+                  alt={activePortfolio.title}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </m.div>
+              <m.div className="portfolio-content" variants={staggerContainer} initial="hidden" animate="visible">
+                <m.span className="portfolio-label" variants={staggerItem}>{activePortfolio.label}</m.span>
+                <m.h3 variants={staggerItem}>{activePortfolio.title}</m.h3>
+                <m.p variants={staggerItem}>{activePortfolio.description}</m.p>
+                <m.p className="portfolio-impact" variants={staggerItem}>{activePortfolio.impact}</m.p>
+                <m.div className="tech-list" aria-label="Teknologi yang digunakan" variants={staggerContainer}>
+                  {activePortfolio.tech.map((tech) => (
+                    <m.span key={tech} variants={staggerItem}>
+                      <i className={techIcons[tech] || 'fa-solid fa-code'} aria-hidden="true" />
+                      {tech}
+                    </m.span>
+                  ))}
+                </m.div>
+                <m.a
+                  className="button button-primary portfolio-cta"
+                  href={activePortfolio.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variants={staggerItem}
+                  {...interactions.button}
+                >
+                  <i className="fa-solid fa-up-right-from-square" aria-hidden="true" />
+                  Live Demo
+                </m.a>
+              </m.div>
+            </m.article>
+          </AnimatePresence>
 
-          <button
+          <m.button
             type="button"
             className="slider-control"
             onClick={nextPortfolio}
             aria-label="Portofolio berikutnya"
+            {...interactions.button}
           >
             <i className="fa-solid fa-arrow-right" aria-hidden="true" />
-          </button>
-        </div>
+          </m.button>
+        </m.div>
 
-        <div className="portfolio-thumbs" role="list" aria-label="Pilih proyek portofolio">
+        <m.div className="portfolio-thumbs" role="list" aria-label="Pilih proyek portofolio" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
           {portfolioItems.map((item, index) => (
-            <button
+            <m.button
               type="button"
               key={item.title}
               className={`thumb-card ${index === portfolioIndex ? 'active' : ''}`}
               onClick={() => setPortfolioIndex(index)}
               aria-label={`Tampilkan portofolio ${item.title}`}
               aria-pressed={index === portfolioIndex}
+              variants={staggerItem}
+              {...interactions.card}
             >
               <img src={item.image} alt="" aria-hidden="true" loading="lazy" decoding="async" />
               <span>{item.title}</span>
-            </button>
+            </m.button>
           ))}
-        </div>
+        </m.div>
       </div>
     </section>
   )

@@ -1,5 +1,15 @@
-import { navItems, whatsappLinks } from '../data/siteData'
+import { AnimatePresence, m, useReducedMotion, useScroll, useSpring } from 'motion/react'
 import { bottomNavItems } from '../data/appConfig'
+import { interactions, transitions } from '../animations/motionConfig'
+import {
+  drawerTransition,
+  fadeDown,
+  fadeIn,
+  modalBackdrop,
+  staggerContainer,
+  staggerItem,
+} from '../animations/motionVariants'
+import { navItems, whatsappLinks } from '../data/siteData'
 
 function SiteNavigation({
   activeSection,
@@ -20,18 +30,27 @@ function SiteNavigation({
   mobileNavRef,
   openDropdown,
 }) {
+  const shouldReduceMotion = useReducedMotion()
+  const { scrollYProgress } = useScroll()
+  const progressScaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    restDelta: 0.001,
+  })
+
   const renderNavItems = (submenuIdPrefix) => {
     const isMobileMenu = submenuIdPrefix.startsWith('mobile')
 
     return navItems.map((item) =>
       item.children ? (
-        <div
+        <m.div
           className={`nav-dropdown ${openDropdown === item.label ? 'open' : ''}`}
           key={item.label}
           onPointerEnter={() => handleDropdownPointerEnter(item.label)}
           onPointerLeave={() => handleDropdownPointerLeave(item.label)}
+          variants={isMobileMenu ? staggerItem : undefined}
         >
-          <button
+          <m.button
             type="button"
             className={`nav-link nav-button ${item.children && isMobileMenu ? 'has-mobile-submenu' : ''} ${
               isNavItemActive(item) ? 'active' : ''
@@ -40,6 +59,7 @@ function SiteNavigation({
             aria-expanded={openDropdown === item.label}
             aria-controls={`${submenuIdPrefix}-${item.label.toLowerCase()}`}
             aria-label={`Toggle submenu ${item.label}`}
+            {...interactions.button}
           >
             <span className="nav-link-copy">
               {isMobileMenu ? (
@@ -67,39 +87,55 @@ function SiteNavigation({
                 {openDropdown === item.label ? '^' : 'v'}
               </span>
             ) : (
-              <i className="fa-solid fa-chevron-down caret" aria-hidden="true" />
+              <m.i
+                className="fa-solid fa-chevron-down caret"
+                aria-hidden="true"
+                animate={{ rotate: openDropdown === item.label ? 180 : 0 }}
+                transition={transitions.fast}
+              />
             )}
-          </button>
-          <div
-            className="dropdown-panel"
-            id={`${submenuIdPrefix}-${item.label.toLowerCase()}`}
-          >
-            {item.children.map((child) => (
-              <a
-                key={child.label}
-                className={`dropdown-link ${
-                  activeSection === child.href.slice(1) ? 'active' : ''
-                }`}
-                href={child.href}
-                onClick={(event) => handleNavClick(event, child.href)}
+          </m.button>
+          <AnimatePresence initial={false}>
+            {openDropdown === item.label ? (
+              <m.div
+                className="dropdown-panel"
+                id={`${submenuIdPrefix}-${item.label.toLowerCase()}`}
+                variants={fadeIn}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
               >
-                {isMobileMenu ? (
-                  <span className="dropdown-link-bullet" aria-hidden="true">
-                    <i className="fa-solid fa-minus" />
-                  </span>
-                ) : null}
-                {child.label}
-              </a>
-            ))}
-          </div>
-        </div>
+                {item.children.map((child) => (
+                  <m.a
+                    key={child.label}
+                    className={`dropdown-link ${
+                      activeSection === child.href.slice(1) ? 'active' : ''
+                    }`}
+                    href={child.href}
+                    onClick={(event) => handleNavClick(event, child.href)}
+                    {...interactions.button}
+                  >
+                    {isMobileMenu ? (
+                      <span className="dropdown-link-bullet" aria-hidden="true">
+                        <i className="fa-solid fa-minus" />
+                      </span>
+                    ) : null}
+                    {child.label}
+                  </m.a>
+                ))}
+              </m.div>
+            ) : null}
+          </AnimatePresence>
+        </m.div>
       ) : (
-        <a
+        <m.a
           key={item.label}
           className={`nav-link ${isNavItemActive(item) ? 'active' : ''}`}
           href={item.href}
           onClick={(event) => handleNavClick(event, item.href)}
           aria-current={isNavItemActive(item) ? 'page' : undefined}
+          variants={isMobileMenu ? staggerItem : undefined}
+          {...interactions.button}
         >
           <span className="nav-link-copy">
             {isMobileMenu ? (
@@ -109,46 +145,70 @@ function SiteNavigation({
             ) : null}
             <span className="nav-link-label">{item.label}</span>
           </span>
-        </a>
+        </m.a>
       )
     )
   }
 
   return (
     <>
-      <header className={`site-header ${isHeaderHidden ? 'header-hidden' : ''}`} ref={headerRef}>
+      <m.div className="scroll-progress" style={{ scaleX: progressScaleX }} aria-hidden="true" />
+      <m.header
+        className={`site-header ${isHeaderHidden ? 'header-hidden' : ''}`}
+        ref={headerRef}
+        initial={shouldReduceMotion ? false : { y: -28, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={transitions.normal}
+      >
         <a className="skip-link" href="#main-content">
           Langsung ke konten utama
         </a>
         <div className="container nav-shell">
-          <a className="brand" href="#home" onClick={(event) => handleNavClick(event, '#home')}>
+          <m.a
+            className="brand"
+            href="#home"
+            onClick={(event) => handleNavClick(event, '#home')}
+            {...interactions.button}
+          >
             <img
               src={brandLogoSrc}
               alt="Logo Koteka Digital"
               loading="eager"
               fetchPriority="high"
+              decoding="async"
+              width="512"
+              height="477"
             />
             <span className="brand-text">
               <span>KOTEKA</span>
               <span className="brand-accent">DIGITAL</span>
             </span>
-          </a>
+          </m.a>
 
-          <nav className="nav-menu nav-menu-desktop" aria-label="Navigasi utama desktop">
+          <m.nav className="nav-menu nav-menu-desktop" aria-label="Navigasi utama desktop" layout>
             {renderNavItems('desktop-services-submenu')}
-          </nav>
+          </m.nav>
 
-          <a
+          <m.a
             className="cta-pill"
             href={whatsappLinks.primary}
             target="_blank"
             rel="noopener noreferrer"
+            {...interactions.button}
           >
-            <img src="/img/optimized/wa-64.png" alt="" aria-hidden="true" />
+            <img
+              src="/img/optimized/wa-64.png"
+              alt=""
+              aria-hidden="true"
+              loading="eager"
+              decoding="async"
+              width="64"
+              height="64"
+            />
             Konsultasi Gratis
-          </a>
+          </m.a>
 
-          <button
+          <m.button
             type="button"
             className={`hamburger ${menuOpen ? 'active' : ''}`}
             onClick={handleHamburgerClick}
@@ -156,68 +216,104 @@ function SiteNavigation({
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
             ref={hamburgerRef}
+            {...interactions.button}
           >
             <span />
             <span />
             <span />
-          </button>
+          </m.button>
         </div>
-      </header>
+      </m.header>
 
-      <div
-        className={`nav-overlay nav-overlay-mobile ${menuOpen ? 'active' : ''}`}
-        onClick={closeNavigation}
-        aria-hidden={!menuOpen}
-      />
+      <AnimatePresence>
+        {menuOpen ? (
+          <>
+            <m.div
+              className="nav-overlay nav-overlay-mobile active"
+              onClick={closeNavigation}
+              aria-hidden={!menuOpen}
+              variants={modalBackdrop}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            />
 
-      <nav
-        className={`nav-menu nav-menu-mobile ${menuOpen ? 'active' : ''}`}
-        id="mobile-navigation"
-        aria-label="Navigasi utama"
-        aria-hidden={!menuOpen}
-        role="dialog"
-        aria-modal="true"
-        tabIndex={menuOpen ? -1 : undefined}
-        ref={mobileNavRef}
-      >
-        <div className="mobile-menu-header">
-          <div className="mobile-menu-brand">
-            <img src={brandLogoSrc} alt="Logo Koteka Digital" />
-            <div className="mobile-menu-brand-copy">
-              <span className="mobile-menu-brand-title">Koteka Digital</span>
-              <span className="mobile-menu-brand-subtitle">Navigasi utama</span>
-            </div>
-          </div>
-          <button
-            type="button"
-            className="mobile-close"
-            onClick={closeNavigation}
-            aria-label="Tutup menu"
-          >
-            <i className="fa-solid fa-xmark" aria-hidden="true" />
-          </button>
-        </div>
+            <m.nav
+              className="nav-menu nav-menu-mobile active"
+              id="mobile-navigation"
+              aria-label="Navigasi utama"
+              aria-hidden={!menuOpen}
+              role="dialog"
+              aria-modal="true"
+              tabIndex={menuOpen ? -1 : undefined}
+              ref={mobileNavRef}
+              variants={drawerTransition}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+              <m.div
+                className="mobile-menu-header"
+                variants={fadeDown}
+                initial="hidden"
+                animate="visible"
+              >
+                <div className="mobile-menu-brand">
+                  <img
+                    src={brandLogoSrc}
+                    alt="Logo Koteka Digital"
+                    loading="eager"
+                    decoding="async"
+                    width="512"
+                    height="477"
+                  />
+                  <div className="mobile-menu-brand-copy">
+                    <span className="mobile-menu-brand-title">Koteka Digital</span>
+                    <span className="mobile-menu-brand-subtitle">Navigasi utama</span>
+                  </div>
+                </div>
+                <m.button
+                  type="button"
+                  className="mobile-close"
+                  onClick={closeNavigation}
+                  aria-label="Tutup menu"
+                  {...interactions.button}
+                >
+                  <i className="fa-solid fa-xmark" aria-hidden="true" />
+                </m.button>
+              </m.div>
 
-        <div className="mobile-menu-list">{renderNavItems('mobile-services-submenu')}</div>
-      </nav>
+              <m.div
+                className="mobile-menu-list"
+                variants={staggerContainer}
+                initial="hidden"
+                animate="visible"
+              >
+                {renderNavItems('mobile-services-submenu')}
+              </m.div>
+            </m.nav>
+          </>
+        ) : null}
+      </AnimatePresence>
 
       <nav className="mobile-bottom-nav" aria-label="Navigasi bawah mobile">
         <div className="mobile-bottom-nav-shell">
           {bottomNavItems.map((item) => (
-            <button
+            <m.button
               type="button"
               key={item.key}
               className={`mobile-bottom-nav-item ${isBottomNavActive(item.key) ? 'active' : ''}`}
               onClick={() => handleBottomNavAction(item)}
               aria-current={isBottomNavActive(item.key) && item.key !== 'menu' ? 'page' : undefined}
               aria-label={item.label}
+              {...interactions.button}
             >
               <span className="mobile-bottom-nav-icon" aria-hidden="true">
                 <i className={item.icon} />
               </span>
               <span className="mobile-bottom-nav-text">{item.label}</span>
               <span className="mobile-bottom-nav-indicator" aria-hidden="true" />
-            </button>
+            </m.button>
           ))}
         </div>
       </nav>

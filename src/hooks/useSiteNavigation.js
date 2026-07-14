@@ -13,6 +13,8 @@ function useSiteNavigation(trackedSectionIds) {
   const hamburgerRef = useRef(null)
   const headerOffsetRef = useRef(0)
   const lastScrollYRef = useRef(typeof window !== 'undefined' ? window.scrollY : 0)
+  const activeSectionRef = useRef('home')
+  const headerHiddenRef = useRef(false)
   const sectionRatiosRef = useRef(new Map())
   const mobileNavRef = useRef(null)
   const sectionTransitionTimeoutRef = useRef(null)
@@ -171,6 +173,14 @@ function useSiteNavigation(trackedSectionIds) {
   )
 
   useEffect(() => {
+    activeSectionRef.current = activeSection
+  }, [activeSection])
+
+  useEffect(() => {
+    headerHiddenRef.current = isHeaderHidden
+  }, [isHeaderHidden])
+
+  useEffect(() => {
     const body = document.body
     const html = document.documentElement
 
@@ -305,9 +315,15 @@ function useSiteNavigation(trackedSectionIds) {
       }
 
       if (!hasPassedHeader || currentScrollY <= 0) {
-        setIsHeaderHidden(false)
+        if (headerHiddenRef.current) {
+          headerHiddenRef.current = false
+          setIsHeaderHidden(false)
+        }
       } else {
-        setIsHeaderHidden(isScrollingDown)
+        if (headerHiddenRef.current !== isScrollingDown) {
+          headerHiddenRef.current = isScrollingDown
+          setIsHeaderHidden(isScrollingDown)
+        }
       }
 
       lastScrollYRef.current = currentScrollY
@@ -355,7 +371,10 @@ function useSiteNavigation(trackedSectionIds) {
       activeSectionLockRef.current = 'home'
 
       window.requestAnimationFrame(() => {
-        setActiveSection((current) => (current === 'home' ? current : 'home'))
+        if (activeSectionRef.current !== 'home') {
+          activeSectionRef.current = 'home'
+          setActiveSection('home')
+        }
         window.scrollTo({
           top: 0,
           behavior: 'auto',
@@ -421,8 +440,12 @@ function useSiteNavigation(trackedSectionIds) {
 
         const topLockThreshold = Math.max(headerOffsetRef.current + 40, 120)
         if (window.scrollY <= topLockThreshold) {
-          if (!activeSectionLockRef.current || activeSectionLockRef.current === 'home') {
-            setActiveSection((current) => (current === 'home' ? current : 'home'))
+          if (
+            (!activeSectionLockRef.current || activeSectionLockRef.current === 'home') &&
+            activeSectionRef.current !== 'home'
+          ) {
+            activeSectionRef.current = 'home'
+            setActiveSection('home')
           }
           return
         }
@@ -440,9 +463,10 @@ function useSiteNavigation(trackedSectionIds) {
             return
           }
 
-          setActiveSection((current) =>
-            current === dominantSection[0] ? current : dominantSection[0]
-          )
+          if (activeSectionRef.current !== dominantSection[0]) {
+            activeSectionRef.current = dominantSection[0]
+            setActiveSection(dominantSection[0])
+          }
         }
       },
       {

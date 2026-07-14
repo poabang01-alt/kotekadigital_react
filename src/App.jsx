@@ -34,9 +34,9 @@ import PricingSection from './components/PricingSection'
 import ServicesSection from './components/ServicesSection'
 import SiteNavigation from './components/SiteNavigation'
 import TestimonialSection from './components/TestimonialSection'
-import useRevealOnScroll from './hooks/useRevealOnScroll'
 import useSiteNavigation from './hooks/useSiteNavigation'
 import useTestimonialSlider from './hooks/useTestimonialSlider'
+import PageTransition from './components/motion/PageTransition'
 import './index.css'
 
 function App() {
@@ -45,8 +45,6 @@ function App() {
 
   const navigation = useSiteNavigation(trackedSectionIds)
   const testimonialSlider = useTestimonialSlider(testimonials)
-
-  useRevealOnScroll()
 
   const activePortfolio = portfolioItems[portfolioIndex]
 
@@ -77,7 +75,7 @@ function App() {
   }
 
   return (
-    <>
+    <PageTransition>
       <SiteNavigation brandLogoSrc={brandLogoSrc} {...navigation} />
 
       <main id="main-content">
@@ -117,8 +115,12 @@ function App() {
         <ContactSection contactInfo={contactInfo} />
       </main>
 
-      <Footer contactInfo={contactInfo} whatsappLinks={whatsappLinks} />
-    </>
+      <Footer
+        contactInfo={contactInfo}
+        handleNavClick={navigation.handleNavClick}
+        whatsappLinks={whatsappLinks}
+      />
+    </PageTransition>
   )
 }
 

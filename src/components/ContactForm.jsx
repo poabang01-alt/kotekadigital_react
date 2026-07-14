@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import { m } from 'motion/react'
+import { interactions, viewportOnce } from '../animations/motionConfig'
+import { fadeUp } from '../animations/motionVariants'
 
 function ContactForm({ contactInfo }) {
   const [form, setForm] = useState({
@@ -50,7 +53,7 @@ function ContactForm({ contactInfo }) {
   }
 
   return (
-    <article className="contact-card contact-form-card" data-reveal>
+    <m.article className="contact-card contact-form-card" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
       <div className="contact-panel-head">
         <span className="contact-panel-icon" aria-hidden="true">
           <i className="fa-solid fa-pen-ruler" />
@@ -125,11 +128,11 @@ function ContactForm({ contactInfo }) {
           </select>
         </div>
 
-        <button type="submit" className="button button-primary form-submit">
+        <m.button type="submit" className="button button-primary form-submit" {...interactions.button}>
           {submitLabel}
-        </button>
+        </m.button>
       </form>
-    </article>
+    </m.article>
   )
 }
 

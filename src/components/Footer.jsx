@@ -1,9 +1,13 @@
+import { m } from 'motion/react'
+import { interactions, viewportOnce } from '../animations/motionConfig'
+import { staggerContainer, staggerItem } from '../animations/motionVariants'
+
 function Footer({ contactInfo, handleNavClick, whatsappLinks }) {
   return (
     <>
       <footer className="site-footer">
-        <div className="container footer-grid">
-          <div className="footer-column footer-brand">
+        <m.div className="container footer-grid" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
+          <m.div className="footer-column footer-brand" variants={staggerItem}>
             <h3>Koteka Digital</h3>
             <p>
               Koteka Digital adalah spesialis jasa pembuatan website profesional di Jayapura, Papua.
@@ -11,87 +15,87 @@ function Footer({ contactInfo, handleNavClick, whatsappLinks }) {
               dan instansi untuk meningkatkan kredibilitas serta visibilitas melalui SEO lokal dan
               desain website yang berorientasi konversi.
             </p>
-          </div>
-          <div className="footer-column">
+          </m.div>
+          <m.div className="footer-column" variants={staggerItem}>
             <h4>Navigasi</h4>
             <span className="footer-accent" aria-hidden="true" />
             <div className="footer-links footer-links-nav">
-              <a href="#home" onClick={(event) => handleNavClick?.(event, '#home')}>
+              <m.a href="#home" onClick={(event) => handleNavClick?.(event, '#home')} {...interactions.button}>
                 <i className="fa-solid fa-house" aria-hidden="true" />
                 <span>Home</span>
-              </a>
-              <a href="#layanan" onClick={(event) => handleNavClick?.(event, '#layanan')}>
+              </m.a>
+              <m.a href="#layanan" onClick={(event) => handleNavClick?.(event, '#layanan')} {...interactions.button}>
                 <i className="fa-solid fa-briefcase" aria-hidden="true" />
                 <span>Layanan</span>
-              </a>
-              <a href="#portfolio" onClick={(event) => handleNavClick?.(event, '#portfolio')}>
+              </m.a>
+              <m.a href="#portfolio" onClick={(event) => handleNavClick?.(event, '#portfolio')} {...interactions.button}>
                 <i className="fa-solid fa-image" aria-hidden="true" />
                 <span>Portofolio</span>
-              </a>
-              <a href="#pricing-section" onClick={(event) => handleNavClick?.(event, '#pricing-section')}>
+              </m.a>
+              <m.a href="#pricing-section" onClick={(event) => handleNavClick?.(event, '#pricing-section')} {...interactions.button}>
                 <i className="fa-solid fa-tags" aria-hidden="true" />
                 <span>Harga</span>
-              </a>
-              <a href="#faq" onClick={(event) => handleNavClick?.(event, '#faq')}>
+              </m.a>
+              <m.a href="#faq" onClick={(event) => handleNavClick?.(event, '#faq')} {...interactions.button}>
                 <i className="fa-solid fa-circle-question" aria-hidden="true" />
                 <span>FAQ</span>
-              </a>
-              <a href="#kontak" onClick={(event) => handleNavClick?.(event, '#kontak')}>
+              </m.a>
+              <m.a href="#kontak" onClick={(event) => handleNavClick?.(event, '#kontak')} {...interactions.button}>
                 <i className="fa-solid fa-envelope" aria-hidden="true" />
                 <span>Kontak</span>
-              </a>
+              </m.a>
             </div>
-          </div>
-          <div className="footer-column">
+          </m.div>
+          <m.div className="footer-column" variants={staggerItem}>
             <h4>Hubungi Kami</h4>
             <span className="footer-accent" aria-hidden="true" />
             <div className="footer-links footer-links-contact">
-              <a href={contactInfo.whatsappLink} target="_blank" rel="noopener noreferrer">
+              <m.a href={contactInfo.whatsappLink} target="_blank" rel="noopener noreferrer" {...interactions.button}>
                 <i className="fa-brands fa-whatsapp" aria-hidden="true" />
                 <span>{contactInfo.whatsappLabel}</span>
-              </a>
-              <a href={`mailto:${contactInfo.email}`}>
+              </m.a>
+              <m.a href={`mailto:${contactInfo.email}`} {...interactions.button}>
                 <i className="fa-solid fa-envelope" aria-hidden="true" />
                 <span>{contactInfo.email}</span>
-              </a>
-              <a href="https://kotekadigital.com/" target="_blank" rel="noopener noreferrer">
+              </m.a>
+              <m.a href="https://kotekadigital.com/" target="_blank" rel="noopener noreferrer" {...interactions.button}>
                 <i className="fa-solid fa-globe" aria-hidden="true" />
                 <span>kotekadigital.com</span>
-              </a>
+              </m.a>
               <div className="footer-contact-item">
                 <i className="fa-solid fa-location-dot" aria-hidden="true" />
                 <span>Jayapura, Papua, Indonesia</span>
               </div>
             </div>
-          </div>
-          <div className="footer-column">
+          </m.div>
+          <m.div className="footer-column" variants={staggerItem}>
             <h4>Media Sosial</h4>
             <span className="footer-accent" aria-hidden="true" />
             <div className="footer-socials">
-              <a href="https://www.instagram.com/kotekadigital/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Koteka Digital">
+              <m.a href="https://www.instagram.com/kotekadigital/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Koteka Digital" {...interactions.button}>
                 <i className="fa-brands fa-instagram" aria-hidden="true" />
-              </a>
-              <a href="https://web.facebook.com/profile.php?id=61573476356920" target="_blank" rel="noopener noreferrer" aria-label="Facebook Koteka Digital">
+              </m.a>
+              <m.a href="https://web.facebook.com/profile.php?id=61573476356920" target="_blank" rel="noopener noreferrer" aria-label="Facebook Koteka Digital" {...interactions.button}>
                 <i className="fa-brands fa-facebook-f" aria-hidden="true" />
-              </a>
-              <a href="https://www.tiktok.com/@kotekadigitalstudio?_r=1&_t=ZS-97V638s9hhd" target="_blank" rel="noopener noreferrer" aria-label="TikTok Koteka Digital">
+              </m.a>
+              <m.a href="https://www.tiktok.com/@kotekadigitalstudio?_r=1&_t=ZS-97V638s9hhd" target="_blank" rel="noopener noreferrer" aria-label="TikTok Koteka Digital" {...interactions.button}>
                 <i className="fa-brands fa-tiktok" aria-hidden="true" />
-              </a>
-              <a href="https://kotekadigital.com/" target="_blank" rel="noopener noreferrer" aria-label="Website Koteka Digital">
+              </m.a>
+              <m.a href="https://kotekadigital.com/" target="_blank" rel="noopener noreferrer" aria-label="Website Koteka Digital" {...interactions.button}>
                 <i className="fa-solid fa-globe" aria-hidden="true" />
-              </a>
+              </m.a>
             </div>
-          </div>
-        </div>
+          </m.div>
+        </m.div>
         <div className="footer-bottom">
           <p>&copy; 2026 Koteka Digital. Seluruh hak cipta dilindungi.</p>
         </div>
       </footer>
 
-      <a className="floating-wa" href={whatsappLinks.floating} target="_blank" rel="noopener noreferrer">
+      <m.a className="floating-wa" href={whatsappLinks.floating} target="_blank" rel="noopener noreferrer" {...interactions.button}>
         <i className="fa-brands fa-whatsapp" aria-hidden="true" />
         <span>Konsultasi Gratis</span>
-      </a>
+      </m.a>
     </>
   )
 }

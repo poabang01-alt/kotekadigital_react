@@ -1,17 +1,21 @@
+import { m } from 'motion/react'
+import { interactions, viewportOnce } from '../animations/motionConfig'
+import { fadeLeft, fadeRight, fadeUp, staggerContainer, staggerItem } from '../animations/motionVariants'
+
 function AboutSection({ aboutCards, contactInfo, logoSrc, teamMembers }) {
   return (
     <section className="about-section" id="about" aria-labelledby="about-heading">
       <div className="container">
-        <div className="section-heading about-heading" data-reveal>
+        <m.div className="section-heading about-heading" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
           <span className="eyebrow">About</span>
           <h2 id="about-heading">Tentang Kami</h2>
           <p className="about-lead">
             Kenali tim, cara kerja, dan komitmen kami dalam membangun solusi digital yang membantu UMKM, bisnis, personal brand, dan instansi berkembang secara profesional.
           </p>
-        </div>
+        </m.div>
 
-        <div className="about-layout" data-reveal>
-          <div className="about-logo-panel">
+        <div className="about-layout">
+          <m.div className="about-logo-panel" variants={fadeRight} initial="hidden" whileInView="visible" viewport={viewportOnce}>
             <div className="about-logo-frame">
               <img
                 className="about-logo"
@@ -74,11 +78,17 @@ function AboutSection({ aboutCards, contactInfo, logoSrc, teamMembers }) {
                 </a>
               </div>
             </div>
-          </div>
+          </m.div>
 
-          <div className="card-grid card-grid-three about-card-grid">
+          <m.div
+            className="card-grid card-grid-three about-card-grid"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+          >
             {aboutCards.map((card) => (
-              <article className="info-card about-info-card" key={card.title}>
+              <m.article className="info-card about-info-card" key={card.title} variants={staggerItem} {...interactions.card}>
                 <div className="about-card-head">
                   <div className="card-icon about-card-icon">
                     <i className={card.icon} aria-hidden="true" />
@@ -86,12 +96,12 @@ function AboutSection({ aboutCards, contactInfo, logoSrc, teamMembers }) {
                   <h3>{card.title}</h3>
                 </div>
                 <p>{card.text}</p>
-              </article>
+              </m.article>
             ))}
-          </div>
+          </m.div>
         </div>
 
-        <div className="about-team" data-reveal>
+        <m.div className="about-team" variants={fadeLeft} initial="hidden" whileInView="visible" viewport={viewportOnce}>
           <div className="section-heading about-team-heading">
             <span className="eyebrow about-eyebrow">Tim Kami</span>
             <div className="about-team-heading-copy">
@@ -103,9 +113,9 @@ function AboutSection({ aboutCards, contactInfo, logoSrc, teamMembers }) {
             </div>
           </div>
 
-          <div className="card-grid card-grid-three about-team-grid" role="list">
+          <m.div className="card-grid card-grid-three about-team-grid" role="list" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
             {teamMembers.map((member) => (
-              <article className="team-card" key={member.name} role="listitem">
+              <m.article className="team-card" key={member.name} role="listitem" variants={staggerItem} {...interactions.card}>
                 <div className="team-avatar-wrap">
                   <span className="team-avatar-ring team-avatar-ring-one" aria-hidden="true" />
                   <span className="team-avatar-ring team-avatar-ring-two" aria-hidden="true" />
@@ -126,22 +136,23 @@ function AboutSection({ aboutCards, contactInfo, logoSrc, teamMembers }) {
 
                 <div className="team-socials" aria-label={`Sosial media ${member.name}`}>
                   {member.socials.map((social) => (
-                    <a
+                    <m.a
                       key={social.label}
                       className="team-social-link"
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={social.label}
+                      {...interactions.button}
                     >
                       <i className={social.icon} aria-hidden="true" />
-                    </a>
+                    </m.a>
                   ))}
                 </div>
-              </article>
+              </m.article>
             ))}
-          </div>
-        </div>
+          </m.div>
+        </m.div>
       </div>
     </section>
   )
