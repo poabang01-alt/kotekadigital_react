@@ -343,6 +343,34 @@ function useSiteNavigation(trackedSectionIds) {
   }, [])
 
   useEffect(() => {
+    if (typeof window === 'undefined') return undefined
+
+    const hasHash = Boolean(window.location.hash)
+
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = hasHash ? 'auto' : 'manual'
+    }
+
+    if (!hasHash) {
+      activeSectionLockRef.current = 'home'
+
+      window.requestAnimationFrame(() => {
+        setActiveSection((current) => (current === 'home' ? current : 'home'))
+        window.scrollTo({
+          top: 0,
+          behavior: 'auto',
+        })
+      })
+    }
+
+    return () => {
+      if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'auto'
+      }
+    }
+  }, [])
+
+  useEffect(() => {
     const syncHashSection = () => {
       const hash = window.location.hash?.replace('#', '')
       if (!hash) return
@@ -390,6 +418,14 @@ function useSiteNavigation(trackedSectionIds) {
         entries.forEach((entry) => {
           sectionRatios.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0)
         })
+
+        const topLockThreshold = Math.max(headerOffsetRef.current + 40, 120)
+        if (window.scrollY <= topLockThreshold) {
+          if (!activeSectionLockRef.current || activeSectionLockRef.current === 'home') {
+            setActiveSection((current) => (current === 'home' ? current : 'home'))
+          }
+          return
+        }
 
         const dominantSection = [...sectionRatios.entries()].sort((a, b) => {
           if (b[1] !== a[1]) return b[1] - a[1]
