@@ -1,4 +1,4 @@
-import { m, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react'
+import { m, useReducedMotion } from 'motion/react'
 import { fadeLeft, fadeRight, fadeUp, heroContainer, staggerItem } from '../animations/motionVariants'
 import { interactions } from '../animations/motionConfig'
 
@@ -9,11 +9,6 @@ function HeroSection({
   homeConsultationLink,
 }) {
   const shouldReduceMotion = useReducedMotion()
-  const { scrollYProgress } = useScroll()
-  const visualY = useSpring(useTransform(scrollYProgress, [0, 0.25], [0, shouldReduceMotion ? 0 : 18]), {
-    stiffness: 120,
-    damping: 24,
-  })
 
   return (
     <section className="hero-section" id="home" aria-labelledby="home-heading">
@@ -79,10 +74,10 @@ function HeroSection({
           </m.div>
         </m.div>
 
-        <m.div className="hero-visual" variants={fadeRight} initial="hidden" animate="visible" style={{ y: visualY }}>
+        <m.div className="hero-visual" variants={fadeRight} initial="hidden" animate="visible">
           <m.div className="hero-card hero-card-main" whileHover={shouldReduceMotion ? undefined : { y: -4, scale: 1.01 }}>
             <img
-              src="/img/optimized/developer-720.jpg"
+              src="/img/optimized/developer-480.jpg"
               srcSet="/img/optimized/developer-480.jpg 480w, /img/optimized/developer-720.jpg 720w"
               sizes="(max-width: 900px) 100vw, 42vw"
               alt="Preview hero Koteka Digital"

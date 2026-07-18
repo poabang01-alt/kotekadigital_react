@@ -3,6 +3,12 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 function useTestimonialSlider(testimonials) {
   const [testimonialIndex, setTestimonialIndex] = useState(0)
   const [testimonialDragOffset, setTestimonialDragOffset] = useState(0)
+  const [isPageVisible, setIsPageVisible] = useState(() =>
+    typeof document === 'undefined' ? true : !document.hidden
+  )
+  const [isSectionVisible, setIsSectionVisible] = useState(() =>
+    typeof IntersectionObserver === 'undefined'
+  )
   const testimonialInteractingRef = useRef(false)
   const testimonialGestureRef = useRef({
     pointerId: null,
@@ -99,13 +105,43 @@ function useTestimonialSlider(testimonials) {
   }, [resetTestimonialGesture])
 
   useEffect(() => {
+    if (typeof document === 'undefined') return undefined
+
+    const handleVisibilityChange = () => {
+      setIsPageVisible(!document.hidden)
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [])
+
+  useEffect(() => {
+    const node = document.getElementById('testimoni')
+    if (!node || typeof IntersectionObserver === 'undefined') return undefined
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsSectionVisible(entry.isIntersecting)
+      },
+      {
+        threshold: 0.2,
+      }
+    )
+
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!isPageVisible || !isSectionVisible) return undefined
+
     const timer = window.setInterval(() => {
       if (testimonialInteractingRef.current) return
       setTestimonialIndex((current) => (current + 1) % testimonials.length)
     }, 6500)
 
     return () => window.clearInterval(timer)
-  }, [testimonials.length])
+  }, [isPageVisible, isSectionVisible, testimonials.length])
 
   return {
     activeTestimonial: testimonials[testimonialIndex],
@@ -122,4 +158,3 @@ function useTestimonialSlider(testimonials) {
 }
 
 export default useTestimonialSlider
-

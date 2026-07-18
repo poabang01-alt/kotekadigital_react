@@ -15,11 +15,11 @@ function useSiteNavigation(trackedSectionIds) {
   const lastScrollYRef = useRef(typeof window !== 'undefined' ? window.scrollY : 0)
   const activeSectionRef = useRef('home')
   const headerHiddenRef = useRef(false)
-  const sectionRatiosRef = useRef(new Map())
   const mobileNavRef = useRef(null)
   const sectionTransitionTimeoutRef = useRef(null)
   const activeSectionLockRef = useRef(null)
   const activeSectionLockTimeoutRef = useRef(null)
+  const dropdownCloseTimeoutRef = useRef(null)
 
   const getMatchedDropdownLabel = useCallback(
     (sectionId) =>
@@ -33,6 +33,10 @@ function useSiteNavigation(trackedSectionIds) {
   )
 
   const closeNavigation = useCallback(() => {
+    if (dropdownCloseTimeoutRef.current) {
+      window.clearTimeout(dropdownCloseTimeoutRef.current)
+      dropdownCloseTimeoutRef.current = null
+    }
     setMenuOpen(false)
     setOpenDropdown(null)
   }, [])
@@ -118,12 +122,23 @@ function useSiteNavigation(trackedSectionIds) {
 
   const handleDropdownPointerEnter = useCallback((label) => {
     if (!isDesktopNav) return
+    if (dropdownCloseTimeoutRef.current) {
+      window.clearTimeout(dropdownCloseTimeoutRef.current)
+      dropdownCloseTimeoutRef.current = null
+    }
     setOpenDropdown(label)
   }, [isDesktopNav])
 
   const handleDropdownPointerLeave = useCallback((label) => {
     if (!isDesktopNav) return
-    setOpenDropdown((current) => (current === label ? null : current))
+    if (dropdownCloseTimeoutRef.current) {
+      window.clearTimeout(dropdownCloseTimeoutRef.current)
+    }
+
+    dropdownCloseTimeoutRef.current = window.setTimeout(() => {
+      setOpenDropdown((current) => (current === label ? null : current))
+      dropdownCloseTimeoutRef.current = null
+    }, 140)
   }, [isDesktopNav])
 
   const handleHamburgerClick = useCallback(() => {
@@ -361,26 +376,34 @@ function useSiteNavigation(trackedSectionIds) {
   useEffect(() => {
     if (typeof window === 'undefined') return undefined
 
-    const hasHash = Boolean(window.location.hash)
-
-    if ('scrollRestoration' in window.history) {
-      window.history.scrollRestoration = hasHash ? 'auto' : 'manual'
-    }
-
-    if (!hasHash) {
+    const currentPath = `${window.location.pathname}${window.location.search}`
+    const forceHomeAtTop = () => {
       activeSectionLockRef.current = 'home'
-
-      window.requestAnimationFrame(() => {
-        if (activeSectionRef.current !== 'home') {
-          activeSectionRef.current = 'home'
-          setActiveSection('home')
-        }
-        window.scrollTo({
-          top: 0,
-          behavior: 'auto',
-        })
+      activeSectionRef.current = 'home'
+      setActiveSection('home')
+      if (window.location.hash) {
+        window.history.replaceState(null, '', currentPath)
+      }
+      window.scrollTo({
+        top: 0,
+        behavior: 'auto',
       })
     }
+    const releaseInitialHomeLock = () => {
+      if (activeSectionLockRef.current === 'home') {
+        activeSectionLockRef.current = null
+      }
+    }
+
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
+    }
+
+    window.requestAnimationFrame(forceHomeAtTop)
+    window.setTimeout(forceHomeAtTop, 80)
+    window.setTimeout(forceHomeAtTop, 220)
+    window.setTimeout(forceHomeAtTop, 420)
+    window.setTimeout(releaseInitialHomeLock, 520)
 
     return () => {
       if ('scrollRestoration' in window.history) {
@@ -425,60 +448,86 @@ function useSiteNavigation(trackedSectionIds) {
   }, [])
 
   useEffect(() => {
-    const sectionRatios = sectionRatiosRef.current
-    const sections = trackedSectionIds
-      .map((sectionId) => document.getElementById(sectionId))
-      .filter(Boolean)
+    let frameId = 0
 
-    sectionRatios.clear()
+    const syncActiveSectionFromScroll = () => {
+      frameId = 0
+      const sections = trackedSectionIds
+        .map((sectionId) => document.getElementById(sectionId))
+        .filter(Boolean)
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          sectionRatios.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0)
-        })
+      if (!sections.length) return
 
-        const topLockThreshold = Math.max(headerOffsetRef.current + 40, 120)
-        if (window.scrollY <= topLockThreshold) {
-          if (
-            (!activeSectionLockRef.current || activeSectionLockRef.current === 'home') &&
-            activeSectionRef.current !== 'home'
-          ) {
-            activeSectionRef.current = 'home'
-            setActiveSection('home')
-          }
+      const topLockThreshold = Math.max(headerOffsetRef.current + 40, 120)
+      if (window.scrollY <= topLockThreshold) {
+        if (
+          (!activeSectionLockRef.current || activeSectionLockRef.current === 'home') &&
+          activeSectionRef.current !== 'home'
+        ) {
+          activeSectionRef.current = 'home'
+          setActiveSection('home')
+        }
+        return
+      }
+
+      const scanLine = headerOffsetRef.current + Math.min(window.innerHeight * 0.16, 120)
+      let dominantSectionId = sections[0]?.id ?? 'home'
+      let lastPassedSectionId = dominantSectionId
+      let nearestUpcomingSectionId = dominantSectionId
+      let nearestUpcomingDistance = Number.POSITIVE_INFINITY
+
+      sections.forEach((section) => {
+        const rect = section.getBoundingClientRect()
+
+        if (rect.top <= scanLine && rect.bottom > scanLine) {
+          dominantSectionId = section.id
+          nearestUpcomingDistance = -1
           return
         }
 
-        const dominantSection = [...sectionRatios.entries()].sort((a, b) => {
-          if (b[1] !== a[1]) return b[1] - a[1]
-          return trackedSectionIds.indexOf(a[0]) - trackedSectionIds.indexOf(b[0])
-        })[0]
-
-        if (dominantSection && dominantSection[1] > 0.15) {
-          if (
-            activeSectionLockRef.current &&
-            activeSectionLockRef.current !== dominantSection[0]
-          ) {
-            return
-          }
-
-          if (activeSectionRef.current !== dominantSection[0]) {
-            activeSectionRef.current = dominantSection[0]
-            setActiveSection(dominantSection[0])
-          }
+        if (rect.top <= scanLine) {
+          lastPassedSectionId = section.id
+        } else if (nearestUpcomingDistance !== -1 && rect.top < nearestUpcomingDistance) {
+          nearestUpcomingDistance = rect.top
+          nearestUpcomingSectionId = section.id
         }
-      },
-      {
-        threshold: [0.15, 0.3, 0.45, 0.6, 0.75],
-        rootMargin: '-96px 0px -40% 0px',
-      }
-    )
+      })
 
-    sections.forEach((section) => observer.observe(section))
+      if (nearestUpcomingDistance !== -1) {
+        dominantSectionId =
+          lastPassedSectionId !== (sections[0]?.id ?? 'home')
+            ? lastPassedSectionId
+            : nearestUpcomingSectionId
+      }
+
+      if (
+        activeSectionLockRef.current &&
+        activeSectionLockRef.current !== dominantSectionId
+      ) {
+        return
+      }
+
+      if (activeSectionRef.current !== dominantSectionId) {
+        activeSectionRef.current = dominantSectionId
+        setActiveSection(dominantSectionId)
+      }
+    }
+
+    const requestSyncActiveSection = () => {
+      if (frameId) return
+      frameId = window.requestAnimationFrame(syncActiveSectionFromScroll)
+    }
+
+    requestSyncActiveSection()
+    window.addEventListener('scroll', requestSyncActiveSection, { passive: true })
+    window.addEventListener('resize', requestSyncActiveSection)
+
     return () => {
-      observer.disconnect()
-      sectionRatios.clear()
+      window.removeEventListener('scroll', requestSyncActiveSection)
+      window.removeEventListener('resize', requestSyncActiveSection)
+      if (frameId) {
+        window.cancelAnimationFrame(frameId)
+      }
     }
   }, [trackedSectionIds])
 
@@ -488,6 +537,9 @@ function useSiteNavigation(trackedSectionIds) {
     }
     if (activeSectionLockTimeoutRef.current) {
       window.clearTimeout(activeSectionLockTimeoutRef.current)
+    }
+    if (dropdownCloseTimeoutRef.current) {
+      window.clearTimeout(dropdownCloseTimeoutRef.current)
     }
   }, [])
 

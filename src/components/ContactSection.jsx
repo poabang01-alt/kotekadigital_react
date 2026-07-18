@@ -136,11 +136,12 @@ function ContactSection({ contactInfo }) {
                   aria-label="Tampilkan peta lokasi Koteka Digital"
                   {...interactions.button}
                 >
-                  <span className="map-embed-trigger-copy">
-                    <strong>Lihat peta lokasi</strong>
-                    <span>Google Maps hanya dimuat saat dibutuhkan agar halaman tetap lebih ringan.</span>
+                  <span className="map-embed-trigger-action">
+                    <span className="map-embed-trigger-eye" aria-hidden="true">
+                      <i className="fa-regular fa-eye" />
+                    </span>
+                    <span>Klik Disini untuk memuat Peta</span>
                   </span>
-                  <span className="map-embed-trigger-action">Muat peta</span>
                 </m.button>
               )}
             </div>

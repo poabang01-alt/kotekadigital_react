@@ -25,7 +25,14 @@
     <link rel="canonical" href="https://kotekadigital.com/" />
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/favicon.png" />
-    <link rel="preload" as="image" href="/img/optimized/developer-720.jpg" />
+    <link
+      rel="preload"
+      as="image"
+      href="/img/optimized/developer-480.jpg"
+      imagesrcset="/img/optimized/developer-480.jpg 480w, /img/optimized/developer-720.jpg 720w"
+      imagesizes="(max-width: 900px) 100vw, 42vw"
+      fetchpriority="high"
+    />
     <meta property="og:locale" content="id_ID" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Koteka Digital" />

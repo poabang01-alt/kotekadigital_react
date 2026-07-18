@@ -1,78 +1,36 @@
-import { useState } from 'react'
+import { Suspense, lazy } from 'react'
 import {
-  aboutCards,
-  blogPosts,
   companyStats,
-  contactInfo,
-  faqs,
-  portfolioItems,
-  pricingPlans,
-  serviceGroups,
-  teamMembers,
-  testimonials,
-  whatsappLinks,
 } from './data/siteData'
 import {
   brandLogoSrc,
   heroSocialLinks,
   homeConsultationLink,
-  partnerCards,
-  pricingComparisonRows,
-  pricingFeatureMap,
-  techIcons,
   trackedSectionIds,
 } from './data/appConfig'
-import AboutSection from './components/AboutSection'
-import BlogSection from './components/BlogSection'
-import ContactSection from './components/ContactSection'
-import FaqSection from './components/FaqSection'
-import Footer from './components/Footer'
 import HeroSection from './components/HeroSection'
-import PartnerSection from './components/PartnerSection'
-import PortfolioSection from './components/PortfolioSection'
-import PricingSection from './components/PricingSection'
-import ServicesSection from './components/ServicesSection'
 import SiteNavigation from './components/SiteNavigation'
-import TestimonialSection from './components/TestimonialSection'
 import useSiteNavigation from './hooks/useSiteNavigation'
-import useTestimonialSlider from './hooks/useTestimonialSlider'
 import PageTransition from './components/motion/PageTransition'
 import './index.css'
 
+const PartnerSection = lazy(() => import('./components/containers/PartnerSectionContainer'))
+const AboutSection = lazy(() => import('./components/containers/AboutSectionContainer'))
+const ServicesSection = lazy(() => import('./components/containers/ServicesSectionContainer'))
+const PricingSection = lazy(() => import('./components/containers/PricingSectionContainer'))
+const PortfolioSection = lazy(() => import('./components/containers/PortfolioSectionContainer'))
+const BlogSection = lazy(() => import('./components/containers/BlogSectionContainer'))
+const TestimonialSection = lazy(() => import('./components/containers/TestimonialSectionContainer'))
+const FaqSection = lazy(() => import('./components/containers/FaqSectionContainer'))
+const ContactSection = lazy(() => import('./components/containers/ContactSectionContainer'))
+const FooterContainer = lazy(() => import('./components/containers/FooterContainer'))
+
+function SectionFallback({ minHeight = 320 }) {
+  return <div className="section-placeholder" style={{ minHeight }} aria-hidden="true" />
+}
+
 function App() {
-  const [portfolioIndex, setPortfolioIndex] = useState(0)
-  const [openFaqIndex, setOpenFaqIndex] = useState(0)
-
   const navigation = useSiteNavigation(trackedSectionIds)
-  const testimonialSlider = useTestimonialSlider(testimonials)
-
-  const activePortfolio = portfolioItems[portfolioIndex]
-
-  const handlePricingAction = (plan) => {
-    const downloadLink = document.createElement('a')
-    downloadLink.href = plan.download
-    downloadLink.setAttribute('download', '')
-    downloadLink.style.display = 'none'
-    document.body.appendChild(downloadLink)
-    downloadLink.click()
-    document.body.removeChild(downloadLink)
-
-    const whatsappBaseUrl =
-      plan.orderLink?.split('?')[0] || `https://wa.me/${contactInfo.whatsappNumber}`
-    const whatsappUrl = `${whatsappBaseUrl}?text=${encodeURIComponent(plan.whatsappMessage)}`
-
-    window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
-  }
-
-  const nextPortfolio = () => {
-    setPortfolioIndex((current) => (current + 1) % portfolioItems.length)
-  }
-
-  const prevPortfolio = () => {
-    setPortfolioIndex(
-      (current) => (current - 1 + portfolioItems.length) % portfolioItems.length
-    )
-  }
 
   return (
     <PageTransition>
@@ -85,41 +43,38 @@ function App() {
           heroSocialLinks={heroSocialLinks}
           homeConsultationLink={homeConsultationLink}
         />
-        <PartnerSection partnerCards={partnerCards} />
-        <AboutSection
-          aboutCards={aboutCards}
-          contactInfo={contactInfo}
-          logoSrc={brandLogoSrc}
-          teamMembers={teamMembers}
-        />
-        <ServicesSection serviceGroups={serviceGroups} />
-        <PricingSection
-          comparisonRows={pricingComparisonRows}
-          handlePricingAction={handlePricingAction}
-          logoSrc={brandLogoSrc}
-          pricingFeatureMap={pricingFeatureMap}
-          pricingPlans={pricingPlans}
-        />
-        <PortfolioSection
-          activePortfolio={activePortfolio}
-          nextPortfolio={nextPortfolio}
-          portfolioIndex={portfolioIndex}
-          portfolioItems={portfolioItems}
-          prevPortfolio={prevPortfolio}
-          setPortfolioIndex={setPortfolioIndex}
-          techIcons={techIcons}
-        />
-        <BlogSection blogPosts={blogPosts} />
-        <TestimonialSection testimonials={testimonials} {...testimonialSlider} />
-        <FaqSection faqs={faqs} openFaqIndex={openFaqIndex} setOpenFaqIndex={setOpenFaqIndex} />
-        <ContactSection contactInfo={contactInfo} />
+        <Suspense fallback={<SectionFallback minHeight={160} />}>
+          <PartnerSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback minHeight={840} />}>
+          <AboutSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback minHeight={760} />}>
+          <ServicesSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback minHeight={900} />}>
+          <PricingSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback minHeight={760} />}>
+          <PortfolioSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback minHeight={820} />}>
+          <BlogSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback minHeight={560} />}>
+          <TestimonialSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback minHeight={540} />}>
+          <FaqSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback minHeight={980} />}>
+          <ContactSection />
+        </Suspense>
       </main>
 
-      <Footer
-        contactInfo={contactInfo}
-        handleNavClick={navigation.handleNavClick}
-        whatsappLinks={whatsappLinks}
-      />
+      <Suspense fallback={null}>
+        <FooterContainer handleNavClick={navigation.handleNavClick} />
+      </Suspense>
     </PageTransition>
   )
 }

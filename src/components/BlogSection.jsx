@@ -5,6 +5,12 @@ import { fadeUp, staggerContainer, staggerItem } from '../animations/motionVaria
 
 function BlogSection({ blogPosts }) {
   const [showAll, setShowAll] = useState(false)
+  const [isPageVisible, setIsPageVisible] = useState(() =>
+    typeof document === 'undefined' ? true : !document.hidden
+  )
+  const [isSectionVisible, setIsSectionVisible] = useState(() =>
+    typeof IntersectionObserver === 'undefined'
+  )
   const [cardsPerView, setCardsPerView] = useState(() => {
     if (typeof window === 'undefined') return 3
     if (window.innerWidth <= 640) return 1
@@ -16,6 +22,7 @@ function BlogSection({ blogPosts }) {
   const touchStartXRef = useRef(0)
   const touchDeltaXRef = useRef(0)
   const resizeFrameRef = useRef(0)
+  const sectionRef = useRef(null)
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,7 +68,36 @@ function BlogSection({ blogPosts }) {
   }, [cardsPerView, currentIndex, totalSlides])
 
   useEffect(() => {
+    if (typeof document === 'undefined') return undefined
+
+    const handleVisibilityChange = () => {
+      setIsPageVisible(!document.hidden)
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [])
+
+  useEffect(() => {
+    const node = sectionRef.current
+    if (!node || typeof IntersectionObserver === 'undefined') return undefined
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsSectionVisible(entry.isIntersecting)
+      },
+      {
+        threshold: 0.2,
+      }
+    )
+
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
     if (!totalSlides || showAll) return undefined
+    if (!isPageVisible || !isSectionVisible) return undefined
 
     const timer = window.setInterval(() => {
       setIsTransitionEnabled(true)
@@ -69,7 +105,7 @@ function BlogSection({ blogPosts }) {
     }, 3400)
 
     return () => window.clearInterval(timer)
-  }, [showAll, totalSlides])
+  }, [isPageVisible, isSectionVisible, showAll, totalSlides])
 
   const goToPrev = () => {
     setIsTransitionEnabled(true)
@@ -121,7 +157,7 @@ function BlogSection({ blogPosts }) {
   }
 
   return (
-    <section className="blog-section" id="blog" aria-labelledby="blog-heading">
+    <section className="blog-section" id="blog" aria-labelledby="blog-heading" ref={sectionRef}>
       <m.div className="container" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
         <div className="blog-section-intro">
           <span className="blog-kicker">Semua Artikel</span>

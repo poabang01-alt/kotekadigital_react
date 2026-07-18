@@ -58,7 +58,11 @@ function SiteNavigation({
             onClick={(event) => handleDropdownButtonClick(event, item)}
             aria-expanded={openDropdown === item.label}
             aria-controls={`${submenuIdPrefix}-${item.label.toLowerCase()}`}
-            aria-label={`Toggle submenu ${item.label}`}
+            aria-haspopup="menu"
+            aria-current={isNavItemActive(item) ? 'location' : undefined}
+            aria-label={
+              isMobileMenu ? `Toggle submenu ${item.label}` : `Buka bagian ${item.label}`
+            }
             {...interactions.button}
           >
             <span className="nav-link-copy">
@@ -113,13 +117,9 @@ function SiteNavigation({
                     }`}
                     href={child.href}
                     onClick={(event) => handleNavClick(event, child.href)}
+                    aria-current={activeSection === child.href.slice(1) ? 'location' : undefined}
                     {...interactions.button}
                   >
-                    {isMobileMenu ? (
-                      <span className="dropdown-link-bullet" aria-hidden="true">
-                        <i className="fa-solid fa-minus" />
-                      </span>
-                    ) : null}
                     {child.label}
                   </m.a>
                 ))}
@@ -133,7 +133,7 @@ function SiteNavigation({
           className={`nav-link ${isNavItemActive(item) ? 'active' : ''}`}
           href={item.href}
           onClick={(event) => handleNavClick(event, item.href)}
-          aria-current={isNavItemActive(item) ? 'page' : undefined}
+          aria-current={isNavItemActive(item) ? 'location' : undefined}
           variants={isMobileMenu ? staggerItem : undefined}
           {...interactions.button}
         >
@@ -200,8 +200,9 @@ function SiteNavigation({
               src="/img/optimized/wa-64.png"
               alt=""
               aria-hidden="true"
-              loading="eager"
+              loading="lazy"
               decoding="async"
+              fetchPriority="low"
               width="64"
               height="64"
             />
@@ -261,12 +262,13 @@ function SiteNavigation({
                 <div className="mobile-menu-brand">
                   <img
                     src={brandLogoSrc}
-                    alt="Logo Koteka Digital"
-                    loading="eager"
-                    decoding="async"
-                    width="512"
-                    height="477"
-                  />
+                  alt="Logo Koteka Digital"
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority="low"
+                  width="512"
+                  height="477"
+                />
                   <div className="mobile-menu-brand-copy">
                     <span className="mobile-menu-brand-title">Koteka Digital</span>
                     <span className="mobile-menu-brand-subtitle">Navigasi utama</span>
@@ -304,8 +306,8 @@ function SiteNavigation({
               key={item.key}
               className={`mobile-bottom-nav-item ${isBottomNavActive(item.key) ? 'active' : ''}`}
               onClick={() => handleBottomNavAction(item)}
-              aria-current={isBottomNavActive(item.key) && item.key !== 'menu' ? 'page' : undefined}
               aria-label={item.label}
+              aria-pressed={isBottomNavActive(item.key)}
               {...interactions.button}
             >
               <span className="mobile-bottom-nav-icon" aria-hidden="true">

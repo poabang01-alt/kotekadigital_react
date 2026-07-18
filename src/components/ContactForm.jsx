@@ -12,9 +12,6 @@ function ContactForm({ contactInfo }) {
     kirimVia: 'whatsapp',
   })
 
-  const submitLabel = form.kirimVia === 'email' ? 'Kirim via Email' : 'Kirim via WhatsApp'
-  const isEmailDelivery = form.kirimVia === 'email'
-
   const handleChange = (event) => {
     const { name, value } = event.target
     setForm((current) => ({ ...current, [name]: value }))
@@ -87,7 +84,7 @@ function ContactForm({ contactInfo }) {
               value={form.email}
               onChange={handleChange}
               autoComplete="email"
-              required={isEmailDelivery}
+              required={form.kirimVia === 'email'}
             />
           </div>
         </div>
@@ -129,7 +126,7 @@ function ContactForm({ contactInfo }) {
         </div>
 
         <m.button type="submit" className="button button-primary form-submit" {...interactions.button}>
-          {submitLabel}
+          {form.kirimVia === 'email' ? 'Kirim via Email' : 'Kirim via WhatsApp'}
         </m.button>
       </form>
     </m.article>
