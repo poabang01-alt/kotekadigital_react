@@ -1,6 +1,7 @@
 import PricingSection from '../PricingSection'
 import { contactInfo, pricingPlans } from '../../data/siteData'
 import { brandLogoSrc, pricingComparisonRows, pricingFeatureMap } from '../../data/appConfig'
+import { trackEvent } from '../../utils/analytics'
 
 function PricingSectionContainer() {
   const handlePricingAction = (plan) => {
@@ -15,6 +16,18 @@ function PricingSectionContainer() {
     document.body.appendChild(downloadLink)
     downloadLink.click()
     document.body.removeChild(downloadLink)
+
+    trackEvent('pdf_download', {
+      source: plan.name.toLowerCase().replace(/\s+/g, '_'),
+      file: downloadLink.download,
+    })
+    trackEvent(`pricing_${plan.name.toLowerCase().replace('paket ', '')}_click`, {
+      source: plan.name.toLowerCase().replace(/\s+/g, '_'),
+      channel: 'whatsapp',
+    })
+    trackEvent('whatsapp_click', {
+      source: plan.name.toLowerCase().replace(/\s+/g, '_'),
+    })
 
     window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
   }

@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { m } from 'motion/react'
 import { interactions, viewportOnce } from '../animations/motionConfig'
 import { fadeUp } from '../animations/motionVariants'
+import { trackEvent } from '../utils/analytics'
 
 const defaultStatus = { type: '', message: '' }
 
@@ -25,10 +26,15 @@ function ContactForm({ contactInfo }) {
   const [errors, setErrors] = useState({})
   const [status, setStatus] = useState(defaultStatus)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const hasTrackedFormStartRef = useRef(false)
   const formRef = useRef(null)
 
   const handleChange = (event) => {
     const { name, value } = event.target
+    if (!hasTrackedFormStartRef.current) {
+      hasTrackedFormStartRef.current = true
+      trackEvent('contact_form_start', { source: 'contact_form' })
+    }
     setErrors((current) => {
       if (!current[name]) return current
       const nextErrors = { ...current }
@@ -122,6 +128,11 @@ function ContactForm({ contactInfo }) {
         }
       }
 
+      trackEvent('contact_form_submit', {
+        source: 'contact_form',
+        channel: form.kirimVia,
+      })
+
       setStatus({
         type: 'success',
         message:
@@ -137,6 +148,7 @@ function ContactForm({ contactInfo }) {
         pesan: '',
         kirimVia: current.kirimVia,
       }))
+      hasTrackedFormStartRef.current = false
     } catch {
       setStatus({
         type: 'error',
@@ -161,7 +173,6 @@ function ContactForm({ contactInfo }) {
       <form
         className="contact-form"
         method="post"
-        action={`mailto:${contactInfo.email}`}
         onSubmit={handleSubmit}
         noValidate
         ref={formRef}

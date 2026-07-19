@@ -99,7 +99,7 @@ function ContactSection({ contactInfo }) {
                 <i className="fa-solid fa-building" aria-hidden="true" />
                 <div>
                   <strong>Basis Layanan</strong>
-                  <span>Koteka Digital Studio</span>
+                  <span>Koteka Digital</span>
                 </div>
               </li>
               <li>

@@ -1,6 +1,7 @@
 import { m } from 'motion/react'
 import { interactions, viewportOnce } from '../animations/motionConfig'
 import { fadeUp, staggerContainer, staggerItem } from '../animations/motionVariants'
+import { trackEvent } from '../utils/analytics'
 
 function ServicesSection({ serviceGroups }) {
   return (
@@ -74,6 +75,11 @@ function ServicesSection({ serviceGroups }) {
                 href={group.link}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  trackEvent('service_cta_click', {
+                    source: group.title.toLowerCase().replace(/[^a-z0-9]+/g, '_'),
+                  })
+                }
                 {...interactions.button}
               >
                 Diskusi Layanan Ini

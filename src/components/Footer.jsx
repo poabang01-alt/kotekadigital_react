@@ -1,6 +1,7 @@
 import { m } from 'motion/react'
 import { interactions, viewportOnce } from '../animations/motionConfig'
 import { staggerContainer, staggerItem } from '../animations/motionVariants'
+import { trackEvent } from '../utils/analytics'
 
 function Footer({ contactInfo, handleNavClick, whatsappLinks }) {
   return (
@@ -50,7 +51,7 @@ function Footer({ contactInfo, handleNavClick, whatsappLinks }) {
             <h4>Hubungi Kami</h4>
             <span className="footer-accent" aria-hidden="true" />
             <div className="footer-links footer-links-contact">
-              <m.a href={contactInfo.whatsappLink} target="_blank" rel="noopener noreferrer" aria-label={`Buka WhatsApp Koteka Digital di ${contactInfo.whatsappLabel}`} {...interactions.button}>
+              <m.a href={contactInfo.whatsappLink} target="_blank" rel="noopener noreferrer" aria-label={`Buka WhatsApp Koteka Digital di ${contactInfo.whatsappLabel}`} onClick={() => trackEvent('whatsapp_click', { source: 'footer_contact' })} {...interactions.button}>
                 <i className="fa-brands fa-whatsapp" aria-hidden="true" />
                 <span>{contactInfo.whatsappLabel}</span>
               </m.a>
@@ -92,7 +93,7 @@ function Footer({ contactInfo, handleNavClick, whatsappLinks }) {
         </div>
       </footer>
 
-      <m.a className="floating-wa" href={whatsappLinks.floating} target="_blank" rel="noopener noreferrer" aria-label="Buka WhatsApp untuk konsultasi gratis" {...interactions.button}>
+      <m.a className="floating-wa" href={whatsappLinks.floating} target="_blank" rel="noopener noreferrer" aria-label="Buka WhatsApp untuk konsultasi gratis" onClick={() => trackEvent('whatsapp_click', { source: 'floating_whatsapp' })} {...interactions.button}>
         <i className="fa-brands fa-whatsapp" aria-hidden="true" />
         <span>Konsultasi Gratis</span>
       </m.a>

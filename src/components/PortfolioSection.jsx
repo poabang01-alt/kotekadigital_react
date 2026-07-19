@@ -1,6 +1,7 @@
 import { AnimatePresence, m, useReducedMotion } from 'motion/react'
 import { interactions, transitions, viewportOnce } from '../animations/motionConfig'
 import { fadeUp, modalContent, staggerContainer, staggerItem } from '../animations/motionVariants'
+import { trackEvent } from '../utils/analytics'
 
 function PortfolioSection({
   activePortfolio,
@@ -88,6 +89,11 @@ function PortfolioSection({
                   href={activePortfolio.link}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() =>
+                    trackEvent('portfolio_demo_click', {
+                      source: activePortfolio.title.toLowerCase().replace(/[^a-z0-9]+/g, '_'),
+                    })
+                  }
                   variants={staggerItem}
                   {...interactions.button}
                 >

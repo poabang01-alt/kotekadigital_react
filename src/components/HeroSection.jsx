@@ -2,6 +2,7 @@ import { m, useReducedMotion } from 'motion/react'
 import { fadeLeft, fadeRight, fadeUp, heroContainer, staggerItem } from '../animations/motionVariants'
 import { interactions } from '../animations/motionConfig'
 import useMediaQuery from '../hooks/useMediaQuery'
+import { trackEvent } from '../utils/analytics'
 
 function HeroSection({
   companyStats,
@@ -42,6 +43,7 @@ function HeroSection({
               className="button button-primary"
               href="#pricing-section"
               onClick={(event) => handleNavClick(event, '#pricing-section')}
+              onPointerUp={() => trackEvent('hero_cta_click', { source: 'hero_pricing' })}
               variants={staggerItem}
               {...interactions.button}
             >
@@ -52,6 +54,7 @@ function HeroSection({
               href={homeConsultationLink}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackEvent('whatsapp_click', { source: 'hero_consultation' })}
               variants={staggerItem}
               {...interactions.button}
             >

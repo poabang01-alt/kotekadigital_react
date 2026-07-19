@@ -2,7 +2,7 @@ const companyName = 'Koteka Digital'
 const companyDescription =
   'Jasa pembuatan website profesional untuk UMKM, bisnis lokal, personal brand, sekolah, lembaga, instansi, portal konten, dan sistem digital di Jayapura, Papua, dan Tanah Papua.'
 const companyContact =
-  'Koteka Digital Studio • Jayapura, Papua • WhatsApp: +62 852-1055-9404 • kotekadigitalstudio@gmail.com'
+  'Koteka Digital • Jayapura, Papua • WhatsApp: +62 852-1055-9404 • kotekadigitalstudio@gmail.com'
 
 const packageColumns = [
   { key: 'basic', label: 'Paket Basic' },

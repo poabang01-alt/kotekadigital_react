@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { m, useReducedMotion } from 'motion/react'
 import { interactions, viewportOnce } from '../animations/motionConfig'
 import { fadeUp, staggerContainer, staggerItem } from '../animations/motionVariants'
+import { trackEvent } from '../utils/analytics'
 
 function BlogSection({ blogPosts }) {
   const shouldReduceMotion = useReducedMotion()
@@ -162,7 +163,16 @@ function BlogSection({ blogPosts }) {
           {post.meta ? <span className="blog-date">{post.meta}</span> : null}
           <h3>{post.title}</h3>
           <p>{post.excerpt}</p>
-          <m.a className="blog-readmore" href={post.link} {...interactions.button}>
+          <m.a
+            className="blog-readmore"
+            href={post.link}
+            onClick={() =>
+              trackEvent('blog_article_click', {
+                source: post.title.toLowerCase().replace(/[^a-z0-9]+/g, '_'),
+              })
+            }
+            {...interactions.button}
+          >
             Baca selengkapnya
           </m.a>
         </div>

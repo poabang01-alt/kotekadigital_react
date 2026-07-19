@@ -48,7 +48,7 @@ function useSiteNavigation(trackedSectionIds) {
   }, [])
 
   const activateAndScroll = useCallback((sectionId) => {
-    const target = document.getElementById(sectionId)
+    let scrollRetryFrame = 0
     activeSectionLockRef.current = sectionId
     setActiveSection(sectionId)
     window.history.replaceState(null, '', `#${sectionId}`)
@@ -62,8 +62,49 @@ function useSiteNavigation(trackedSectionIds) {
     }, 1400)
 
     const performScroll = () => {
+      const target = document.getElementById(sectionId)
       if (!target) {
-        closeNavigation()
+        window.dispatchEvent(
+          new CustomEvent('kotekadigital:reveal-section', {
+            detail: { sectionId },
+          })
+        )
+
+        scrollRetryFrame = window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(() => {
+            const deferredTarget = document.getElementById(sectionId)
+            if (!deferredTarget) {
+              closeNavigation()
+              return
+            }
+
+            const headerOffset = headerOffsetRef.current
+            const targetTop =
+              deferredTarget.getBoundingClientRect().top + window.scrollY - headerOffset
+
+            window.scrollTo({
+              top: Math.max(targetTop, 0),
+              behavior: 'smooth',
+            })
+
+            deferredTarget.classList.remove('section-spotlight')
+            deferredTarget.classList.remove('section-spotlight-deep')
+            void deferredTarget.offsetWidth
+            deferredTarget.classList.add('section-spotlight')
+            window.setTimeout(() => {
+              deferredTarget.classList.add('section-spotlight-deep')
+            }, 110)
+
+            if (sectionTransitionTimeoutRef.current) {
+              window.clearTimeout(sectionTransitionTimeoutRef.current)
+            }
+
+            sectionTransitionTimeoutRef.current = window.setTimeout(() => {
+              deferredTarget.classList.remove('section-spotlight')
+              deferredTarget.classList.remove('section-spotlight-deep')
+            }, 1300)
+          })
+        })
         return
       }
 
@@ -100,6 +141,12 @@ function useSiteNavigation(trackedSectionIds) {
     }
 
     performScroll()
+
+    return () => {
+      if (scrollRetryFrame) {
+        window.cancelAnimationFrame(scrollRetryFrame)
+      }
+    }
   }, [closeNavigation, isDesktopNav, menuOpen])
 
   const handleNavClick = useCallback((event, href) => {

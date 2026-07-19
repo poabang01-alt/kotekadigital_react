@@ -1,8 +1,8 @@
 export const whatsappLinks = {
   primary:
-    'https://wa.me/6285210559404?text=Halo%20Koteka%20Digital%20Studio%2C%20saya%20ingin%20konsultasi%20gratis%20tentang%20pembuatan%20website%20untuk%20bisnis%20saya.',
+    'https://wa.me/6285210559404?text=Halo%20Koteka%20Digital%2C%20saya%20ingin%20konsultasi%20gratis%20tentang%20pembuatan%20website%20untuk%20bisnis%20saya.',
   floating:
-    'https://wa.me/6285210559404?text=Halo%20Koteka%20Digital%20Studio,%20saya%20ingin%20konsultasi%20website',
+    'https://wa.me/6285210559404?text=Halo%20Koteka%20Digital,%20saya%20ingin%20konsultasi%20website',
 }
 
 export const navItems = [
@@ -110,7 +110,7 @@ export const serviceGroups = [
   {
     title: 'Fondasi Website Bisnis',
     description: 'Pilihan layanan inti untuk bisnis yang ingin tampil profesional, cepat dipercaya, dan siap menerima calon pelanggan secara online.',
-    link: 'https://wa.me/6285210559404?text=Halo%20Koteka%20Digital%20Studio,%20saya%20ingin%20diskusi%20layanan%20Fondasi%20Website%20Bisnis%20untuk%20kebutuhan%20usaha%20saya.',
+    link: 'https://wa.me/6285210559404?text=Halo%20Koteka%20Digital,%20saya%20ingin%20diskusi%20layanan%20Fondasi%20Website%20Bisnis%20untuk%20kebutuhan%20usaha%20saya.',
     items: [
       { icon: 'fa-solid fa-store', title: 'Website UMKM', text: 'Website bisnis yang ringkas, meyakinkan, dan cocok untuk promosi produk atau jasa lokal.' },
       { icon: 'fa-solid fa-building', title: 'Company Profile', text: 'Profil perusahaan digital yang rapi untuk memperkuat citra brand dan nilai bisnis.' },
@@ -123,7 +123,7 @@ export const serviceGroups = [
   {
     title: 'Website Profesional & Institusi',
     description: 'Dirancang untuk kebutuhan lembaga, organisasi, dan institusi yang memerlukan struktur informasi kuat serta tampilan yang kredibel.',
-    link: 'https://wa.me/6285210559404?text=Halo%20Koteka%20Digital%20Studio,%20saya%20ingin%20diskusi%20layanan%20Website%20Profesional%20dan%20Institusi.',
+    link: 'https://wa.me/6285210559404?text=Halo%20Koteka%20Digital,%20saya%20ingin%20diskusi%20layanan%20Website%20Profesional%20dan%20Institusi.',
     items: [
       { icon: 'fa-solid fa-school', title: 'Website Sekolah', text: 'Website akademik yang informatif untuk profil sekolah, berita, dan kebutuhan komunikasi publik.' },
       { icon: 'fa-solid fa-hospital', title: 'Website Rumah Sakit / Klinik', text: 'Tampilan profesional untuk informasi layanan kesehatan, jadwal, dan kontak pasien.' },
@@ -136,7 +136,7 @@ export const serviceGroups = [
   {
     title: 'Sistem Digital & Layanan Premium',
     description: 'Solusi digital yang lebih kompleks untuk operasional, automasi, integrasi, dan pengalaman pengguna yang lebih canggih.',
-    link: 'https://wa.me/6285210559404?text=Halo%20Koteka%20Digital%20Studio,%20saya%20ingin%20diskusi%20Sistem%20Digital%20dan%20Layanan%20Premium.',
+    link: 'https://wa.me/6285210559404?text=Halo%20Koteka%20Digital,%20saya%20ingin%20diskusi%20Sistem%20Digital%20dan%20Layanan%20Premium.',
     items: [
       { icon: 'fa-solid fa-chart-pie', title: 'Dashboard Admin', text: 'Panel kontrol modern untuk membantu monitoring data, aktivitas, dan operasional bisnis.' },
       { icon: 'fa-solid fa-database', title: 'Sistem Informasi Berbasis Web', text: 'Sistem web terstruktur untuk pengelolaan data, layanan, dan proses kerja internal.' },
@@ -509,7 +509,7 @@ export const contactInfo = {
   whatsappNumber: '6285210559404',
   whatsappLabel: '085210559404',
   whatsappLink:
-    'https://wa.me/6285210559404?text=Halo%20Koteka%20Digital%20Studio%2C%20saya%20mendapatkan%20nomor%20ini%20dari%20website.%20Saya%20ingin%20konsultasi%20kebutuhan%20website%20untuk%20bisnis%20saya.',
+    'https://wa.me/6285210559404?text=Halo%20Koteka%20Digital%2C%20saya%20mendapatkan%20nomor%20ini%20dari%20website.%20Saya%20ingin%20konsultasi%20kebutuhan%20website%20untuk%20bisnis%20saya.',
   email: 'kotekadigitalstudio@gmail.com',
   location: 'Jayapura, Papua, Indonesia',
 }
