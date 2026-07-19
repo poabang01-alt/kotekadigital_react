@@ -58,14 +58,14 @@ function ContactSection({ contactInfo }) {
                 </div>
 
                 <div className="contact-social-grid">
-                  <m.a className="contact-social-card" href={contactInfo.whatsappLink} target="_blank" rel="noopener noreferrer" {...interactions.card}>
+                  <m.a className="contact-social-card" href={contactInfo.whatsappLink} target="_blank" rel="noopener noreferrer" aria-label={`Buka WhatsApp Koteka Digital di ${contactInfo.whatsappLabel}`} {...interactions.card}>
                     <i className="fa-brands fa-whatsapp" aria-hidden="true" />
                     <div>
                       <strong>WhatsApp</strong>
                       <span>{contactInfo.whatsappLabel}</span>
                     </div>
                   </m.a>
-                  <m.a className="contact-social-card" href={`mailto:${contactInfo.email}`} {...interactions.card}>
+                  <m.a className="contact-social-card" href={`mailto:${contactInfo.email}`} aria-label={`Kirim email ke ${contactInfo.email}`} {...interactions.card}>
                     <i className="fa-solid fa-envelope" aria-hidden="true" />
                     <div>
                       <strong>Email</strong>
@@ -158,7 +158,7 @@ function ContactSection({ contactInfo }) {
               <p>Klik tombol di samping untuk langsung chat via WhatsApp.</p>
             </div>
           </div>
-          <m.a className="contact-cta-button" href={contactInfo.whatsappLink} target="_blank" rel="noopener noreferrer" {...interactions.button}>
+          <m.a className="contact-cta-button" href={contactInfo.whatsappLink} target="_blank" rel="noopener noreferrer" aria-label="Buka WhatsApp untuk chat cepat dengan Koteka Digital" {...interactions.button}>
             <i className="fa-brands fa-whatsapp" aria-hidden="true" />
             Chat WhatsApp Sekarang
             <i className="fa-solid fa-arrow-right" aria-hidden="true" />

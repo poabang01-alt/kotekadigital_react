@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { navItems } from '../data/siteData'
+import useMediaQuery from './useMediaQuery'
+import { resetHomeViewport } from '../utils/homeViewport'
 
 function useSiteNavigation(trackedSectionIds) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState(null)
-  const [isDesktopNav, setIsDesktopNav] = useState(() =>
-    typeof window !== 'undefined' ? window.matchMedia('(min-width: 901px)').matches : true
-  )
+  const isDesktopNav = useMediaQuery('(min-width: 901px)', true)
   const [isHeaderHidden, setIsHeaderHidden] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
   const headerRef = useRef(null)
@@ -20,6 +20,8 @@ function useSiteNavigation(trackedSectionIds) {
   const activeSectionLockRef = useRef(null)
   const activeSectionLockTimeoutRef = useRef(null)
   const dropdownCloseTimeoutRef = useRef(null)
+  const scrollFrameRef = useRef(null)
+  const initialHomeReadyRef = useRef(false)
 
   const getMatchedDropdownLabel = useCallback(
     (sectionId) =>
@@ -301,30 +303,24 @@ function useSiteNavigation(trackedSectionIds) {
   }, [menuOpen])
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(min-width: 901px)')
-    const handleMediaChange = (event) => {
-      setIsDesktopNav(event.matches)
-      setIsHeaderHidden(false)
-      setOpenDropdown(null)
-    }
-
-    mediaQuery.addEventListener('change', handleMediaChange)
-    return () => mediaQuery.removeEventListener('change', handleMediaChange)
-  }, [])
-
-  useEffect(() => {
     if (menuOpen) return undefined
 
     lastScrollYRef.current = window.scrollY
 
-    const handleScroll = () => {
+    const syncHeaderVisibility = () => {
+      scrollFrameRef.current = null
+
       const currentScrollY = window.scrollY
       const previousScrollY = lastScrollYRef.current
-      const isScrollingDown = currentScrollY > previousScrollY
-      const hasPassedHeader = currentScrollY > 80
-      const scrollDelta = Math.abs(currentScrollY - previousScrollY)
+      const scrollDelta = currentScrollY - previousScrollY
+      const hasPassedHeader = currentScrollY > Math.max(headerOffsetRef.current + 24, 96)
+      const absoluteDelta = Math.abs(scrollDelta)
 
-      if (scrollDelta < 6) {
+      if (absoluteDelta < 10) {
+        if (currentScrollY <= 0) {
+          headerHiddenRef.current = false
+          setIsHeaderHidden(false)
+        }
         lastScrollYRef.current = currentScrollY
         return
       }
@@ -335,17 +331,30 @@ function useSiteNavigation(trackedSectionIds) {
           setIsHeaderHidden(false)
         }
       } else {
-        if (headerHiddenRef.current !== isScrollingDown) {
-          headerHiddenRef.current = isScrollingDown
-          setIsHeaderHidden(isScrollingDown)
+        const shouldHideHeader = scrollDelta > 0
+        if (headerHiddenRef.current !== shouldHideHeader) {
+          headerHiddenRef.current = shouldHideHeader
+          setIsHeaderHidden(shouldHideHeader)
         }
       }
 
       lastScrollYRef.current = currentScrollY
     }
 
+    const handleScroll = () => {
+      if (scrollFrameRef.current !== null) return
+      scrollFrameRef.current = window.requestAnimationFrame(syncHeaderVisibility)
+    }
+
     window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (scrollFrameRef.current !== null) {
+        window.cancelAnimationFrame(scrollFrameRef.current)
+        scrollFrameRef.current = null
+      }
+    }
   }, [menuOpen])
 
   useEffect(() => {
@@ -376,44 +385,34 @@ function useSiteNavigation(trackedSectionIds) {
   useEffect(() => {
     if (typeof window === 'undefined') return undefined
 
-    const currentPath = `${window.location.pathname}${window.location.search}`
-    const forceHomeAtTop = () => {
+    const resetInitialViewToHome = () => {
       activeSectionLockRef.current = 'home'
       activeSectionRef.current = 'home'
       setActiveSection('home')
-      if (window.location.hash) {
-        window.history.replaceState(null, '', currentPath)
-      }
-      window.scrollTo({
-        top: 0,
-        behavior: 'auto',
-      })
+      resetHomeViewport()
     }
-    const releaseInitialHomeLock = () => {
-      if (activeSectionLockRef.current === 'home') {
+
+    const releaseInitialLockTimeout = window.setTimeout(() => {
+      initialHomeReadyRef.current = true
+      if (window.scrollY <= Math.max(headerOffsetRef.current + 40, 120)) {
         activeSectionLockRef.current = null
       }
-    }
+    }, 2200)
 
-    if ('scrollRestoration' in window.history) {
-      window.history.scrollRestoration = 'manual'
-    }
-
-    window.requestAnimationFrame(forceHomeAtTop)
-    window.setTimeout(forceHomeAtTop, 80)
-    window.setTimeout(forceHomeAtTop, 220)
-    window.setTimeout(forceHomeAtTop, 420)
-    window.setTimeout(releaseInitialHomeLock, 520)
+    const initialScrollFrame = window.requestAnimationFrame(() => {
+      resetInitialViewToHome()
+    })
 
     return () => {
-      if ('scrollRestoration' in window.history) {
-        window.history.scrollRestoration = 'auto'
-      }
+      window.clearTimeout(releaseInitialLockTimeout)
+      window.cancelAnimationFrame(initialScrollFrame)
     }
   }, [])
 
   useEffect(() => {
     const syncHashSection = () => {
+      if (!initialHomeReadyRef.current) return
+
       const hash = window.location.hash?.replace('#', '')
       if (!hash) return
 
@@ -442,7 +441,6 @@ function useSiteNavigation(trackedSectionIds) {
       })
     }
 
-    syncHashSection()
     window.addEventListener('hashchange', syncHashSection)
     return () => window.removeEventListener('hashchange', syncHashSection)
   }, [])
@@ -452,6 +450,14 @@ function useSiteNavigation(trackedSectionIds) {
 
     const syncActiveSectionFromScroll = () => {
       frameId = 0
+      if (!initialHomeReadyRef.current) {
+        if (activeSectionRef.current !== 'home') {
+          activeSectionRef.current = 'home'
+          setActiveSection('home')
+        }
+        return
+      }
+
       const sections = trackedSectionIds
         .map((sectionId) => document.getElementById(sectionId))
         .filter(Boolean)
@@ -466,6 +472,10 @@ function useSiteNavigation(trackedSectionIds) {
         ) {
           activeSectionRef.current = 'home'
           setActiveSection('home')
+        }
+
+        if (activeSectionLockRef.current === 'home') {
+          activeSectionLockRef.current = null
         }
         return
       }
@@ -555,6 +565,7 @@ function useSiteNavigation(trackedSectionIds) {
     hamburgerRef,
     headerRef,
     isBottomNavActive,
+    isDesktopNav,
     isHeaderHidden,
     isNavItemActive,
     menuOpen,

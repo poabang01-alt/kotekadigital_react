@@ -1,4 +1,4 @@
-import { AnimatePresence, m } from 'motion/react'
+import { AnimatePresence, m, useReducedMotion } from 'motion/react'
 import { interactions, transitions, viewportOnce } from '../animations/motionConfig'
 import { fadeUp, modalContent, staggerContainer, staggerItem } from '../animations/motionVariants'
 
@@ -11,6 +11,9 @@ function PortfolioSection({
   setPortfolioIndex,
   techIcons,
 }) {
+  const shouldReduceMotion = useReducedMotion()
+  const hasMultiplePortfolios = portfolioItems.length > 1
+
   return (
     <section className="portfolio-section" id="portfolio" aria-labelledby="portfolio-heading">
       <div className="container">
@@ -24,7 +27,7 @@ function PortfolioSection({
           role="region"
           aria-roledescription="carousel"
           aria-label="Carousel portofolio unggulan"
-          aria-live="polite"
+          aria-live={shouldReduceMotion ? 'polite' : 'off'}
           variants={fadeUp}
           initial="hidden"
           whileInView="visible"
@@ -35,6 +38,8 @@ function PortfolioSection({
             className="slider-control"
             onClick={prevPortfolio}
             aria-label="Portofolio sebelumnya"
+            aria-controls="portfolio-featured-card"
+            disabled={!hasMultiplePortfolios}
             {...interactions.button}
           >
             <i className="fa-solid fa-arrow-left" aria-hidden="true" />
@@ -42,6 +47,7 @@ function PortfolioSection({
 
           <AnimatePresence mode="wait">
             <m.article
+              id="portfolio-featured-card"
               className="portfolio-card featured portfolio-card-animated"
               key={activePortfolio.title}
               variants={modalContent}
@@ -50,12 +56,18 @@ function PortfolioSection({
               exit="exit"
               transition={transitions.normal}
             >
-              <m.div className="portfolio-image" whileHover={{ scale: 1.01 }}>
+              <m.div
+                className="portfolio-image"
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.01 }}
+              >
                 <img
                   src={activePortfolio.image}
                   alt={activePortfolio.title}
                   loading="lazy"
                   decoding="async"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 92vw, 720px"
+                  width={activePortfolio.imageWidth}
+                  height={activePortfolio.imageHeight}
                 />
               </m.div>
               <m.div className="portfolio-content" variants={staggerContainer} initial="hidden" animate="visible">
@@ -91,26 +103,59 @@ function PortfolioSection({
             className="slider-control"
             onClick={nextPortfolio}
             aria-label="Portofolio berikutnya"
+            aria-controls="portfolio-featured-card"
+            disabled={!hasMultiplePortfolios}
             {...interactions.button}
           >
             <i className="fa-solid fa-arrow-right" aria-hidden="true" />
           </m.button>
         </m.div>
 
-        <m.div className="portfolio-thumbs" role="list" aria-label="Pilih proyek portofolio" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
+        <m.div className="portfolio-thumbs" aria-label="Pilih proyek portofolio" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
           {portfolioItems.map((item, index) => (
             <m.button
               type="button"
               key={item.title}
               className={`thumb-card ${index === portfolioIndex ? 'active' : ''}`}
+              style={{
+                height: 'fit-content',
+                alignSelf: 'flex-start',
+                minHeight: 0,
+              }}
               onClick={() => setPortfolioIndex(index)}
               aria-label={`Tampilkan portofolio ${item.title}`}
               aria-pressed={index === portfolioIndex}
+              aria-controls="portfolio-featured-card"
               variants={staggerItem}
               {...interactions.card}
             >
-              <img src={item.image} alt="" aria-hidden="true" loading="lazy" decoding="async" />
-              <span>{item.title}</span>
+              <img
+                src={item.image}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                decoding="async"
+                sizes="(max-width: 640px) 44vw, (max-width: 1024px) 28vw, 220px"
+                width={item.imageWidth}
+                height={item.imageHeight}
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  aspectRatio: '16 / 9',
+                  objectFit: 'cover',
+                }}
+              />
+              <span
+                style={{
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  minHeight: 0,
+                }}
+              >
+                {item.title}
+              </span>
             </m.button>
           ))}
         </m.div>

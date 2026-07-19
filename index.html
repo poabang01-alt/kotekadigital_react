@@ -22,6 +22,30 @@
     <meta name="geo.placename" content="Jayapura, Papua, Indonesia" />
     <meta name="geo.position" content="-2.5337;140.7181" />
     <meta name="ICBM" content="-2.5337, 140.7181" />
+    <script>
+      (() => {
+        const resetToHome = () => {
+          if (window.location.hash) {
+            const cleanUrl = `${window.location.pathname}${window.location.search}`
+            window.history.replaceState(null, '', cleanUrl)
+          }
+
+          document.documentElement.scrollTop = 0
+          document.body.scrollTop = 0
+          window.scrollTo(0, 0)
+        }
+
+        if ('scrollRestoration' in window.history) {
+          window.history.scrollRestoration = 'manual'
+        }
+
+        resetToHome()
+        requestAnimationFrame(resetToHome)
+        window.addEventListener('DOMContentLoaded', resetToHome, { once: true })
+        window.addEventListener('load', resetToHome, { once: true })
+        window.addEventListener('pageshow', resetToHome, { once: true })
+      })()
+    </script>
     <link rel="canonical" href="https://kotekadigital.com/" />
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/favicon.png" />
@@ -32,6 +56,7 @@
       imagesrcset="/img/optimized/developer-480.jpg 480w, /img/optimized/developer-720.jpg 720w"
       imagesizes="(max-width: 900px) 100vw, 42vw"
       fetchpriority="high"
+      media="(min-width: 901px)"
     />
     <meta property="og:locale" content="id_ID" />
     <meta property="og:type" content="website" />
@@ -74,14 +99,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
       media="print"
       onload="this.media='all'"
     />
     <noscript>
       <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet"
       />
     </noscript>

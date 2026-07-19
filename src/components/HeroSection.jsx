@@ -1,6 +1,7 @@
 import { m, useReducedMotion } from 'motion/react'
 import { fadeLeft, fadeRight, fadeUp, heroContainer, staggerItem } from '../animations/motionVariants'
 import { interactions } from '../animations/motionConfig'
+import useMediaQuery from '../hooks/useMediaQuery'
 
 function HeroSection({
   companyStats,
@@ -9,6 +10,7 @@ function HeroSection({
   homeConsultationLink,
 }) {
   const shouldReduceMotion = useReducedMotion()
+  const isMobileViewport = useMediaQuery('(max-width: 900px)')
 
   return (
     <section className="hero-section" id="home" aria-labelledby="home-heading">
@@ -79,11 +81,13 @@ function HeroSection({
             <img
               src="/img/optimized/developer-480.jpg"
               srcSet="/img/optimized/developer-480.jpg 480w, /img/optimized/developer-720.jpg 720w"
-              sizes="(max-width: 900px) 100vw, 42vw"
+              sizes="(max-width: 900px) 72vw, 42vw"
               alt="Preview hero Koteka Digital"
-              loading="eager"
-              fetchPriority="high"
+              loading={isMobileViewport ? 'lazy' : 'eager'}
+              fetchPriority={isMobileViewport ? 'low' : 'high'}
               decoding="async"
+              width="480"
+              height="374"
             />
           </m.div>
           <m.div className="hero-stat-grid" aria-label="Ringkasan keunggulan utama" variants={heroContainer} initial="hidden" animate="visible">

@@ -9,9 +9,9 @@ import {
   trackedSectionIds,
 } from './data/appConfig'
 import HeroSection from './components/HeroSection'
+import MobileDeferredSection from './components/MobileDeferredSection'
 import SiteNavigation from './components/SiteNavigation'
 import useSiteNavigation from './hooks/useSiteNavigation'
-import PageTransition from './components/motion/PageTransition'
 import './index.css'
 
 const PartnerSection = lazy(() => import('./components/containers/PartnerSectionContainer'))
@@ -33,49 +33,67 @@ function App() {
   const navigation = useSiteNavigation(trackedSectionIds)
 
   return (
-    <PageTransition>
+    <>
       <SiteNavigation brandLogoSrc={brandLogoSrc} {...navigation} />
 
-      <main id="main-content">
+      <main id="main-content" tabIndex={-1}>
         <HeroSection
           companyStats={companyStats}
           handleNavClick={navigation.handleNavClick}
           heroSocialLinks={heroSocialLinks}
           homeConsultationLink={homeConsultationLink}
         />
-        <Suspense fallback={<SectionFallback minHeight={160} />}>
-          <PartnerSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback minHeight={840} />}>
-          <AboutSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback minHeight={760} />}>
-          <ServicesSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback minHeight={900} />}>
-          <PricingSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback minHeight={760} />}>
-          <PortfolioSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback minHeight={820} />}>
-          <BlogSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback minHeight={560} />}>
-          <TestimonialSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback minHeight={540} />}>
-          <FaqSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback minHeight={980} />}>
-          <ContactSection />
-        </Suspense>
+        <MobileDeferredSection fallback={<SectionFallback minHeight={900} />}>
+          <Suspense fallback={<SectionFallback minHeight={160} />}>
+            <PartnerSection />
+          </Suspense>
+        </MobileDeferredSection>
+        <MobileDeferredSection fallback={<SectionFallback minHeight={840} />}>
+          <Suspense fallback={<SectionFallback minHeight={840} />}>
+            <AboutSection />
+          </Suspense>
+        </MobileDeferredSection>
+        <MobileDeferredSection fallback={<SectionFallback minHeight={760} />}>
+          <Suspense fallback={<SectionFallback minHeight={760} />}>
+            <ServicesSection />
+          </Suspense>
+        </MobileDeferredSection>
+        <MobileDeferredSection fallback={<SectionFallback minHeight={900} />}>
+          <Suspense fallback={<SectionFallback minHeight={900} />}>
+            <PricingSection />
+          </Suspense>
+        </MobileDeferredSection>
+        <MobileDeferredSection fallback={<SectionFallback minHeight={760} />}>
+          <Suspense fallback={<SectionFallback minHeight={760} />}>
+            <PortfolioSection />
+          </Suspense>
+        </MobileDeferredSection>
+        <MobileDeferredSection fallback={<SectionFallback minHeight={820} />}>
+          <Suspense fallback={<SectionFallback minHeight={820} />}>
+            <BlogSection />
+          </Suspense>
+        </MobileDeferredSection>
+        <MobileDeferredSection fallback={<SectionFallback minHeight={560} />}>
+          <Suspense fallback={<SectionFallback minHeight={560} />}>
+            <TestimonialSection />
+          </Suspense>
+        </MobileDeferredSection>
+        <MobileDeferredSection fallback={<SectionFallback minHeight={540} />}>
+          <Suspense fallback={<SectionFallback minHeight={540} />}>
+            <FaqSection />
+          </Suspense>
+        </MobileDeferredSection>
+        <MobileDeferredSection fallback={<SectionFallback minHeight={980} />}>
+          <Suspense fallback={<SectionFallback minHeight={980} />}>
+            <ContactSection />
+          </Suspense>
+        </MobileDeferredSection>
       </main>
 
       <Suspense fallback={null}>
         <FooterContainer handleNavClick={navigation.handleNavClick} />
       </Suspense>
-    </PageTransition>
+    </>
   )
 }
 

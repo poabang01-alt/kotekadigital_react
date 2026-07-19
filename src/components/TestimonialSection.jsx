@@ -1,4 +1,4 @@
-import { AnimatePresence, m } from 'motion/react'
+import { AnimatePresence, m, useReducedMotion } from 'motion/react'
 import { interactions, transitions, viewportOnce } from '../animations/motionConfig'
 import { fadeUp, modalContent, staggerContainer, staggerItem } from '../animations/motionVariants'
 
@@ -15,6 +15,9 @@ function TestimonialSection({
   testimonialIndex,
   testimonials,
 }) {
+  const shouldReduceMotion = useReducedMotion()
+  const hasMultipleTestimonials = testimonials.length > 1
+
   return (
     <section className="testimonial-section" id="testimoni" aria-labelledby="testimonial-heading">
       <div className="container">
@@ -28,7 +31,7 @@ function TestimonialSection({
           role="region"
           aria-roledescription="carousel"
           aria-label="Carousel testimoni klien"
-          aria-live="polite"
+          aria-live={shouldReduceMotion ? 'polite' : 'off'}
           onPointerDown={handleTestimonialPointerDown}
           onPointerMove={handleTestimonialPointerMove}
           onPointerUp={handleTestimonialPointerUp}
@@ -44,6 +47,8 @@ function TestimonialSection({
             className="slider-control"
             onClick={prevTestimonial}
             aria-label="Testimoni sebelumnya"
+            aria-controls="testimonial-featured-card"
+            disabled={!hasMultipleTestimonials}
             {...interactions.button}
           >
             <i className="fa-solid fa-arrow-left" aria-hidden="true" />
@@ -51,6 +56,7 @@ function TestimonialSection({
 
           <AnimatePresence mode="wait">
             <m.article
+              id="testimonial-featured-card"
               className="testimonial-card featured testimonial-card-animated"
               key={activeTestimonial.name}
               style={{ '--testimonial-drag-offset': `${testimonialDragOffset}px` }}
@@ -66,6 +72,9 @@ function TestimonialSection({
                   alt={activeTestimonial.name}
                   loading="lazy"
                   decoding="async"
+                  sizes="(max-width: 640px) 72px, (max-width: 900px) 84px, 200px"
+                  width={activeTestimonial.imageWidth}
+                  height={activeTestimonial.imageHeight}
                 />
                 <div>
                   <h3>{activeTestimonial.name}</h3>
@@ -92,12 +101,14 @@ function TestimonialSection({
             className="slider-control"
             onClick={nextTestimonial}
             aria-label="Testimoni berikutnya"
+            aria-controls="testimonial-featured-card"
+            disabled={!hasMultipleTestimonials}
             {...interactions.button}
           >
             <i className="fa-solid fa-arrow-right" aria-hidden="true" />
           </m.button>
         </m.div>
-        <m.div className="dot-list" role="list" aria-label="Pilih testimoni klien" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
+        <m.div className="dot-list" aria-label="Pilih testimoni klien" variants={staggerContainer} initial="hidden" whileInView="visible" viewport={viewportOnce}>
           {testimonials.map((item, index) => (
             <m.button
               type="button"
@@ -106,9 +117,10 @@ function TestimonialSection({
               onClick={() => setTestimonialIndex(index)}
               aria-label={`Tampilkan testimoni ${item.name}`}
               aria-pressed={index === testimonialIndex}
+              aria-controls="testimonial-featured-card"
               variants={staggerItem}
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={shouldReduceMotion ? undefined : { scale: 1.08 }}
+              whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
             />
           ))}
         </m.div>

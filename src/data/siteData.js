@@ -67,6 +67,8 @@ export const teamMembers = [
     role: 'Founder & Web Strategist',
     description: 'Mengarahkan strategi website, struktur konten, dan pengalaman pengguna agar brand tampil lebih kuat dan meyakinkan.',
     image: '/img/owner.jpg',
+    imageWidth: 200,
+    imageHeight: 200,
     socials: [
       { label: 'Website Koteka Digital', href: 'https://kotekadigital.com/', icon: 'fa-solid fa-globe' },
       { label: 'Instagram Lae Gwijangge', href: 'https://www.instagram.com/kotekadigital/', icon: 'fa-brands fa-instagram' },
@@ -79,6 +81,8 @@ export const teamMembers = [
     role: 'UI Designer & Creative Support',
     description: 'Fokus pada visual yang bersih, premium, dan konsisten agar setiap halaman terasa profesional di semua device.',
     image: '/img/rival.jpg',
+    imageWidth: 200,
+    imageHeight: 200,
     socials: [
       { label: 'Website Rivaldo G.', href: 'https://kotekadigital.com/', icon: 'fa-solid fa-globe' },
       { label: 'Instagram Rivaldo G.', href: 'https://www.instagram.com/kotekadigital/', icon: 'fa-brands fa-instagram' },
@@ -91,6 +95,8 @@ export const teamMembers = [
     role: 'Kolaborasi & Support',
     description: 'Membuka ruang kolaborasi untuk talenta yang ingin tumbuh bersama dalam website dan eksekusi digital.',
     image: '/img/user3.jpg',
+    imageWidth: 200,
+    imageHeight: 200,
     socials: [
       { label: 'Website Koteka Digital', href: 'https://kotekadigital.com/', icon: 'fa-solid fa-globe' },
       { label: 'Instagram Koteka Digital', href: 'https://www.instagram.com/kotekadigital/', icon: 'fa-brands fa-instagram' },
@@ -186,6 +192,8 @@ export const portfolioItems = [
     description: 'Landing page jasa website dengan struktur hero yang kuat, CTA yang jelas, dan presentasi visual yang modern untuk membangun kesan profesional.',
     impact: 'Menunjukkan kemampuan membuat website agency yang kuat secara branding, konversi, dan first impression.',
     image: '/img/optimized/portofolio-koteka-digital-home.jpg',
+    imageWidth: 1918,
+    imageHeight: 1077,
     link: 'https://kotekadigital.com/',
     tech: ['React', 'CSS', 'JavaScript'],
   },
@@ -195,6 +203,8 @@ export const portfolioItems = [
     description: 'Portofolio dashboard dengan alur data yang lebih terstruktur untuk kebutuhan pengelolaan fasilitas sekolah.',
     impact: 'Menunjukkan kemampuan membangun project yang lebih dari sekadar landing page.',
     image: '/img/optimized/portofolio-dashboard-sistem-sarana-dan-prasarana-papua-koteka-digital.jpg',
+    imageWidth: 960,
+    imageHeight: 542,
     link: 'https://sistem-sarana-dan-prasarana-sekolah.netlify.app/',
     tech: ['HTML', 'CSS', 'JavaScript', 'PHP', 'Laravel'],
   },
@@ -204,6 +214,8 @@ export const portfolioItems = [
     description: 'Website promosi dengan tampilan visual kuat untuk memperkenalkan brand dan menu secara cepat.',
     impact: 'Cocok sebagai contoh project branding yang mengutamakan first impression.',
     image: '/img/optimized/tampilan-home-website-coffee-shop-koteka-digital.jpg',
+    imageWidth: 960,
+    imageHeight: 545,
     link: 'https://po-coffee.netlify.app/',
     tech: ['HTML', 'CSS', 'JavaScript'],
   },
@@ -213,6 +225,8 @@ export const portfolioItems = [
     description: 'Contoh presentasi jasa yang fokus pada kejelasan layanan, value, dan CTA konsultasi.',
     impact: 'Menegaskan kemampuan membuat website jasa yang ringkas namun persuasif.',
     image: '/img/optimized/abangpo-website-preview.jpg',
+    imageWidth: 1915,
+    imageHeight: 1077,
     link: 'https://abangponetlify.netlify.app/',
     tech: ['HTML', 'CSS', 'JavaScript'],
   },
@@ -222,6 +236,8 @@ export const portfolioItems = [
     description: 'Project yang menonjolkan identitas personal dan portofolio secara lebih elegan.',
     impact: 'Bagus untuk profesi kreatif atau profile pemilik usaha.',
     image: '/img/optimized/portofolio-personal-branding-jayapura-koteka-digital.jpg',
+    imageWidth: 960,
+    imageHeight: 532,
     link: 'https://laegwijangge.netlify.app/',
     tech: ['HTML', 'CSS', 'JavaScript'],
   },
@@ -231,6 +247,8 @@ export const portfolioItems = [
     description: 'Contoh implementasi dashboard internal yang menunjukkan kemampuan menangani antarmuka sistem.',
     impact: 'Memperlihatkan range pengerjaan dari website promosi sampai aplikasi internal.',
     image: '/img/optimized/portofolio-dashboard-web-app-papua-koteka-digital.jpg',
+    imageWidth: 960,
+    imageHeight: 538,
     link: 'https://cozy-torte-69aa3a.netlify.app/assets/login/login.html',
     tech: ['HTML', 'CSS', 'JavaScript', 'PHP', 'Laravel'],
   },
@@ -245,6 +263,8 @@ export const blogPosts = [
     title: 'Kenapa UMKM di Jayapura Wajib Punya Website Sendiri?',
     excerpt: 'Artikel ini membahas alasan kenapa website penting untuk kepercayaan pelanggan dan pertumbuhan UMKM lokal.',
     image: '/img/optimized/website-umkm-jayapura-koteka-digital.jpg',
+    imageWidth: 720,
+    imageHeight: 560,
     link: '/blog/jasa-website-jayapura-umkm/index.html',
   },
   {
@@ -255,6 +275,8 @@ export const blogPosts = [
     title: 'Manfaat SEO untuk Bisnis Online di Jayapura',
     excerpt: 'Menjelaskan bagaimana SEO lokal membantu bisnis lebih mudah ditemukan dan lebih dipercaya.',
     image: '/img/optimized/optimasi-seo-bisnis-jayapura-koteka-digital.jpg',
+    imageWidth: 720,
+    imageHeight: 560,
     link: '/blog/manfaat-seo-bisnis-jayapura/index.html',
   },
   {
@@ -265,6 +287,8 @@ export const blogPosts = [
     title: 'Tips Digital Marketing untuk UMKM di Papua',
     excerpt: 'Rangkuman strategi promosi digital yang lebih realistis untuk bisnis lokal dan UMKM Papua.',
     image: '/img/optimized/digitalmarketing-720.jpg',
+    imageWidth: 720,
+    imageHeight: 504,
     link: '/blog/tips-digital-marketing-papua/index.html',
   },
   {
@@ -275,6 +299,8 @@ export const blogPosts = [
     title: 'Kriteria Memilih Web Developer Jayapura Profesional',
     excerpt: 'Panduan singkat memilih partner pembuatan website yang rapi, aman, dan tidak asal jadi.',
     image: '/img/optimized/developer-720.jpg',
+    imageWidth: 720,
+    imageHeight: 560,
     link: '/blog/web-developer-jayapura/index.html',
   },
   {
@@ -285,6 +311,8 @@ export const blogPosts = [
     title: 'Panduan Lengkap Jasa Pembuatan Website untuk UMKM Papua',
     excerpt: 'Artikel inti tentang memilih layanan website yang sesuai kebutuhan bisnis dan budget.',
     image: '/img/optimized/jasa-pembuatan-website-papua-koteka-digital.jpg',
+    imageWidth: 720,
+    imageHeight: 560,
     link: '/blog/jasa-pembuatan-website-jayapura/index.html',
   },
   {
@@ -295,6 +323,8 @@ export const blogPosts = [
     title: 'Berapa Harga Pembuatan Website di Jayapura?',
     excerpt: 'Membantu pengunjung memahami komponen biaya dan perbedaan paket secara lebih jelas.',
     image: '/img/optimized/harga-pembuatan-website-jayapura-koteka-digital.jpg',
+    imageWidth: 720,
+    imageHeight: 560,
     link: '/blog/harga-pembuatan-website-jayapura/index.html',
   },
   {
@@ -305,6 +335,8 @@ export const blogPosts = [
     title: 'Jasa Pembuatan Website Sekolah di Papua: Fitur Wajib dan Harga Terjangkau',
     excerpt: 'Panduan untuk sekolah dan lembaga pendidikan yang ingin punya website resmi yang informatif, rapi, dan mudah diakses.',
     image: '/img/optimized/portofolio-dashboard-sistem-sarana-dan-prasarana-papua-koteka-digital.jpg',
+    imageWidth: 960,
+    imageHeight: 542,
     link: '/blog/jasa-website-sekolah-papua/index.html',
   },
   {
@@ -315,6 +347,8 @@ export const blogPosts = [
     title: 'Jasa Pembuatan Website Toko Online di Jayapura yang Siap untuk Jualan',
     excerpt: 'Membahas kebutuhan website toko online yang siap menampilkan produk, membangun kepercayaan, dan membantu penjualan digital.',
     image: '/img/optimized/tampilan-home-website-coffee-shop-koteka-digital.jpg',
+    imageWidth: 960,
+    imageHeight: 545,
     link: '/blog/jasa-website-toko-online-jayapura/index.html',
   },
   {
@@ -325,6 +359,8 @@ export const blogPosts = [
     title: 'Perbedaan Website Murah dan Profesional untuk Bisnis',
     excerpt: 'Menjelaskan perbedaan hasil, kualitas, dan dampak bisnis antara website yang asal jadi dengan website yang dibangun secara profesional.',
     image: '/img/optimized/portofolio-koteka-digital-home.jpg',
+    imageWidth: 1918,
+    imageHeight: 1077,
     link: '/blog/perbedaan-website-murah-dan-profesional/index.html',
   },
   {
@@ -335,6 +371,8 @@ export const blogPosts = [
     title: 'Studi Kasus Website UMKM Jayapura',
     excerpt: 'Contoh pendekatan website untuk UMKM lokal agar tampil lebih meyakinkan, mudah ditemukan, dan siap dipakai promosi.',
     image: '/img/optimized/website-umkm-jayapura-koteka-digital.jpg',
+    imageWidth: 720,
+    imageHeight: 560,
     link: '/blog/studi-kasus-website-umkm-jayapura/index.html',
   },
   {
@@ -345,6 +383,8 @@ export const blogPosts = [
     title: 'Cara Memilih Jasa Pembuatan Website yang Tidak Mengecewakan',
     excerpt: 'Panduan memilih jasa pembuatan website yang aman, jelas prosesnya, dan benar-benar memahami kebutuhan bisnis Anda.',
     image: '/img/optimized/developer-480.jpg',
+    imageWidth: 480,
+    imageHeight: 374,
     link: '/blog/tips-memilih-jasa-pembuatan-website/index.html',
   },
   {
@@ -355,6 +395,8 @@ export const blogPosts = [
     title: 'Jasa Website Company Profile Jayapura: Tampil Profesional, Dipercaya Klien',
     excerpt: 'Artikel tentang pentingnya website company profile untuk membangun citra profesional dan kepercayaan calon klien.',
     image: '/img/optimized/portofolio-koteka-digital-home.jpg',
+    imageWidth: 1918,
+    imageHeight: 1077,
     link: '/blog/website-company-profile-jayapura/index.html',
   },
 ]
@@ -368,6 +410,8 @@ export const testimonials = [
     period: 'Klien aktif',
     quote: 'Website yang dibuat terasa lebih profesional, cepat diakses, dan membuat bisnis saya lebih mudah dipresentasikan ke calon pelanggan.',
     image: '/img/owner.jpg',
+    imageWidth: 200,
+    imageHeight: 200,
   },
   {
     name: 'Abangpo Project',
@@ -377,6 +421,8 @@ export const testimonials = [
     period: 'Project selesai',
     quote: 'Komunikasi jelas, tampilannya rapi, dan hasil akhirnya sesuai kebutuhan. Bagian CTA dan alur kontennya terasa lebih meyakinkan.',
     image: '/img/abangpo.jpg',
+    imageWidth: 200,
+    imageHeight: 200,
   },
   {
     name: 'Rival Creative',
@@ -386,6 +432,8 @@ export const testimonials = [
     period: 'Kolaborasi branding',
     quote: 'Portofolio jadi lebih enak dilihat dan lebih gampang menjelaskan layanan saya ke orang baru. Ini sangat membantu saat promosi.',
     image: '/img/rival.jpg',
+    imageWidth: 200,
+    imageHeight: 200,
   },
 ]
 

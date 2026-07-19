@@ -50,15 +50,15 @@ function Footer({ contactInfo, handleNavClick, whatsappLinks }) {
             <h4>Hubungi Kami</h4>
             <span className="footer-accent" aria-hidden="true" />
             <div className="footer-links footer-links-contact">
-              <m.a href={contactInfo.whatsappLink} target="_blank" rel="noopener noreferrer" {...interactions.button}>
+              <m.a href={contactInfo.whatsappLink} target="_blank" rel="noopener noreferrer" aria-label={`Buka WhatsApp Koteka Digital di ${contactInfo.whatsappLabel}`} {...interactions.button}>
                 <i className="fa-brands fa-whatsapp" aria-hidden="true" />
                 <span>{contactInfo.whatsappLabel}</span>
               </m.a>
-              <m.a href={`mailto:${contactInfo.email}`} {...interactions.button}>
+              <m.a href={`mailto:${contactInfo.email}`} aria-label={`Kirim email ke ${contactInfo.email}`} {...interactions.button}>
                 <i className="fa-solid fa-envelope" aria-hidden="true" />
                 <span>{contactInfo.email}</span>
               </m.a>
-              <m.a href="https://kotekadigital.com/" target="_blank" rel="noopener noreferrer" {...interactions.button}>
+              <m.a href="https://kotekadigital.com/" target="_blank" rel="noopener noreferrer" aria-label="Buka website resmi Koteka Digital" {...interactions.button}>
                 <i className="fa-solid fa-globe" aria-hidden="true" />
                 <span>kotekadigital.com</span>
               </m.a>
@@ -92,7 +92,7 @@ function Footer({ contactInfo, handleNavClick, whatsappLinks }) {
         </div>
       </footer>
 
-      <m.a className="floating-wa" href={whatsappLinks.floating} target="_blank" rel="noopener noreferrer" {...interactions.button}>
+      <m.a className="floating-wa" href={whatsappLinks.floating} target="_blank" rel="noopener noreferrer" aria-label="Buka WhatsApp untuk konsultasi gratis" {...interactions.button}>
         <i className="fa-brands fa-whatsapp" aria-hidden="true" />
         <span>Konsultasi Gratis</span>
       </m.a>

@@ -175,9 +175,19 @@ function PricingSection({
                   type="button"
                   className="button button-primary pricing-cta"
                   onClick={() => handlePricingAction(plan)}
+                  aria-label={`Chat WhatsApp untuk ${plan.name}`}
                   {...interactions.button}
                 >
-                  Chat WA & Download PDF
+                  <span className="pricing-cta-copy">
+                    <span className="pricing-cta-title">
+                      <i className="fa-brands fa-whatsapp" aria-hidden="true" />
+                      Chat WhatsApp
+                    </span>
+                    <span className="pricing-cta-note">Auto download file paket</span>
+                  </span>
+                  <span className="pricing-cta-badge" aria-hidden="true">
+                    <i className="fa-solid fa-download" />
+                  </span>
                 </m.button>
               </div>
             </m.article>

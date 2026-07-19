@@ -24,6 +24,7 @@ function SiteNavigation({
   hamburgerRef,
   headerRef,
   isBottomNavActive,
+  isDesktopNav,
   isHeaderHidden,
   isNavItemActive,
   menuOpen,
@@ -152,12 +153,18 @@ function SiteNavigation({
 
   return (
     <>
-      <m.div className="scroll-progress" style={{ scaleX: progressScaleX }} aria-hidden="true" />
+      {isDesktopNav ? (
+        <m.div className="scroll-progress" style={{ scaleX: progressScaleX }} aria-hidden="true" />
+      ) : null}
       <m.header
         className={`site-header ${isHeaderHidden ? 'header-hidden' : ''}`}
         ref={headerRef}
         initial={shouldReduceMotion ? false : { y: -28, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+        animate={
+          shouldReduceMotion
+            ? { y: 0, opacity: isHeaderHidden ? 0 : 1 }
+            : { y: isHeaderHidden ? '-108%' : 0, opacity: isHeaderHidden ? 0 : 1 }
+        }
         transition={transitions.normal}
       >
         <a className="skip-link" href="#main-content">
@@ -168,6 +175,7 @@ function SiteNavigation({
             className="brand"
             href="#home"
             onClick={(event) => handleNavClick(event, '#home')}
+            aria-label="Kembali ke Home Koteka Digital"
             {...interactions.button}
           >
             <img
@@ -176,6 +184,7 @@ function SiteNavigation({
               loading="eager"
               fetchPriority="high"
               decoding="async"
+              sizes="(max-width: 900px) 56px, 72px"
               width="512"
               height="477"
             />
@@ -185,29 +194,34 @@ function SiteNavigation({
             </span>
           </m.a>
 
-          <m.nav className="nav-menu nav-menu-desktop" aria-label="Navigasi utama desktop" layout>
-            {renderNavItems('desktop-services-submenu')}
-          </m.nav>
+          {isDesktopNav ? (
+            <m.nav className="nav-menu nav-menu-desktop" aria-label="Navigasi utama desktop">
+              {renderNavItems('desktop-services-submenu')}
+            </m.nav>
+          ) : null}
 
-          <m.a
-            className="cta-pill"
-            href={whatsappLinks.primary}
-            target="_blank"
-            rel="noopener noreferrer"
-            {...interactions.button}
-          >
-            <img
-              src="/img/optimized/wa-64.png"
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-              decoding="async"
-              fetchPriority="low"
-              width="64"
-              height="64"
-            />
-            Konsultasi Gratis
-          </m.a>
+          {isDesktopNav ? (
+            <m.a
+              className="cta-pill"
+              href={whatsappLinks.primary}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Buka WhatsApp untuk konsultasi gratis"
+              {...interactions.button}
+            >
+              <img
+                src="/img/optimized/wa-64.png"
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                decoding="async"
+                fetchPriority="low"
+                width="64"
+                height="64"
+              />
+              Konsultasi Gratis
+            </m.a>
+          ) : null}
 
           <m.button
             type="button"
@@ -219,9 +233,9 @@ function SiteNavigation({
             ref={hamburgerRef}
             {...interactions.button}
           >
-            <span />
-            <span />
-            <span />
+              <span aria-hidden="true" />
+              <span aria-hidden="true" />
+              <span aria-hidden="true" />
           </m.button>
         </div>
       </m.header>
@@ -242,7 +256,7 @@ function SiteNavigation({
             <m.nav
               className="nav-menu nav-menu-mobile active"
               id="mobile-navigation"
-              aria-label="Navigasi utama"
+              aria-labelledby="mobile-navigation-title"
               aria-hidden={!menuOpen}
               role="dialog"
               aria-modal="true"
@@ -262,15 +276,16 @@ function SiteNavigation({
                 <div className="mobile-menu-brand">
                   <img
                     src={brandLogoSrc}
-                  alt="Logo Koteka Digital"
-                  loading="lazy"
-                  decoding="async"
-                  fetchPriority="low"
-                  width="512"
-                  height="477"
-                />
+                    alt="Logo Koteka Digital"
+                    loading="lazy"
+                    decoding="async"
+                    fetchPriority="low"
+                    sizes="56px"
+                    width="512"
+                    height="477"
+                  />
                   <div className="mobile-menu-brand-copy">
-                    <span className="mobile-menu-brand-title">Koteka Digital</span>
+                    <span className="mobile-menu-brand-title" id="mobile-navigation-title">Koteka Digital</span>
                     <span className="mobile-menu-brand-subtitle">Navigasi utama</span>
                   </div>
                 </div>
@@ -298,7 +313,7 @@ function SiteNavigation({
         ) : null}
       </AnimatePresence>
 
-      <nav className="mobile-bottom-nav" aria-label="Navigasi bawah mobile">
+      <nav className="mobile-bottom-nav" aria-label="Navigasi bawah mobile" aria-hidden={menuOpen}>
         <div className="mobile-bottom-nav-shell">
           {bottomNavItems.map((item) => (
             <m.button
@@ -306,8 +321,11 @@ function SiteNavigation({
               key={item.key}
               className={`mobile-bottom-nav-item ${isBottomNavActive(item.key) ? 'active' : ''}`}
               onClick={() => handleBottomNavAction(item)}
-              aria-label={item.label}
-              aria-pressed={isBottomNavActive(item.key)}
+              aria-label={item.key === 'menu' ? 'Buka menu navigasi' : item.label}
+              aria-current={item.key !== 'menu' && isBottomNavActive(item.key) ? 'location' : undefined}
+              aria-pressed={item.key === 'menu' ? isBottomNavActive(item.key) : undefined}
+              disabled={menuOpen}
+              tabIndex={menuOpen ? -1 : 0}
               {...interactions.button}
             >
               <span className="mobile-bottom-nav-icon" aria-hidden="true">

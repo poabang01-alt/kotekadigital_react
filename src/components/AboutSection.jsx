@@ -23,6 +23,9 @@ function AboutSection({ aboutCards, contactInfo, logoSrc, teamMembers }) {
                 alt="Logo Koteka Digital"
                 loading="lazy"
                 decoding="async"
+                sizes="(max-width: 640px) 132px, (max-width: 900px) 250px, 360px"
+                width="512"
+                height="477"
               />
             </div>
 
@@ -125,6 +128,9 @@ function AboutSection({ aboutCards, contactInfo, logoSrc, teamMembers }) {
                     alt={member.name}
                     loading="lazy"
                     decoding="async"
+                    sizes="(max-width: 640px) 96px, (max-width: 900px) 120px, 200px"
+                    width={member.imageWidth}
+                    height={member.imageHeight}
                   />
                 </div>
 

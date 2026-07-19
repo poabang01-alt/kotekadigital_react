@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { m } from 'motion/react'
+import { m, useReducedMotion } from 'motion/react'
 import { interactions, viewportOnce } from '../animations/motionConfig'
 import { fadeUp, staggerContainer, staggerItem } from '../animations/motionVariants'
 
 function BlogSection({ blogPosts }) {
+  const shouldReduceMotion = useReducedMotion()
   const [showAll, setShowAll] = useState(false)
   const [isPageVisible, setIsPageVisible] = useState(() =>
     typeof document === 'undefined' ? true : !document.hidden
@@ -11,6 +12,7 @@ function BlogSection({ blogPosts }) {
   const [isSectionVisible, setIsSectionVisible] = useState(() =>
     typeof IntersectionObserver === 'undefined'
   )
+  const totalSlides = blogPosts.length
   const [cardsPerView, setCardsPerView] = useState(() => {
     if (typeof window === 'undefined') return 3
     if (window.innerWidth <= 640) return 1
@@ -36,7 +38,7 @@ function BlogSection({ blogPosts }) {
 
         setCardsPerView((current) => {
           if (current === nextCardsPerView) return current
-          setCurrentIndex(nextCardsPerView)
+          setCurrentIndex(totalSlides > nextCardsPerView ? nextCardsPerView : 0)
           setIsTransitionEnabled(false)
           return nextCardsPerView
         })
@@ -51,17 +53,18 @@ function BlogSection({ blogPosts }) {
         window.cancelAnimationFrame(resizeFrameRef.current)
       }
     }
-  }, [])
+  }, [totalSlides])
+
+  const canSlide = totalSlides > cardsPerView
 
   const extendedPosts = useMemo(() => {
-    if (!blogPosts.length) return []
+    if (!canSlide) return blogPosts
 
     const leading = blogPosts.slice(-cardsPerView)
     const trailing = blogPosts.slice(0, cardsPerView)
     return [...leading, ...blogPosts, ...trailing]
-  }, [blogPosts, cardsPerView])
+  }, [blogPosts, canSlide, cardsPerView])
 
-  const totalSlides = blogPosts.length
   const activeDotIndex = useMemo(() => {
     if (!totalSlides) return 0
     return ((currentIndex - cardsPerView) % totalSlides + totalSlides) % totalSlides
@@ -96,7 +99,7 @@ function BlogSection({ blogPosts }) {
   }, [])
 
   useEffect(() => {
-    if (!totalSlides || showAll) return undefined
+    if (!canSlide || showAll || shouldReduceMotion) return undefined
     if (!isPageVisible || !isSectionVisible) return undefined
 
     const timer = window.setInterval(() => {
@@ -105,25 +108,70 @@ function BlogSection({ blogPosts }) {
     }, 3400)
 
     return () => window.clearInterval(timer)
-  }, [isPageVisible, isSectionVisible, showAll, totalSlides])
+  }, [canSlide, isPageVisible, isSectionVisible, showAll, shouldReduceMotion])
 
   const goToPrev = () => {
+    if (!canSlide) return
     setIsTransitionEnabled(true)
     setCurrentIndex((current) => current - 1)
   }
 
   const goToNext = () => {
+    if (!canSlide) return
     setIsTransitionEnabled(true)
     setCurrentIndex((current) => current + 1)
   }
 
   const goToDot = (index) => {
+    if (!canSlide) return
     setIsTransitionEnabled(true)
     setCurrentIndex(cardsPerView + index)
   }
 
+  const renderBlogCard = (post, key, variants) => (
+    <m.article
+      className={`blog-card blog-card-showcase ${variants ? 'blog-card-grid' : ''}`}
+      key={key}
+      role={variants ? 'listitem' : undefined}
+      variants={variants}
+      {...(variants ? interactions.card : {})}
+      whileHover={!variants && !shouldReduceMotion ? { y: -4 } : undefined}
+    >
+      <div className="blog-card-frame">
+        <div className="blog-card-media">
+          <img
+            src={post.image}
+            alt={post.title}
+            loading="lazy"
+            decoding="async"
+            sizes={
+              variants
+                ? '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
+                : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
+            }
+            width={post.imageWidth}
+            height={post.imageHeight}
+          />
+        </div>
+        <div className="blog-card-body">
+          <div className="blog-chip-row">
+            <span className="blog-tag blog-tag-primary">{post.category}</span>
+            {post.audience ? <span className="blog-tag blog-tag-soft">{post.audience}</span> : null}
+            {post.focus ? <span className="blog-tag blog-tag-muted">{post.focus}</span> : null}
+          </div>
+          {post.meta ? <span className="blog-date">{post.meta}</span> : null}
+          <h3>{post.title}</h3>
+          <p>{post.excerpt}</p>
+          <m.a className="blog-readmore" href={post.link} {...interactions.button}>
+            Baca selengkapnya
+          </m.a>
+        </div>
+      </div>
+    </m.article>
+  )
+
   const handleTransitionEnd = () => {
-    if (!totalSlides) return
+    if (!canSlide) return
 
     if (currentIndex >= totalSlides + cardsPerView) {
       setIsTransitionEnabled(false)
@@ -156,6 +204,15 @@ function BlogSection({ blogPosts }) {
     touchDeltaXRef.current = 0
   }
 
+  const toggleShowAll = () => {
+    setShowAll((current) => {
+      const nextShowAll = !current
+      setIsTransitionEnabled(false)
+      setCurrentIndex(nextShowAll || !canSlide ? 0 : cardsPerView)
+      return nextShowAll
+    })
+  }
+
   return (
     <section className="blog-section" id="blog" aria-labelledby="blog-heading" ref={sectionRef}>
       <m.div className="container" variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
@@ -174,8 +231,9 @@ function BlogSection({ blogPosts }) {
           <m.button
             type="button"
             className="blog-showcase-link"
-            onClick={() => setShowAll((current) => !current)}
+            onClick={toggleShowAll}
             aria-pressed={showAll}
+            aria-controls="blog-showcase-content"
             {...interactions.button}
           >
             {showAll ? 'Tampilkan slider' : 'Lihat semua'}
@@ -187,97 +245,64 @@ function BlogSection({ blogPosts }) {
           </div>
 
           {showAll ? (
-            <m.div className="blog-all-grid" role="list" variants={staggerContainer} initial="hidden" animate="visible">
+            <m.div id="blog-showcase-content" className="blog-all-grid" role="list" variants={staggerContainer} initial="hidden" animate="visible">
               {blogPosts.map((post) => (
-                <m.article className="blog-card blog-card-showcase blog-card-grid" key={post.title} role="listitem" variants={staggerItem} {...interactions.card}>
-                  <div className="blog-card-frame">
-                    <div className="blog-card-media">
-                      <img src={post.image} alt={post.title} loading="lazy" decoding="async" />
-                    </div>
-                    <div className="blog-card-body">
-                      <div className="blog-chip-row">
-                        <span className="blog-tag blog-tag-primary">{post.category}</span>
-                        {post.audience ? <span className="blog-tag blog-tag-soft">{post.audience}</span> : null}
-                        {post.focus ? <span className="blog-tag blog-tag-muted">{post.focus}</span> : null}
-                      </div>
-                      {post.meta ? <span className="blog-date">{post.meta}</span> : null}
-                      <h3>{post.title}</h3>
-                      <p>{post.excerpt}</p>
-                      <m.a className="blog-readmore" href={post.link} {...interactions.button}>
-                        Baca selengkapnya
-                      </m.a>
-                    </div>
-                  </div>
-                </m.article>
+                renderBlogCard(post, post.title, staggerItem)
               ))}
             </m.div>
           ) : (
             <>
               <div
+                id="blog-showcase-content"
                 className="blog-carousel"
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
                 aria-roledescription="carousel"
                 aria-label="Slider artikel unggulan"
+                aria-live={shouldReduceMotion ? 'polite' : 'off'}
               >
                 <div
                   className={`blog-carousel-track ${isTransitionEnabled ? 'is-animated' : ''}`}
                   style={{
-                    transform: `translateX(-${(100 / cardsPerView) * currentIndex}%)`,
+                    transform: `translateX(-${(100 / cardsPerView) * (canSlide ? currentIndex : 0)}%)`,
                   }}
                   onTransitionEnd={handleTransitionEnd}
                 >
                   {extendedPosts.map((post, index) => (
-                    <m.article className="blog-card blog-card-showcase" key={`${post.title}-${index}`} whileHover={{ y: -4 }}>
-                      <div className="blog-card-frame">
-                        <div className="blog-card-media">
-                          <img src={post.image} alt={post.title} loading="lazy" decoding="async" />
-                        </div>
-                        <div className="blog-card-body">
-                          <div className="blog-chip-row">
-                            <span className="blog-tag blog-tag-primary">{post.category}</span>
-                            {post.audience ? <span className="blog-tag blog-tag-soft">{post.audience}</span> : null}
-                            {post.focus ? <span className="blog-tag blog-tag-muted">{post.focus}</span> : null}
-                          </div>
-                          {post.meta ? <span className="blog-date">{post.meta}</span> : null}
-                          <h3>{post.title}</h3>
-                          <p>{post.excerpt}</p>
-                          <m.a className="blog-readmore" href={post.link} {...interactions.button}>
-                            Baca selengkapnya
-                          </m.a>
-                        </div>
-                      </div>
-                    </m.article>
+                    renderBlogCard(post, `${post.title}-${index}`)
                   ))}
                 </div>
               </div>
 
-              <div className="blog-carousel-footer">
-                <div className="blog-carousel-dots" aria-label="Navigasi slider blog">
-                  {blogPosts.map((post, index) => (
-                    <m.button
-                      type="button"
+              {canSlide ? (
+                <div className="blog-carousel-footer">
+                  <div className="blog-carousel-dots" aria-label="Navigasi slider blog">
+                    {blogPosts.map((post, index) => (
+                      <m.button
+                        type="button"
                       key={post.title}
                       className={`blog-dot ${activeDotIndex === index ? 'active' : ''}`}
                       aria-label={`Lihat blog ${index + 1}`}
                       aria-pressed={activeDotIndex === index}
+                      aria-controls="blog-showcase-content"
                       onClick={() => goToDot(index)}
-                      whileHover={{ scale: 1.08 }}
-                      whileTap={{ scale: 0.95 }}
-                    />
-                  ))}
-                </div>
+                      whileHover={shouldReduceMotion ? undefined : { scale: 1.08 }}
+                      whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
+                      />
+                    ))}
+                  </div>
 
-                <div className="blog-carousel-actions">
-                  <m.button type="button" className="blog-arrow-button" onClick={goToPrev} aria-label="Slide sebelumnya" {...interactions.button}>
-                    <i className="fa-solid fa-arrow-left" aria-hidden="true" />
-                  </m.button>
-                  <m.button type="button" className="blog-arrow-button" onClick={goToNext} aria-label="Slide berikutnya" {...interactions.button}>
-                    <i className="fa-solid fa-arrow-right" aria-hidden="true" />
-                  </m.button>
+                  <div className="blog-carousel-actions">
+                    <m.button type="button" className="blog-arrow-button" onClick={goToPrev} aria-label="Slide sebelumnya" aria-controls="blog-showcase-content" {...interactions.button}>
+                      <i className="fa-solid fa-arrow-left" aria-hidden="true" />
+                    </m.button>
+                    <m.button type="button" className="blog-arrow-button" onClick={goToNext} aria-label="Slide berikutnya" aria-controls="blog-showcase-content" {...interactions.button}>
+                      <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+                    </m.button>
+                  </div>
                 </div>
-              </div>
+              ) : null}
             </>
           )}
         </div>

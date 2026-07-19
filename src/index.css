@@ -1709,6 +1709,20 @@ main section,
   overflow-x: clip;
 }
 
+.partner-section,
+.about-section,
+.services-section,
+.pricing-section,
+.portfolio-section,
+.blog-section,
+.testimonial-section,
+.faq-section,
+.contact-section,
+.site-footer {
+  content-visibility: auto;
+  contain-intrinsic-size: 720px;
+}
+
 .pricing-section,
 .pricing-section .container,
 .pricing-lower-grid,
@@ -1850,6 +1864,15 @@ main section.section-spotlight.section-spotlight-deep::after {
     scroll-behavior: auto;
   }
 
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
   .scroll-progress {
     display: none;
   }
@@ -1857,8 +1880,50 @@ main section.section-spotlight.section-spotlight-deep::after {
   .portfolio-card-animated,
   .testimonial-card-animated,
   .about-logo-frame,
-  .team-avatar-ring {
+  .team-avatar-ring,
+  .hero-copy > *,
+  main section.section-spotlight,
+  main section.section-spotlight::after {
     animation: none !important;
+  }
+}
+
+@media (pointer: coarse) {
+  .hero-copy > *,
+  .hero-visual,
+  .about-logo,
+  .team-avatar-ring,
+  .portfolio-card-animated,
+  .testimonial-card-animated,
+  .map-embed-trigger-eye i {
+    animation: none !important;
+  }
+
+  .hero-card,
+  .about-logo-frame,
+  .team-card,
+  .portfolio-card,
+  .testimonial-card,
+  .thumb-card,
+  .blog-card,
+  .mobile-bottom-nav-item,
+  .button,
+  .nav-link,
+  .nav-button {
+    transition-duration: 0.01ms !important;
+  }
+
+  .about-section,
+  .services-section,
+  .pricing-section,
+  .portfolio-section,
+  .blog-section,
+  .testimonial-section,
+  .faq-section,
+  .contact-section,
+  .site-footer {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 960px;
   }
 }
 
@@ -2698,7 +2763,6 @@ main section {
 .hero-stat-grid,
 .partner-grid,
 .card-grid,
-.portfolio-thumbs,
 .contact-list,
 .footer-links,
 .feature-list,
@@ -2772,6 +2836,33 @@ main section {
     linear-gradient(90deg, rgba(5, 38, 78, 0.92) 0%, rgba(8, 52, 99, 0.84) 42%, rgba(10, 58, 106, 0.72) 100%),
     url('/img/background.jpg') center center / cover no-repeat;
   color: #fff;
+}
+
+@media (max-width: 900px) {
+  .hero-section,
+  .services-section,
+  .portfolio-section,
+  .testimonial-section,
+  .site-footer,
+  .faq-section {
+    background-image: none;
+  }
+
+  .hero-section {
+    background:
+      radial-gradient(circle at 18% 16%, rgba(255, 204, 0, 0.16), transparent 18%),
+      radial-gradient(circle at 82% 18%, rgba(255, 255, 255, 0.08), transparent 22%),
+      linear-gradient(90deg, rgba(5, 38, 78, 0.92) 0%, rgba(8, 52, 99, 0.84) 42%, rgba(10, 58, 106, 0.72) 100%);
+  }
+
+  .services-section,
+  .portfolio-section,
+  .testimonial-section,
+  .site-footer,
+  .faq-section {
+    background:
+      linear-gradient(90deg, rgba(5, 38, 78, 0.92) 0%, rgba(8, 52, 99, 0.84) 42%, rgba(10, 58, 106, 0.72) 100%);
+  }
 }
 
 .partner-grid {
@@ -3894,15 +3985,20 @@ main section {
 
 .pricing-cta {
   width: 100%;
-  min-height: 58px;
-  padding: 0 26px;
-  font-size: 0.98rem;
+  min-height: 50px;
+  padding: 10px 14px 10px 16px;
+  font-size: 0.92rem;
   font-weight: 800;
   letter-spacing: 0.015em;
   background: linear-gradient(135deg, #18ba6f, #0b8a56);
   box-shadow:
     0 20px 36px rgba(11, 159, 89, 0.24),
     inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  text-align: left;
 }
 
 .pricing-cta:hover,
@@ -3918,6 +4014,64 @@ main section {
 .pricing-cta:focus-visible {
   outline: 2px solid rgba(11, 159, 89, 0.28);
   outline-offset: 3px;
+}
+
+.pricing-cta-copy {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.pricing-cta-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.92rem;
+  line-height: 1.15;
+}
+
+.pricing-cta-note {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.67rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+.pricing-cta-badge {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+@media (max-width: 640px) {
+  .pricing-cta {
+    min-height: 46px;
+    padding: 9px 12px 9px 14px;
+    gap: 8px;
+  }
+
+  .pricing-cta-title {
+    gap: 7px;
+    font-size: 0.88rem;
+  }
+
+  .pricing-cta-note {
+    font-size: 0.62rem;
+  }
+
+  .pricing-cta-badge {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+  }
 }
 
 .portfolio-showcase,
@@ -4018,7 +4172,8 @@ main section {
   min-width: 0;
   padding: 18px 0 18px 18px;
   display: flex;
-  align-items: stretch;
+  align-items: flex-start;
+  align-self: start;
   justify-content: center;
   background:
     radial-gradient(circle at top left, rgba(255, 204, 0, 0.1), transparent 30%),
@@ -4049,10 +4204,12 @@ main section {
 }
 
 .portfolio-image img {
+  display: block;
   width: 100%;
-  height: 100%;
-  min-height: 100%;
+  height: auto;
+  min-height: 0;
   max-height: none;
+  aspect-ratio: 16 / 10;
   object-fit: cover;
   object-position: center top;
   border-radius: 26px;
@@ -4061,6 +4218,12 @@ main section {
     0 22px 42px rgba(2, 12, 22, 0.28),
     0 10px 22px rgba(255, 204, 0, 0.08);
   transform: translateY(0);
+}
+
+.portfolio-card.featured .portfolio-image img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
 }
 
 .portfolio-content {
@@ -4169,62 +4332,95 @@ main section {
 }
 
 .portfolio-thumbs {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   margin-top: 22px;
+  gap: 14px;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 .thumb-card {
-  padding: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 22px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+  display: grid;
+  align-content: start;
+  grid-template-rows: auto auto;
+  gap: 0;
+  flex: 0 0 calc((100% - 56px) / 5);
+  width: calc((100% - 56px) / 5);
+  max-width: calc((100% - 56px) / 5);
+  padding: 12px 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04)),
+    linear-gradient(180deg, rgba(10, 37, 61, 0.92), rgba(12, 39, 64, 0.82));
   color: #fff;
   cursor: pointer;
   box-shadow:
-    0 12px 24px rgba(3, 16, 28, 0.12),
+    0 18px 34px rgba(3, 16, 28, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
   transition:
     transform var(--motion-base) var(--motion-ease),
     box-shadow var(--motion-base) var(--motion-ease),
     border-color var(--motion-base) var(--motion-ease),
     background var(--motion-base) var(--motion-ease);
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  min-height: 0;
+  height: fit-content;
 }
 
 .thumb-card span {
-  display: block;
-  font-size: 0.9rem;
-  font-weight: 700;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, 0.88);
+  display: -webkit-box;
+  padding: 14px 6px 2px;
+  font-size: 0.94rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: #f5f9ff;
+  min-height: 0;
+  text-align: center;
+  text-shadow: 0 2px 10px rgba(2, 12, 22, 0.22);
+  text-wrap: balance;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .thumb-card.active {
-  transform: translateY(-3px) scale(1.02);
+  transform: translateY(-3px);
   border-color: rgba(255, 204, 0, 0.72);
-  background: linear-gradient(180deg, rgba(255, 204, 0, 0.22), rgba(255, 255, 255, 0.08));
+  background:
+    linear-gradient(180deg, rgba(255, 204, 0, 0.12), rgba(255, 255, 255, 0.05)),
+    linear-gradient(180deg, rgba(10, 37, 61, 0.96), rgba(12, 39, 64, 0.86));
   box-shadow:
-    0 16px 28px rgba(3, 16, 28, 0.18),
+    0 22px 40px rgba(3, 16, 28, 0.22),
     inset 0 0 0 1px rgba(255, 204, 0, 0.18);
 }
 
 .thumb-card img {
+  display: block;
   width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
-  border-radius: 16px;
-  margin-bottom: 12px;
+  border-radius: 18px;
+  margin-bottom: 0;
   transition: transform 220ms ease, box-shadow 220ms ease;
-  box-shadow: 0 12px 24px rgba(3, 16, 28, 0.22);
+  box-shadow:
+    0 16px 30px rgba(3, 16, 28, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .thumb-card:hover,
 .thumb-card:focus-visible {
-  transform: translateY(-6px) scale(1.02);
+  transform: translateY(-6px);
   color: #fff8d7;
-  border-color: rgba(255, 204, 0, 0.26);
-  background: linear-gradient(180deg, rgba(255, 204, 0, 0.18), rgba(255, 255, 255, 0.08));
+  border-color: rgba(255, 204, 0, 0.42);
+  background:
+    linear-gradient(180deg, rgba(255, 204, 0, 0.12), rgba(255, 255, 255, 0.06)),
+    linear-gradient(180deg, rgba(10, 37, 61, 0.96), rgba(12, 39, 64, 0.86));
   box-shadow:
-    0 16px 28px rgba(3, 16, 28, 0.18),
+    0 24px 42px rgba(3, 16, 28, 0.24),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
@@ -6001,6 +6197,7 @@ main section {
 
   .portfolio-image {
     padding: 16px 16px 0;
+    align-self: start;
   }
 
   .portfolio-image::before {
@@ -6012,6 +6209,9 @@ main section {
   }
 
   .portfolio-image img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
     max-height: none;
   }
 
@@ -6021,7 +6221,13 @@ main section {
   }
 
   .portfolio-thumbs {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .thumb-card {
+    flex-basis: calc((100% - 20px) / 3);
+    width: calc((100% - 20px) / 3);
+    max-width: calc((100% - 20px) / 3);
   }
 
   .testimonial-card.featured {
@@ -7464,7 +7670,9 @@ main section {
 
   .portfolio-image img {
     border-radius: 14px;
-    aspect-ratio: 1.8 / 1;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
     object-position: center top;
   }
 
@@ -7523,30 +7731,31 @@ main section {
   }
 
   .portfolio-thumbs {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
     margin-top: 12px;
   }
 
   .thumb-card {
-    grid-template-columns: 1fr;
-    align-items: start;
-    gap: 8px;
     min-height: 0;
-    padding: 8px;
-    border-radius: 14px;
+    flex-basis: calc((100% - 8px) / 2);
+    width: calc((100% - 8px) / 2);
+    max-width: calc((100% - 8px) / 2);
+    padding: 10px 10px 12px;
+    border-radius: 18px;
   }
 
   .thumb-card img {
     width: 100%;
-    height: 76px;
-    border-radius: 10px;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
     object-fit: cover;
   }
 
   .thumb-card span {
-    font-size: 0.68rem;
-    line-height: 1.2;
+    padding: 10px 2px 0;
+    font-size: 0.72rem;
+    line-height: 1.25;
     text-align: center;
   }
 
@@ -7965,6 +8174,9 @@ main section {
 
   .portfolio-image img {
     border-radius: 20px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
   }
 
   .portfolio-content {
@@ -8656,34 +8868,34 @@ main section {
   }
 
   .about-logo-panel {
-    gap: 12px;
+    gap: 5px;
   }
 
   .about-logo-frame {
-    min-height: 168px;
-    padding: 14px 14px 18px;
-    border-radius: 24px;
+    min-height: 96px;
+    padding: 4px 6px 6px;
+    border-radius: 15px;
   }
 
   .about-logo {
-    width: min(100%, 184px);
+    width: min(100%, 156px);
     border-radius: 0;
   }
 
   .about-logo-contact {
-    padding: 10px;
-    border-radius: 18px;
-    gap: 10px;
+    padding: 6px 7px;
+    border-radius: 12px;
+    gap: 5px;
   }
 
   .about-logo-socials-label {
-    font-size: 0.72rem;
+    font-size: 0.58rem;
   }
 
   .about-logo-social-links {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     justify-items: center;
-    gap: 8px;
+    gap: 4px;
   }
 
   .about-logo-social-links a,
@@ -10147,16 +10359,18 @@ main section {
   }
 
   .thumb-card {
-    padding: 8px;
-    border-radius: 16px;
+    padding: 10px 10px 12px;
+    border-radius: 18px;
   }
 
   .thumb-card img {
-    margin-bottom: 8px;
+    margin-bottom: 0;
+    border-radius: 12px;
   }
 
   .thumb-card span {
-    font-size: 0.76rem;
+    padding: 10px 2px 0;
+    font-size: 0.78rem;
     line-height: 1.28;
   }
 }

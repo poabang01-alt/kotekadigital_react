@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useReducedMotion } from 'motion/react'
 
 function useTestimonialSlider(testimonials) {
+  const shouldReduceMotion = useReducedMotion()
+  const totalTestimonials = testimonials.length
   const [testimonialIndex, setTestimonialIndex] = useState(0)
   const [testimonialDragOffset, setTestimonialDragOffset] = useState(0)
   const [isPageVisible, setIsPageVisible] = useState(() =>
@@ -19,12 +22,14 @@ function useTestimonialSlider(testimonials) {
   })
 
   const nextTestimonial = useCallback(() => {
-    setTestimonialIndex((current) => (current + 1) % testimonials.length)
-  }, [testimonials.length])
+    if (totalTestimonials < 2) return
+    setTestimonialIndex((current) => (current + 1) % totalTestimonials)
+  }, [totalTestimonials])
 
   const prevTestimonial = useCallback(() => {
-    setTestimonialIndex((current) => (current - 1 + testimonials.length) % testimonials.length)
-  }, [testimonials.length])
+    if (totalTestimonials < 2) return
+    setTestimonialIndex((current) => (current - 1 + totalTestimonials) % totalTestimonials)
+  }, [totalTestimonials])
 
   const resetTestimonialGesture = useCallback(() => {
     testimonialInteractingRef.current = false
@@ -133,15 +138,16 @@ function useTestimonialSlider(testimonials) {
   }, [])
 
   useEffect(() => {
-    if (!isPageVisible || !isSectionVisible) return undefined
+    if (totalTestimonials < 2) return undefined
+    if (shouldReduceMotion || !isPageVisible || !isSectionVisible) return undefined
 
     const timer = window.setInterval(() => {
       if (testimonialInteractingRef.current) return
-      setTestimonialIndex((current) => (current + 1) % testimonials.length)
+      setTestimonialIndex((current) => (current + 1) % totalTestimonials)
     }, 6500)
 
     return () => window.clearInterval(timer)
-  }, [isPageVisible, isSectionVisible, testimonials.length])
+  }, [isPageVisible, isSectionVisible, shouldReduceMotion, totalTestimonials])
 
   return {
     activeTestimonial: testimonials[testimonialIndex],

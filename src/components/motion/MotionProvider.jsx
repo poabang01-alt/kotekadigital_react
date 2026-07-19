@@ -1,24 +1,9 @@
-import { useEffect, useState } from 'react'
 import { LazyMotion, MotionConfig, domAnimation } from 'motion/react'
 import { transitions } from '../../animations/motionConfig'
+import useMediaQuery from '../../hooks/useMediaQuery'
 
 function MotionProvider({ children }) {
-  const [isMobileViewport, setIsMobileViewport] = useState(() =>
-    typeof window !== 'undefined' ? window.matchMedia('(max-width: 900px)').matches : false
-  )
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return undefined
-
-    const mediaQuery = window.matchMedia('(max-width: 900px)')
-    const handleChange = (event) => {
-      setIsMobileViewport(event.matches)
-    }
-
-    mediaQuery.addEventListener('change', handleChange)
-
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
+  const isMobileViewport = useMediaQuery('(max-width: 900px)')
 
   return (
     <LazyMotion features={domAnimation}>
