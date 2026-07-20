@@ -20,6 +20,7 @@ function SiteNavigation({
   handleDropdownPointerEnter,
   handleDropdownPointerLeave,
   handleHamburgerClick,
+  handleMobileSubmenuToggle,
   handleNavClick,
   hamburgerRef,
   headerRef,
@@ -43,7 +44,7 @@ function SiteNavigation({
     const isMobileMenu = submenuIdPrefix.startsWith('mobile')
 
     return navItems.map((item) =>
-      item.children ? (
+      item.children && !isMobileMenu ? (
         <m.div
           className={`nav-dropdown ${openDropdown === item.label ? 'open' : ''}`}
           key={item.label}
@@ -100,6 +101,74 @@ function SiteNavigation({
               />
             )}
           </m.button>
+          <AnimatePresence initial={false}>
+            {openDropdown === item.label ? (
+              <m.div
+                className="dropdown-panel"
+                id={`${submenuIdPrefix}-${item.label.toLowerCase()}`}
+                variants={fadeIn}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+              >
+                {item.children.map((child) => (
+                  <m.a
+                    key={child.label}
+                    className={`dropdown-link ${
+                      activeSection === child.href.slice(1) ? 'active' : ''
+                    }`}
+                    href={child.href}
+                    onClick={(event) => handleNavClick(event, child.href)}
+                    aria-current={activeSection === child.href.slice(1) ? 'location' : undefined}
+                    {...interactions.button}
+                  >
+                    {child.label}
+                  </m.a>
+                ))}
+              </m.div>
+            ) : null}
+          </AnimatePresence>
+        </m.div>
+      ) : item.children ? (
+        <m.div
+          className={`nav-dropdown ${openDropdown === item.label ? 'open' : ''}`}
+          key={item.label}
+          variants={staggerItem}
+        >
+          <div className="mobile-submenu-row">
+            <m.a
+              className={`nav-link nav-link-with-submenu ${isNavItemActive(item) ? 'active' : ''}`}
+              href={item.href}
+              onClick={(event) => handleNavClick(event, item.href)}
+              aria-current={isNavItemActive(item) ? 'location' : undefined}
+              {...interactions.button}
+            >
+              <span className="nav-link-copy">
+                <span className="nav-link-icon" aria-hidden="true">
+                  <i className={item.icon || 'fa-solid fa-circle'} />
+                </span>
+                <span className="nav-link-label">{item.label}</span>
+              </span>
+            </m.a>
+            <m.button
+              type="button"
+              className={`mobile-submenu-toggle ${openDropdown === item.label ? 'open' : ''}`}
+              onClick={(event) => handleMobileSubmenuToggle(event, item.label)}
+              aria-expanded={openDropdown === item.label}
+              aria-controls={`${submenuIdPrefix}-${item.label.toLowerCase()}`}
+              aria-label={`${
+                openDropdown === item.label ? 'Tutup' : 'Buka'
+              } submenu ${item.label}`}
+              {...interactions.button}
+            >
+              <span
+                className={`mobile-submenu-arrow ${openDropdown === item.label ? 'open' : ''}`}
+                aria-hidden="true"
+              >
+                <span className="mobile-submenu-arrow-glyph" />
+              </span>
+            </m.button>
+          </div>
           <AnimatePresence initial={false}>
             {openDropdown === item.label ? (
               <m.div
@@ -233,9 +302,9 @@ function SiteNavigation({
             ref={hamburgerRef}
             {...interactions.button}
           >
-              <span aria-hidden="true" />
-              <span aria-hidden="true" />
-              <span aria-hidden="true" />
+            <span aria-hidden="true" />
+            <span aria-hidden="true" />
+            <span aria-hidden="true" />
           </m.button>
         </div>
       </m.header>
@@ -308,6 +377,37 @@ function SiteNavigation({
               >
                 {renderNavItems('mobile-services-submenu')}
               </m.div>
+
+              <div className="mobile-sidebar-promo" aria-hidden="true">
+                <div className="mobile-sidebar-promo-icon">
+                  <i className="fa-solid fa-sparkles" />
+                </div>
+                <div className="mobile-sidebar-promo-copy">
+                  <span className="mobile-sidebar-promo-title">Upgrade plan</span>
+                  <span className="mobile-sidebar-promo-text">Solusi website premium untuk bisnis yang ingin naik level.</span>
+                </div>
+                <div className="mobile-sidebar-promo-bar">
+                  <span className="mobile-sidebar-promo-bar-fill" />
+                </div>
+              </div>
+
+              <div className="mobile-sidebar-profile" aria-hidden="true">
+                <div className="mobile-sidebar-profile-avatar">
+                  <img
+                    src={brandLogoSrc}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    width="512"
+                    height="477"
+                  />
+                  <span className="mobile-sidebar-profile-status" />
+                </div>
+                <div className="mobile-sidebar-profile-copy">
+                  <span className="mobile-sidebar-profile-name">Koteka Digital</span>
+                  <span className="mobile-sidebar-profile-email">kotekadigitalstudio@gmail.com</span>
+                </div>
+              </div>
             </m.nav>
           </>
         ) : null}
