@@ -7,8 +7,6 @@ import {
   useHeaderVisibility,
   useMobileMenu,
 } from './navigation'
-import { resetHomeViewport } from '../utils/homeViewport'
-
 function useSiteNavigation(trackedSectionIds) {
   const isDesktopNav = useMediaQuery('(min-width: 901px)', true)
   const headerRef = useRef(null)
@@ -31,7 +29,6 @@ function useSiteNavigation(trackedSectionIds) {
   const {
     activeSection,
     lockActiveSection,
-    setActiveSection,
   } = useActiveSectionSync({
     trackedSectionIds,
     headerOffsetRef,
@@ -169,28 +166,8 @@ function useSiteNavigation(trackedSectionIds) {
   }, [])
 
   useEffect(() => {
-    if (typeof window === 'undefined') return undefined
-
-    const shouldResetToHome =
-      window.location.pathname === '/' &&
-      !window.location.hash &&
-      window.performance.getEntriesByType('navigation')?.[0]?.type !== 'back_forward'
-
-    if (!shouldResetToHome) {
-      initialHomeReadyRef.current = true
-      return undefined
-    }
-
-    activeSection === 'home' || setActiveSection('home')
-    lockActiveSection('home', 900)
-    resetHomeViewport()
-
-    const releaseInitialLockTimeout = window.setTimeout(() => {
-      initialHomeReadyRef.current = true
-    }, 900)
-
-    return () => window.clearTimeout(releaseInitialLockTimeout)
-  }, [activeSection, lockActiveSection, setActiveSection])
+    initialHomeReadyRef.current = true
+  }, [])
 
   useEffect(() => {
     const syncHashSection = () => {

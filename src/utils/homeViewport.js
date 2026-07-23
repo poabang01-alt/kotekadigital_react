@@ -15,8 +15,7 @@ export function resetHomeViewport() {
 }
 
 export function scheduleInitialHomeViewportSync({
-  durationMs = 1800,
-  intervalMs = 140,
+  runOnPathname,
 } = {}) {
   if (typeof window === 'undefined') {
     return () => {}
@@ -26,25 +25,26 @@ export function scheduleInitialHomeViewportSync({
     window.history.scrollRestoration = 'manual'
   }
 
-  const stopAt = window.performance.now() + durationMs
+  const navigationEntry = window.performance.getEntriesByType('navigation')?.[0]
+  const shouldReset =
+    (!runOnPathname || window.location.pathname === runOnPathname) &&
+    !window.location.hash &&
+    navigationEntry?.type !== 'back_forward'
+
+  if (!shouldReset) {
+    return () => {}
+  }
+
   const sync = () => resetHomeViewport()
-  const intervalId = window.setInterval(() => {
-    if (window.performance.now() >= stopAt) {
-      window.clearInterval(intervalId)
-      return
-    }
+  const frameId = window.requestAnimationFrame(sync)
+  const timeoutId = window.setTimeout(sync, 120)
+  const handleLoad = () => sync()
 
-    sync()
-  }, intervalMs)
-
-  sync()
-  window.requestAnimationFrame(sync)
-  window.addEventListener('load', sync, { once: true })
-  window.addEventListener('pageshow', sync, { once: true })
+  window.addEventListener('load', handleLoad, { once: true })
 
   return () => {
-    window.clearInterval(intervalId)
-    window.removeEventListener('load', sync)
-    window.removeEventListener('pageshow', sync)
+    window.cancelAnimationFrame(frameId)
+    window.clearTimeout(timeoutId)
+    window.removeEventListener('load', handleLoad)
   }
 }
