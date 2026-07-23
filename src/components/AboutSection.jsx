@@ -72,7 +72,7 @@ function AboutSection({ aboutCards, contactInfo, logoSrc, teamMembers }) {
                   <i className="fa-brands fa-tiktok" aria-hidden="true" />
                 </a>
                 <a
-                  href="https://kotekadigital.com/"
+                  href="/"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Website Koteka Digital"

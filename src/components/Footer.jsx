@@ -59,7 +59,7 @@ function Footer({ contactInfo, handleNavClick, whatsappLinks }) {
                 <i className="fa-solid fa-envelope" aria-hidden="true" />
                 <span>{contactInfo.email}</span>
               </m.a>
-              <m.a href="https://kotekadigital.com/" target="_blank" rel="noopener noreferrer" aria-label="Buka website resmi Koteka Digital" {...interactions.button}>
+              <m.a href="/" target="_blank" rel="noopener noreferrer" aria-label="Buka website resmi Koteka Digital" {...interactions.button}>
                 <i className="fa-solid fa-globe" aria-hidden="true" />
                 <span>kotekadigital.com</span>
               </m.a>
@@ -82,7 +82,7 @@ function Footer({ contactInfo, handleNavClick, whatsappLinks }) {
               <m.a href="https://www.tiktok.com/@kotekadigitalstudio?_r=1&_t=ZS-97V638s9hhd" target="_blank" rel="noopener noreferrer" aria-label="TikTok Koteka Digital" {...interactions.button}>
                 <i className="fa-brands fa-tiktok" aria-hidden="true" />
               </m.a>
-              <m.a href="https://kotekadigital.com/" target="_blank" rel="noopener noreferrer" aria-label="Website Koteka Digital" {...interactions.button}>
+              <m.a href="/" target="_blank" rel="noopener noreferrer" aria-label="Website Koteka Digital" {...interactions.button}>
                 <i className="fa-solid fa-globe" aria-hidden="true" />
               </m.a>
             </div>

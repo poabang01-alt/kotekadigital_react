@@ -10,6 +10,7 @@ import {
   staggerItem,
 } from '../animations/motionVariants'
 import { navItems, whatsappLinks } from '../data/siteData'
+import { trackEvent } from '../utils/analytics'
 
 function SiteNavigation({
   activeSection,
@@ -276,6 +277,10 @@ function SiteNavigation({
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Buka WhatsApp untuk konsultasi gratis"
+              onClick={() => {
+                trackEvent('navbar_cta_click', { source: 'desktop_navbar' })
+                trackEvent('whatsapp_click', { source: 'desktop_navbar' })
+              }}
               {...interactions.button}
             >
               <img

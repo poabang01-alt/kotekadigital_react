@@ -15,7 +15,7 @@ export const techIcons = {
 export const heroSocialLinks = [
   {
     label: 'Website Koteka Digital',
-    href: 'https://kotekadigital.com/',
+    href: '/',
     icon: 'fa-solid fa-globe',
   },
   {

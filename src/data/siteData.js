@@ -70,7 +70,7 @@ export const teamMembers = [
     imageWidth: 200,
     imageHeight: 200,
     socials: [
-      { label: 'Website Koteka Digital', href: 'https://kotekadigital.com/', icon: 'fa-solid fa-globe' },
+      { label: 'Website Koteka Digital', href: '/', icon: 'fa-solid fa-globe' },
       { label: 'Instagram Lae Gwijangge', href: 'https://www.instagram.com/kotekadigital/', icon: 'fa-brands fa-instagram' },
       { label: 'TikTok Lae Gwijangge', href: 'https://www.tiktok.com/@kotekadigitalstudio?_r=1&_t=ZS-97V638s9hhd', icon: 'fa-brands fa-tiktok' },
       { label: 'Facebook Lae Gwijangge', href: 'https://web.facebook.com/profile.php?id=61573476356920', icon: 'fa-brands fa-facebook-f' },
@@ -84,7 +84,7 @@ export const teamMembers = [
     imageWidth: 200,
     imageHeight: 200,
     socials: [
-      { label: 'Website Rivaldo G.', href: 'https://kotekadigital.com/', icon: 'fa-solid fa-globe' },
+      { label: 'Website Rivaldo G.', href: '/', icon: 'fa-solid fa-globe' },
       { label: 'Instagram Rivaldo G.', href: 'https://www.instagram.com/kotekadigital/', icon: 'fa-brands fa-instagram' },
       { label: 'TikTok Rivaldo G.', href: 'https://www.tiktok.com/@kotekadigitalstudio?_r=1&_t=ZS-97V638s9hhd', icon: 'fa-brands fa-tiktok' },
       { label: 'Facebook Rivaldo G.', href: 'https://web.facebook.com/profile.php?id=61573476356920', icon: 'fa-brands fa-facebook-f' },
@@ -98,7 +98,7 @@ export const teamMembers = [
     imageWidth: 200,
     imageHeight: 200,
     socials: [
-      { label: 'Website Koteka Digital', href: 'https://kotekadigital.com/', icon: 'fa-solid fa-globe' },
+      { label: 'Website Koteka Digital', href: '/', icon: 'fa-solid fa-globe' },
       { label: 'Instagram Koteka Digital', href: 'https://www.instagram.com/kotekadigital/', icon: 'fa-brands fa-instagram' },
       { label: 'TikTok Koteka Digital', href: 'https://www.tiktok.com/@kotekadigitalstudio?_r=1&_t=ZS-97V638s9hhd', icon: 'fa-brands fa-tiktok' },
       { label: 'Facebook Koteka Digital', href: 'https://web.facebook.com/profile.php?id=61573476356920', icon: 'fa-brands fa-facebook-f' },
@@ -194,7 +194,7 @@ export const portfolioItems = [
     image: '/img/optimized/portofolio-koteka-digital-home.jpg',
     imageWidth: 1918,
     imageHeight: 1077,
-    link: 'https://kotekadigital.com/',
+    link: '/',
     tech: ['React', 'CSS', 'JavaScript'],
   },
   {
@@ -265,7 +265,7 @@ export const blogPosts = [
     image: '/img/optimized/website-umkm-jayapura-koteka-digital.jpg',
     imageWidth: 720,
     imageHeight: 560,
-    link: '/blog/jasa-website-jayapura-umkm/index.html',
+    link: '/blog/jasa-website-jayapura-umkm/',
   },
   {
     category: 'SEO',
@@ -277,7 +277,7 @@ export const blogPosts = [
     image: '/img/optimized/optimasi-seo-bisnis-jayapura-koteka-digital.jpg',
     imageWidth: 720,
     imageHeight: 560,
-    link: '/blog/manfaat-seo-bisnis-jayapura/index.html',
+    link: '/blog/manfaat-seo-bisnis-jayapura/',
   },
   {
     category: 'Digital Marketing',
@@ -289,7 +289,7 @@ export const blogPosts = [
     image: '/img/optimized/digitalmarketing-720.jpg',
     imageWidth: 720,
     imageHeight: 504,
-    link: '/blog/tips-digital-marketing-papua/index.html',
+    link: '/blog/tips-digital-marketing-papua/',
   },
   {
     category: 'Web Developer',
@@ -301,7 +301,7 @@ export const blogPosts = [
     image: '/img/optimized/developer-720.jpg',
     imageWidth: 720,
     imageHeight: 560,
-    link: '/blog/web-developer-jayapura/index.html',
+    link: '/blog/web-developer-jayapura/',
   },
   {
     category: 'Panduan',
@@ -313,7 +313,7 @@ export const blogPosts = [
     image: '/img/optimized/jasa-pembuatan-website-papua-koteka-digital.jpg',
     imageWidth: 720,
     imageHeight: 560,
-    link: '/blog/jasa-pembuatan-website-jayapura/index.html',
+    link: '/blog/jasa-pembuatan-website-jayapura/',
   },
   {
     category: 'Harga',
@@ -325,7 +325,7 @@ export const blogPosts = [
     image: '/img/optimized/harga-pembuatan-website-jayapura-koteka-digital.jpg',
     imageWidth: 720,
     imageHeight: 560,
-    link: '/blog/harga-pembuatan-website-jayapura/index.html',
+    link: '/blog/harga-pembuatan-website-jayapura/',
   },
   {
     category: 'Sekolah',
@@ -337,7 +337,7 @@ export const blogPosts = [
     image: '/img/optimized/portofolio-dashboard-sistem-sarana-dan-prasarana-papua-koteka-digital.jpg',
     imageWidth: 960,
     imageHeight: 542,
-    link: '/blog/jasa-website-sekolah-papua/index.html',
+    link: '/blog/jasa-website-sekolah-papua/',
   },
   {
     category: 'Toko Online',
@@ -349,7 +349,7 @@ export const blogPosts = [
     image: '/img/optimized/tampilan-home-website-coffee-shop-koteka-digital.jpg',
     imageWidth: 960,
     imageHeight: 545,
-    link: '/blog/jasa-website-toko-online-jayapura/index.html',
+    link: '/blog/jasa-website-toko-online-jayapura/',
   },
   {
     category: 'Perbandingan',
@@ -361,7 +361,7 @@ export const blogPosts = [
     image: '/img/optimized/portofolio-koteka-digital-home.jpg',
     imageWidth: 1918,
     imageHeight: 1077,
-    link: '/blog/perbedaan-website-murah-dan-profesional/index.html',
+    link: '/blog/perbedaan-website-murah-dan-profesional/',
   },
   {
     category: 'Studi Kasus',
@@ -373,7 +373,7 @@ export const blogPosts = [
     image: '/img/optimized/website-umkm-jayapura-koteka-digital.jpg',
     imageWidth: 720,
     imageHeight: 560,
-    link: '/blog/studi-kasus-website-umkm-jayapura/index.html',
+    link: '/blog/studi-kasus-website-umkm-jayapura/',
   },
   {
     category: 'Panduan',
@@ -385,7 +385,7 @@ export const blogPosts = [
     image: '/img/optimized/developer-480.jpg',
     imageWidth: 480,
     imageHeight: 374,
-    link: '/blog/tips-memilih-jasa-pembuatan-website/index.html',
+    link: '/blog/tips-memilih-jasa-pembuatan-website/',
   },
   {
     category: 'Company Profile',
@@ -397,7 +397,7 @@ export const blogPosts = [
     image: '/img/optimized/portofolio-koteka-digital-home.jpg',
     imageWidth: 1918,
     imageHeight: 1077,
-    link: '/blog/website-company-profile-jayapura/index.html',
+    link: '/blog/website-company-profile-jayapura/',
   },
 ]
 
