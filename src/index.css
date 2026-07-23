@@ -379,11 +379,15 @@
   color: #07243d;
   font-size: clamp(0.68rem, 0.8vw, 0.74rem);
   font-weight: 900;
+  line-height: 1;
   text-transform: uppercase;
   white-space: nowrap;
   letter-spacing: 0.04em;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(255, 245, 204, 0.7);
   box-shadow: 0 14px 22px rgba(242, 180, 0, 0.26);
   max-width: calc(100% - 24px);
+  z-index: 2;
 }
 
 .pricing-card-icon {
@@ -1320,8 +1324,9 @@
   .pricing-popular-badge {
     top: -18px;
     min-height: 24px;
-    padding-inline: 9px;
-    font-size: 0.58rem;
+    padding-inline: 11px;
+    font-size: 0.64rem;
+    letter-spacing: 0.03em;
   }
 
   .pricing-card-shell {

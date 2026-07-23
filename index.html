@@ -25,6 +25,28 @@
     <link rel="canonical" href="https://kotekadigital.com/" />
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/favicon.png" />
+    <style>
+      .seo-prerender {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+    </style>
+    <link
+      rel="preload"
+      as="image"
+      href="/img/optimized/developer-480.jpg"
+      imagesrcset="/img/optimized/developer-480.jpg 480w, /img/optimized/developer-720.jpg 720w"
+      imagesizes="72vw"
+      fetchpriority="high"
+      media="(max-width: 900px)"
+    />
     <link
       rel="preload"
       as="image"
@@ -178,6 +200,54 @@
   </head>
   <body>
     <div id="root"></div>
+    <main class="seo-prerender">
+      <header>
+        <h1>Koteka Digital | Jasa Pembuatan Website Profesional di Jayapura, Papua</h1>
+        <p>
+          Koteka Digital membantu UMKM, bisnis lokal, personal brand, sekolah, lembaga, dan
+          instansi di Jayapura dan Tanah Papua memiliki website cepat, responsif, dan SEO-ready.
+        </p>
+      </header>
+      <nav aria-label="Navigasi awal homepage">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#layanan">Layanan</a>
+        <a href="#pricing-section">Harga</a>
+        <a href="#portfolio">Portofolio</a>
+        <a href="#blog">Blog</a>
+        <a href="#testimoni">Testimoni</a>
+        <a href="#faq">FAQ</a>
+        <a href="#kontak">Kontak</a>
+      </nav>
+      <section aria-labelledby="seo-services-heading">
+        <h2 id="seo-services-heading">Layanan Utama</h2>
+        <p>
+          Layanan utama meliputi website bisnis, company profile, website sekolah, landing page,
+          optimasi SEO dasar, dan sistem digital untuk kebutuhan usaha maupun institusi.
+        </p>
+      </section>
+      <section aria-labelledby="seo-blog-heading">
+        <h2 id="seo-blog-heading">Artikel Pilihan</h2>
+        <ul>
+          <li>
+            <a href="/blog/jasa-pembuatan-website-jayapura/">
+              Jasa Pembuatan Website Jayapura
+            </a>
+          </li>
+          <li>
+            <a href="/blog/harga-pembuatan-website-jayapura/">
+              Harga Pembuatan Website Jayapura
+            </a>
+          </li>
+          <li>
+            <a href="/blog/jasa-website-jayapura-umkm/">Jasa Website Jayapura untuk UMKM</a>
+          </li>
+          <li>
+            <a href="/blog/web-developer-jayapura/">Web Developer Jayapura</a>
+          </li>
+        </ul>
+      </section>
+    </main>
     <script type="module" src="/src/main.jsx"></script>
   </body>
   </html>

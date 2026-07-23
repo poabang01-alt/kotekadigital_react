@@ -86,8 +86,8 @@ function HeroSection({
               srcSet="/img/optimized/developer-480.jpg 480w, /img/optimized/developer-720.jpg 720w"
               sizes="(max-width: 900px) 72vw, 42vw"
               alt="Preview hero Koteka Digital"
-              loading={isMobileViewport ? 'lazy' : 'eager'}
-              fetchPriority={isMobileViewport ? 'low' : 'high'}
+              loading="eager"
+              fetchPriority="high"
               decoding="async"
               width="480"
               height="374"
